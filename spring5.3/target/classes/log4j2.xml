@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<Configuration>
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %5p [%c] %m%n" />
+        </Console>
+		<RollingFile name="File">
+			<FileName>D:/workDir/workspace/log/app.log</FileName>
+			<FilePattern>D:/workDir/eGovFrameDev-4.2.0-64bit/workspace/log/%d{yyyy-MM-dd}.log.zip</FilePattern>
+			<PatternLayout>
+				<Pattern>%d{yyyy-MMM-dd HH:mm:ss} [%t] %-5level %logger - %msg%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="2000KB"/>
+				<TimeBasedTriggeringPolicy interval="1"/>
+			</Policies>
+			<DefaultRolloverStrategy max="10" />
+		</RollingFile>        
+    </Appenders>
+    <Loggers>
+        <Logger name="base" level="DEBUG" additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="File" />
+        </Logger>
+        <Logger name="org.springframework" level="INFO" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+		<logger name="jdbc.sqlonly" level="DEBUG" additivity="false"> 
+			<appender-ref ref="console"/> 
+		</logger>
+		<Logger name="jdbc.resultsettable" level="DEBUG" additivity="false"> 
+			<appender-ref ref="console"/> 
+		</Logger> 
+
+        <Root level="DEBUG">
+            <AppenderRef ref="console" />
+        </Root>
+    </Loggers>
+</Configuration>
