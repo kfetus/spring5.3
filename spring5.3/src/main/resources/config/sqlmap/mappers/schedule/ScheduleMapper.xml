@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="base.biz.schedule.ScheduleMapper">
+
+	<!-- select id="selectScheduleList" parameterType="String" resultType="java.util.HashMap">
+		SELECT S.CAL_DAY /* 오라클용 UserInfoMapper.selectUserInfoOne 사용자 정보 상세 조회 */
+				, S.DOW 
+				, CASE WHEN S.DOW=1 THEN '일요일'
+				      WHEN S.DOW=2 THEN '월요일'
+				      WHEN S.DOW=3 THEN '화요일'
+				      WHEN S.DOW=4 THEN '수요일'
+				      WHEN S.DOW=5 THEN '목요일'
+				      WHEN S.DOW=6 THEN '금요일'
+				      WHEN S.DOW=7 THEN '토요일'
+				 ELSE '' END AS DAY
+				, GROUP_CONCAT(S.SCHEDULE) AS SC
+		  FROM (
+				SELECT A.CAL_DAY
+					, DAYOFWEEK( DATE_FORMAT(A.CAL_DAY,'%Y%m%d')) AS DOW
+					, S.YYYYMMDD
+					, CONCAT( S.HH	,":", S.MM ," ", S.SCHEDULE) AS SCHEDULE
+				  FROM (
+						WITH RECURSIVE T AS (
+							SELECT DATE_FORMAT(#{yyyymmdd}, '%Y%m01') as CAL_DAY
+							UNION ALL
+							SELECT CAL_DAY + 1 FROM T WHERE DATE_FORMAT(CAL_DAY, '%Y%m%d') &lt; LAST_DAY(DATE_FORMAT(#{yyyymmdd}, '%Y%m%d'))
+						)
+						SELECT * FROM T
+				  ) A LEFT OUTER JOIN (
+								SELECT S.YYYYMMDD
+									, S.HH
+									, S.MM
+									, S.SCHEDULE
+							      FROM MY_SCHEDULE S
+							     ORDER BY S.YYYYMMDD, S.HH,S.MM
+							) S ON A.CAL_DAY = S.YYYYMMDD
+			) S
+		GROUP BY S.CAL_DAY,S.DOW
+	</select-->
+    
+    <!-- Error querying database. Cause: java.lang.NullPointerException 에러가 발생하면 select 값에 null이 있을경우임. sql 로그를 찍기 위한 
+    net.sf.log4jdbc.sql.jdbcapi.DriverSpy 이녀석이 찍는것이라서 log4j에서 jdbc.resultsettable 을 없애거나 아래와 깉이 coalesce로 null을 ''으로 치환으로 해결 -->
+	<select id="selectScheduleList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT /* MariaDB용 ScheduleMapper.selectScheduleList 스케쥴 목록 조회 */
+			COALESCE( MIN(CASE WHEN S.DOW=1 THEN CONCAT(CAST(SUBSTRING(S.CAL_DAY,7) AS INTEGER),"|", COALESCE(S.SCHEDULE,'')) END) ,'') AS SUN,
+			COALESCE( MIN(CASE WHEN S.DOW=2 THEN CONCAT(CAST(SUBSTRING(S.CAL_DAY,7) AS INTEGER),"|", COALESCE(S.SCHEDULE,'')) END) ,'') AS MON,
+			COALESCE( MIN(CASE WHEN S.DOW=3 THEN CONCAT(CAST(SUBSTRING(S.CAL_DAY,7) AS INTEGER),"|", COALESCE(S.SCHEDULE,'')) END) ,'') AS TUE,
+			COALESCE( MIN(CASE WHEN S.DOW=4 THEN CONCAT(CAST(SUBSTRING(S.CAL_DAY,7) AS INTEGER),"|", COALESCE(S.SCHEDULE,'')) END) ,'') AS WED,
+			COALESCE( MIN(CASE WHEN S.DOW=5 THEN CONCAT(CAST(SUBSTRING(S.CAL_DAY,7) AS INTEGER),"|", COALESCE(S.SCHEDULE,'')) END) ,'') AS THU,
+			COALESCE( MIN(CASE WHEN S.DOW=6 THEN CONCAT(CAST(SUBSTRING(S.CAL_DAY,7) AS INTEGER),"|", COALESCE(S.SCHEDULE,'')) END) ,'') AS FRI,
+			COALESCE( MIN(CASE WHEN S.DOW=7 THEN CONCAT(CAST(SUBSTRING(S.CAL_DAY,7) AS INTEGER),"|", COALESCE(S.SCHEDULE,'')) END) ,'') AS SAT
+		FROM (
+		SELECT S.CAL_DAY, S.DOW, S.WEEK_DAY
+				, GROUP_CONCAT(S.SCHEDULE) AS SCHEDULE
+		 FROM (
+			SELECT A.CAL_DAY
+			      , DAYOFWEEK( DATE_FORMAT(A.CAL_DAY,'%Y%m%d')) AS DOW
+			      , WEEK(DATE_FORMAT(A.CAL_DAY, '%Y%m%d')) AS WEEK_DAY
+					, S.SCHEDULE
+			  FROM (
+				WITH RECURSIVE T AS (
+				    SELECT DATE_FORMAT(#{yyyymmdd}, '%Y%m01')AS CAL_DAY , WEEK(DATE_FORMAT(#{yyyymmdd}, '%Y%m01')) AS WEEK_DAY
+				    UNION ALL
+				    SELECT CAL_DAY + 1 , WEEK(DATE_FORMAT(CAL_DAY+1, '%Y%m%d')) AS WEEK_DAY from T where DATE_FORMAT(CAL_DAY, '%Y%m%d') &lt; LAST_DAY(DATE_FORMAT(#{yyyymmdd}, '%Y%m%d'))
+				)
+				SELECT * FROM T
+			) A LEFT OUTER JOIN (
+								SELECT S.YYYYMMDD,
+										CONCAT( S.HH	,":", S.MM ," ", S.SCHEDULE) AS SCHEDULE
+								   FROM MY_SCHEDULE S
+								  WHERE S.USER_NO = #{userNo}
+								  ORDER BY S.YYYYMMDD, S.HH,S.MM
+						) S ON A.CAL_DAY = S.YYYYMMDD
+		)S
+		GROUP BY S.CAL_DAY, S.DOW, S.WEEK_DAY
+		) S
+		GROUP BY S.WEEK_DAY
+	</select>
+	
+	<select id="selectScheduleOne" parameterType="String" resultType="java.util.HashMap">
+		SELECT S.YYYYMMDD /* ScheduleMapper.selectScheduleOne 스케쥴 상세 조회 */
+				, S.HH
+				, S.MM
+				, S.SCHEDULE
+		  FROM MY_SCHEDULE S
+		 WHERE S.YYYYMMDD = #{yyyymmdd}
+		   AND S.USER_NO = #{userNo}
+		ORDER BY S.YYYYMMDD, S.HH,S.MM
+	</select>
+
+	<insert id="insertSchedule" parameterType="java.util.HashMap">
+		INSERT /* ScheduleMapper.insertSchedule 스케쥴 인서트 */
+		  INTO MY_SCHEDULE (
+				YYYYMMDD
+				, HH
+				, MM
+				, USER_NO
+				, SCHEDULE
+				, CNG_USER_NO
+				, REG_DT
+				, CNG_DT
+		) 
+		 VALUES 
+			<foreach collection="list" item="rowData" separator=",">
+			 (
+				#{rowData.YYYYMMDD}
+				,#{rowData.HH}
+				,#{rowData.MM}
+				,#{rowData.userNo}
+				,#{rowData.SCHEDULE}
+				,#{rowData.userNo}
+				,CURRENT_TIMESTAMP()
+				,CURRENT_TIMESTAMP()
+	       	 ) 
+			</foreach>		 
+	</insert>
+
+	<delete id="deletescheduleDay">
+		DELETE /* ScheduleMapper.deletescheduleDay 스케쥴 하루 삭제 */
+		  FROM MY_SCHEDULE 
+		 WHERE YYYYMMDD = #{yyyymmdd}
+	</delete>	
+
+	<delete id="deletescheduleOne">
+		DELETE /* ScheduleMapper.deletescheduleOne 스케쥴 한건 삭제 */
+		  FROM MY_SCHEDULE 
+		 WHERE YYYYMMDD = #{yyyymmdd}
+		   AND HH = #{HH}
+		   AND MM = #{MM}
+	</delete>	
+
+	
+	<!-- upsert 샘플. 이 로직에서는 맞지 않는게 pk가 년월일,시,분 르로 잡혓기 때문에 화면에서 시,분 만 바꿀경우 삭제 추가가 아니고 추가만 된다. -->
+	<insert id="upsertSchedule" parameterType="java.util.HashMap">
+		INSERT /* ScheduleMapper.upsertSchedule 스케쥴 업서트 */
+		  INTO MY_SCHEDULE (
+				YYYYMMDD
+				, HH
+				, MM
+				, USER_NO
+				, SCHEDULE
+				, CNG_USER_NO
+				, REG_DT
+				, CNG_DT
+		) 
+		 VALUES 
+			<foreach collection="list" item="rowData" separator=",">
+			 (
+				#{rowData.YYYYMMDD}
+				,#{rowData.HH}
+				,#{rowData.MM}
+				,#{rowData.userNo}
+				,#{rowData.SCHEDULE}
+				,#{rowData.userNo}
+				,CURRENT_TIMESTAMP()
+				,CURRENT_TIMESTAMP()
+	       	 ) 
+			</foreach>		 
+		ON DUPLICATE KEY UPDATE 
+				USER_NO = VALUES(USER_NO)
+				, SCHEDULE = VALUES(SCHEDULE)
+				, CNG_USER_NO = VALUES(CNG_USER_NO)
+	<!-- 			, REG_DT = VALUES(REG_DT) -->
+				, CNG_DT = VALUES(CNG_DT)
+	</insert>
+
+</mapper>
