@@ -35,6 +35,15 @@
 		<Logger name="jdbc.resultsettable" level="DEBUG" additivity="false"> 
 			<AppenderRef ref="console" />
 		</Logger> 
+		<Logger name="jdbc.resultset" level="WARN" additivity="false"> 
+			<AppenderRef ref="console" />
+		</Logger> 
+		<Logger name="jdbc.audit" level="WARN" additivity="false"> 
+			<AppenderRef ref="console" />
+		</Logger> 
+		<Logger name="jdbc.connection" level="WARN" additivity="false"> 
+			<AppenderRef ref="console" />
+		</Logger> 
 
         <Root level="DEBUG">
             <AppenderRef ref="console" />
