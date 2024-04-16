@@ -17,7 +17,7 @@
     <head>
         <title>DB Access Error</title> 
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script src="/js/comm/jquery-3.7.1.min.js"></script>
+        <script src="/static/js/comm/jquery-3.7.1.min.js"></script>
     </head>
     
     <body>
