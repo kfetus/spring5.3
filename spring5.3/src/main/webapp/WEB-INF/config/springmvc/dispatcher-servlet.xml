@@ -26,9 +26,10 @@
 	</mvc:interceptors>
 
 
-    <bean id="EchoHandler" class="base.comm.websocket.WebSocketHandler" />
+    <bean id="SockJsHandler" class="base.comm.websocket.sockjs.SockJsWebSocketHandler" />
+	<!-- websocket:handlers allowed-origins="http://localhost:8080" -->
 	<websocket:handlers>
-	    <websocket:mapping handler="EchoHandler" path="/echo-ws" />
+	    <websocket:mapping handler="SockJsHandler" path="/sockjsws" />
 	    <websocket:handshake-interceptors>
 	        <bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor" />
 	    </websocket:handshake-interceptors>

@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+/**
+ * 기본 테스트용 클래스
+ * @author USER
+ *
+ */
 @Controller
 public class SampleController {
 	
@@ -22,19 +27,37 @@ public class SampleController {
 	@Autowired
 	private SampleServiceImpl sampleService;
 
-	
-	@RequestMapping(value = "/client.do")
-	public String getClient(HttpServletRequest request, HttpServletResponse response) {
-		return "websocket/client";
+	/**
+	 * SockJs 방식의 브라우저용 websocket 테스트 샘플
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/sockJsSample.do")
+	public String sockJsSample(HttpServletRequest request, HttpServletResponse response) {
+		LOGGER.debug("####################### sockJsSample");
+		return "websocket/sockJsSample";
 	}
 
-	@RequestMapping(value = "/server.do")
-	public String getServer(HttpServletRequest request, HttpServletResponse response) {
-		LOGGER.debug("#######################");
-		System.out.println("$$$$$$$$$$$$$$");
-		return "websocket/server";
+	/**
+	 * websocket 일반적인 방식(javax.websocket)의 websocket 테스트 샘플
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/javaxWebsocketSample.do")
+	public String javaxWebsocketSample(HttpServletRequest request, HttpServletResponse response) {
+		LOGGER.debug("####################### javaxWebsocketSample");
+		return "websocket/javaxWebsocketSample";
 	}
+
 	
+	/**
+	 * 샘플용 리스트 페이지 조회
+	 * @param map
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/baseList.do")
 	public ModelAndView baseList(@RequestParam HashMap<String,Object> map) throws Exception {
 		LOGGER.debug("########## baseList  #############"+map);
