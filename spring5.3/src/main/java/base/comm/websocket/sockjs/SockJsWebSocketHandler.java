@@ -13,6 +13,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 /**
  * sockjs 용 websocket. 웹 브라우저용. java client 프로그래밍으로는 해당 프로토콜을 지원하지 않아서 400 BAD Request만 떨어짐
  * 브라우저에서 해당url/info 로 정보를 받아와서 101 메세지를 보내주면 키값을 만들어서 클라이언트에게 보내고 해당 키값을 기준으로 서버와 클라이언트가 통신하는 쳬계임
+ * 현재 web.xml에서 	<servlet-mapping><servlet-name>action</servlet-name><url-pattern>*.do</url-pattern></servlet-mapping> 부분에서 *.do를 / 로 바꿔야 동작함 
  * @author OJH
  *
  */
