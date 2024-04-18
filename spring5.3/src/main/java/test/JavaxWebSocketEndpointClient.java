@@ -1,6 +1,7 @@
 package test;
 
 import java.net.URI;
+import java.util.Scanner;
 
 import javax.websocket.ClientEndpoint;
 import javax.websocket.ContainerProvider;
@@ -16,10 +17,6 @@ import base.comm.websocket.javax.MsgEncoder;
 
 @ClientEndpoint(encoders = MsgEncoder.class, decoders = MsgDecoder.class)
 public class JavaxWebSocketEndpointClient {
-
-	public JavaxWebSocketEndpointClient() {
-
-	}
 
 	@OnOpen
 	public void onOpen(Session userSession) {
@@ -44,26 +41,24 @@ public class JavaxWebSocketEndpointClient {
 	public static void main(String[] args) {
 		System.out.println("################# START");
 
-		try {
+		//try with resource패턴. try가 알아서 close 호출함
+		try (Scanner in = new Scanner(System.in)) {
 			WebSocketContainer container = ContainerProvider.getWebSocketContainer();
 			Session session = container.connectToServer(JavaxWebSocketEndpointClient.class, new URI("ws://localhost:8080/websocket.do"));
-			session.getBasicRemote().sendText("가나다라마바사1");
-			Thread.sleep(3000);
+			session.getBasicRemote().sendText("안녕하세요 여러분~");
+
+			while(true) {
+				String inText = in.nextLine();
+				if("qqq".equals(inText)) {
+					break;
+				} else {
+					session.getBasicRemote().sendText(inText);
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-
-//		try {
-//			JavaxWebSocketEndpointClient clientEndPoint = new JavaxWebSocketEndpointClient();
-//			clientEndPoint.sendMessage("메세지를 첫번째로 보냅니다......");
-//			clientEndPoint.sendMessage("메세지를 두번째로 보냅니다......");
-//			clientEndPoint.sendMessage("메세지를 세번째로 보냅니다......");
-//			clientEndPoint.onClose();
-//		} catch (Exception e) {
-//			e.getStackTrace();
-//		}
-
 	}	
 	
 }
