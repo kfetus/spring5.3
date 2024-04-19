@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import base.comm.vo.UserVO;
 
-@ServerEndpoint(value = "/websocket.do", encoders = MsgEncoder.class, decoders = MsgDecoder.class, configurator = ServerConfigurator.class)
+@ServerEndpoint(value = "/auctionWebsocket.do", encoders = MsgEncoder.class, decoders = MsgDecoder.class, configurator = ServerConfigurator.class)
 public class JavaxWebSocketEndpointServer {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(JavaxWebSocketEndpointServer.class);
@@ -40,8 +40,11 @@ public class JavaxWebSocketEndpointServer {
 			sessionList.add(session);
 		} else {
 			try {
-				session.getBasicRemote().sendObject("로그인 정보가 없습니다.");
-				throw new Exception("ddd");
+				BidMessage bidMessage = new BidMessage();
+				bidMessage.setConState("9999");
+				bidMessage.setMessage("로그인 정보가 없습니다.");
+				session.getBasicRemote().sendObject(bidMessage);
+				throw new Exception("login info is null");
 			} catch (Exception e) {
 				e.printStackTrace();
 				//종료가 되면 안되므로 Exception을 던짐. 그 후 onError, onClose가 차례대로 호출됨
@@ -67,19 +70,20 @@ public class JavaxWebSocketEndpointServer {
 	public void onError(Session session, Throwable t) {
 		LOGGER.debug("@@@@@@@@ onError=" + session.getId() + "|" + session.getUserProperties());
 		t.printStackTrace();
+		LOGGER.error(t.getMessage());
 	}
 
 	private synchronized void serveMessage(Session reqSession, BidMessage message) {
 		LOGGER.debug("@@@@@@@@ serveMessage message =" + message);
 		for (Session session : sessionList) {
-			LOGGER.debug("@@@@@@@@ serveMessage session.getId() =" + session.getId());
-			LOGGER.debug("@@@@@@@@ serveMessage WEBSOCKET_USER_INFO =" + session.getUserProperties().get("WEBSOCKET_USER_INFO"));
-			// 내가 보낸 메세지 나한텐 안보내기
-		    if (reqSession.getId().equals(session.getId())) {
-		        continue; 
-		    }
-            Basic basic = session.getBasicRemote();
             try {
+    			LOGGER.debug("@@@@@@@@ serveMessage session.getId() =" + session.getId());
+    			LOGGER.debug("@@@@@@@@ serveMessage WEBSOCKET_USER_INFO =" + session.getUserProperties().get("WEBSOCKET_USER_INFO"));
+    			// 내가 보낸 메세지 나한텐 안보내기. 경매에서는 전체 모두 갱신
+//    		    if (reqSession.getId().equals(session.getId())) {
+//    		        continue; 
+//    		    }
+                Basic basic = session.getBasicRemote();
                 basic.sendObject(message);
             } catch (Exception e) {
                 e.printStackTrace();

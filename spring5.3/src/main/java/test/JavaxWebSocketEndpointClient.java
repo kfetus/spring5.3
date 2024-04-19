@@ -12,6 +12,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
 
+import base.comm.websocket.javax.BidMessage;
 import base.comm.websocket.javax.MsgDecoder;
 import base.comm.websocket.javax.MsgEncoder;
 
@@ -26,11 +27,12 @@ public class JavaxWebSocketEndpointClient {
 	@OnClose
 	public void onClose() {
 		System.out.println("################# close Websocket");
+		System.exit(0);
 	}
 
 	@OnMessage
-	public void sendMessage(String message) {
-		System.out.println("################# sendMessage : " + message);
+	public void sendMessage(BidMessage message) {
+		System.out.println("################# sendMessage : " + message.getMessage());
 	}
 	
 	@OnError
@@ -40,11 +42,11 @@ public class JavaxWebSocketEndpointClient {
 	
 	public static void main(String[] args) {
 		System.out.println("################# START");
-
+		BidMessage bidMessage = new BidMessage();
 		//try with resource패턴. try가 알아서 close 호출함
 		try (Scanner in = new Scanner(System.in)) {
 			WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-			Session session = container.connectToServer(JavaxWebSocketEndpointClient.class, new URI("ws://localhost:8080/websocket.do"));
+			Session session = container.connectToServer(JavaxWebSocketEndpointClient.class, new URI("ws://localhost:8080/auctionWebsocket.do"));
 			session.getBasicRemote().sendText("안녕하세요 여러분~");
 
 			while(true) {
@@ -52,7 +54,9 @@ public class JavaxWebSocketEndpointClient {
 				if("qqq".equals(inText)) {
 					break;
 				} else {
-					session.getBasicRemote().sendText(inText);
+					bidMessage.setMessage(inText);
+					session.getBasicRemote().sendObject(bidMessage);
+					//session.getBasicRemote().sendText(inText);
 				}
 			}
 		} catch (Exception e) {

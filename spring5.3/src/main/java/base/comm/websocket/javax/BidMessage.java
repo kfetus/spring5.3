@@ -28,8 +28,11 @@ public class BidMessage {
 	public String evaluationGrade;
 	//낙찰여부 메세지
 	public String successfulBidYN;
-	//전송메세지
+	//전송 TEXT 메세지
 	public String message;
+	//websocket 상태? 딱히 단어가.. 일단 지금은 로그인 안한 사람 팅기는 용도. 정상:0000 로그인 하지 않음 : 9999
+	public String conState;
+	
 	
 	public String getBidId() {
 		return bidId;
@@ -115,6 +118,12 @@ public class BidMessage {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+	public String getConState() {
+		return conState;
+	}
+	public void setConState(String conState) {
+		this.conState = conState;
+	}
 	@Override
 	public String toString() {
 		return "BidMessage [bidId=" + bidId + ", entryNumber=" + entryNumber + ", auctionState=" + auctionState
@@ -122,7 +131,7 @@ public class BidMessage {
 				+ minAuctionMoney + ", nowAuctionMoney=" + nowAuctionMoney + ", maxAuctionMoney=" + maxAuctionMoney
 				+ ", auctionCarInfo=" + auctionCarInfo + ", imgSrc=" + imgSrc + ", performanceCheckList="
 				+ performanceCheckList + ", evaluationGrade=" + evaluationGrade + ", successfulBidYN=" + successfulBidYN
-				+ ", message=" + message + "]";
+				+ ", message=" + message + ", conState=" + conState + "]";
 	}
 
 }
