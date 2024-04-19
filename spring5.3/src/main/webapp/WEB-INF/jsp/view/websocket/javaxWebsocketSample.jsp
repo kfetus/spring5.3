@@ -21,7 +21,9 @@
 	
 	document.addEventListener("DOMContentLoaded", function(){
 	    // 웹소켓 연결
-	    socket = new WebSocket('ws://localhost:8080/websocket.do' + name);
+	    socket = new WebSocket('ws://localhost:8080/websocket.do');
+	    //핸드폰이나 기타 다른 피씨에서 테스트 활 경우에는 여기 IP를 서버수행 아이피로 해야 한다. localhost 안됨
+//	    socket = new WebSocket('ws://192.168.0.16:8080/websocket.do');
 	    socket.onopen = onOpen;
 	    socket.onmessage = onMessage;
 	    socket.onclose = onClose;
@@ -32,15 +34,24 @@
 	});
 
     function send(){ 
-    	var msg = document.getElementById("sendMessage").value;
-        socket.send(msg);
+    	
+    	var bidMessage = {};
+    	bidMessage.entryNumber = '1233';
+    	bidMessage.message = document.getElementById("sendMessage").value;
+    	socket.send(JSON.stringify(bidMessage));
+    	
+//    	var msg = document.getElementById("sendMessage").value;
+//      socket.send(msg);
     }
 
 	function onOpen() {
 		document.getElementById("socketStatus").innerHTML = "접속 중";
 	}
 	function onMessage(evt){
-	    document.getElementById("msg").innerHTML = evt.data;
+		console.log(evt);
+		var message = JSON.parse(evt.data);
+		
+	    document.getElementById("msg").innerHTML = message.message;
 	    document.getElementById("msgTime").innerHTML = getNowString();
 	}
 	function getNowString() {
@@ -54,8 +65,9 @@
 		
 		return year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds;
 	}	
-	function onClose() {
+	function onClose(e) {
 		document.getElementById("socketStatus").innerHTML = "접속 종료";
+		console.log(e);
 	}
 	</script>
 </body>

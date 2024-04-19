@@ -3,6 +3,7 @@ package base.comm.websocket.javax;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
@@ -15,44 +16,67 @@ import javax.websocket.server.ServerEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@ServerEndpoint(value = "/websocket.do", encoders = MsgEncoder.class, decoders = MsgDecoder.class)
+import base.comm.vo.UserVO;
+
+@ServerEndpoint(value = "/websocket.do", encoders = MsgEncoder.class, decoders = MsgDecoder.class, configurator = ServerConfigurator.class)
 public class JavaxWebSocketEndpointServer {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(JavaxWebSocketEndpointServer.class);
 	
 	private static List<Session> sessionList = new ArrayList<>();
+//	private ConcurrentHashMap<Session, BidMessage> joinList = new ConcurrentHashMap<>();
 	
+	//PathParam은 @ServerEndpoint에서 url값에 {} 같이 변수가 설정되어 있을때 받는 파라미터
 	@OnOpen
-	public void connectionOpen(Session session, @PathParam("param") String param) {
-		LOGGER.debug("@@@@@@@@ connectionOpen");
-		sessionList.add(session);
+	public void onOpen( @PathParam("param") String param,Session session, EndpointConfig config) throws Exception {
+		LOGGER.debug("@@@@@@@@ onOpen");
+		//ServerEndpointConfig에 값을 넣으면 session에 있는 내용이나 config에 있는 내용이나 같은 값. 다만 session은 ID를 설정해 주므로 이것으로 컨트롤
+		LOGGER.debug("@@@@@@@@ onOpen session=" + session.getId() + "|" + session.getUserProperties());
+//		LOGGER.debug("@@@@@@@@ onOpen config=" + config.getUserProperties());
+		Object vo = session.getUserProperties().get("WEBSOCKET_USER_INFO");
+		LOGGER.debug("@@@@@@@@ onOpen session vo=" + vo);
+
+		if(  vo instanceof UserVO) {
+			sessionList.add(session);
+		} else {
+			try {
+				session.getBasicRemote().sendObject("로그인 정보가 없습니다.");
+				throw new Exception("ddd");
+			} catch (Exception e) {
+				e.printStackTrace();
+				//종료가 되면 안되므로 Exception을 던짐. 그 후 onError, onClose가 차례대로 호출됨
+				throw e;
+			}
+		}
 	}
 
 	@OnMessage
-	public void receiveMessage(Session session, String message) {
-		String msg = message;
-		LOGGER.debug("@@@@@@@@ receiveMessage message =" + message);
-		msg = msg + ":REURN";
-		LOGGER.debug("@@@@@@@@ SERVER MSG =" + msg);
-		broadcast(session, msg);
+	public void onMessage(Session session, BidMessage message) {
+		LOGGER.debug("@@@@@@@@ onMessage session=" + session.getId() + "|" + session.getUserProperties());
+		LOGGER.debug("@@@@@@@@ onMessage message=" + message);
+		serveMessage(session, message);
 	}
 
 	@OnClose
-	public void connectionClose(Session session) {
-		LOGGER.debug("@@@@@@@@ connectionClose");
+	public void onClose(Session session) {
+		LOGGER.debug("@@@@@@@@ onClose=" + session.getId() + "|" + session.getUserProperties());
 		sessionList.remove(session);
 	}
 
 	@OnError
-	public void connectionError(Session session, Throwable t) {
+	public void onError(Session session, Throwable t) {
+		LOGGER.debug("@@@@@@@@ onError=" + session.getId() + "|" + session.getUserProperties());
 		t.printStackTrace();
 	}
 
-	private synchronized void broadcast(Session selfSession, String message) {
-		LOGGER.debug("@@@@@@@@ broadcast message =" + message);
+	private synchronized void serveMessage(Session reqSession, BidMessage message) {
+		LOGGER.debug("@@@@@@@@ serveMessage message =" + message);
 		for (Session session : sessionList) {
-		    if (selfSession.getId().equals(session.getId())) {
-		        continue; // 메시지 보낸 당사자에게는 전송 제외하기
+			LOGGER.debug("@@@@@@@@ serveMessage session.getId() =" + session.getId());
+			LOGGER.debug("@@@@@@@@ serveMessage WEBSOCKET_USER_INFO =" + session.getUserProperties().get("WEBSOCKET_USER_INFO"));
+			// 내가 보낸 메세지 나한텐 안보내기
+		    if (reqSession.getId().equals(session.getId())) {
+		        continue; 
 		    }
             Basic basic = session.getBasicRemote();
             try {

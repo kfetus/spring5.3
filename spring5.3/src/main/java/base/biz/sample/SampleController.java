@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -50,7 +51,6 @@ public class SampleController {
 		LOGGER.debug("####################### javaxWebsocketSample");
 		return "websocket/javaxWebsocketSample";
 	}
-
 	
 	/**
 	 * 샘플용 리스트 페이지 조회
@@ -71,5 +71,19 @@ public class SampleController {
 		return mv;
 	}
 	
-	
+	/**
+	 * url에 들어온 url 그대로 view로 매핑. 파라미터들 그대로 전달
+	 * @param map
+	 * @param subPath
+	 * @param viewName
+	 * @return
+	 */
+	@RequestMapping("/urlToView/{subPath}/{viewName}")
+	public ModelAndView subPathUrlToVies( @RequestParam HashMap<String,Object> map,@PathVariable String subPath,@PathVariable String viewName) {
+		LOGGER.debug("########## subPathUrlToVies  #############"+map);
+		ModelAndView mv = new ModelAndView();
+		String viewFileName = viewName.substring(0, viewName.indexOf("."));
+		mv.setViewName(subPath+"/"+viewFileName);
+		return mv;
+	}
 }

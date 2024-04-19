@@ -4,7 +4,9 @@ import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
-public class MsgDecoder implements Decoder.Text<String> {
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class MsgDecoder implements Decoder.Text<BidMessage> {
 
 	@Override
 	public void init(EndpointConfig ec) {
@@ -17,8 +19,16 @@ public class MsgDecoder implements Decoder.Text<String> {
 	}
 
 	@Override
-	public String decode(String msg) throws DecodeException {
-		return msg;
+	public BidMessage decode(String msg) throws DecodeException {
+		ObjectMapper mapper = new ObjectMapper();
+		BidMessage bidMsg;
+		try {
+			bidMsg = mapper.readValue(msg, BidMessage.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new DecodeException(msg,"json to object decode error",e.getCause());
+		}
+		return bidMsg;
 	}
 
 	@Override
