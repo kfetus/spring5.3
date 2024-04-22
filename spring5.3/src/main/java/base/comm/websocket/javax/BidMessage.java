@@ -6,7 +6,7 @@ public class BidMessage {
 	public String bidId;
 	//출품번호
 	public String entryNumber;
-	//경매상태(준비,시작,경쟁,낙찰)
+	//경매상태(준비:R,시작:S,경쟁:C,낙찰:E)
 	public String auctionState;
 	// 경합 인원 수(신호등)
 	public int competePeopleNum;
@@ -17,8 +17,8 @@ public class BidMessage {
 	// 현재 진행 호가 금액 
 	public int nowAuctionMoney;
 	// 희망 낙찰 금액
-	public int maxAuctionMoney;
-	// 차량 간단 정보(차량번호,년식,기어,연료,주행거리,자가또는법인)
+	public int hopeAuctionMoney;
+	// 차량 간단 정보(차량번호,년식,기어,연료,주행거리,자가또는법인) 분리해야 할듯
 	public String auctionCarInfo;
 	//차량이미지 => 응찰가격이 희망가격에 도달하게 되면 이미지 주위가 번쩍임. 낙찰, 유찰 결과 보여주기
 	public String imgSrc;
@@ -28,12 +28,33 @@ public class BidMessage {
 	public String evaluationGrade;
 	//낙찰여부 메세지
 	public String successfulBidYN;
-	//전송 TEXT 메세지
+	//전송 TEXT 메세지(지금은 테스트 메세지이나 주로 위 상태와 함께 낙찰되었습니다, 유찰되었습니다 일듯)
 	public String message;
 	//websocket 상태? 딱히 단어가.. 일단 지금은 로그인 안한 사람 팅기는 용도. 정상:0000 로그인 하지 않음 : 9999
 	public String conState;
 	
+	public BidMessage() {
+		
+	};
 	
+	public BidMessage(String entryNumber, String auctionState, int minAuctionMoney, int hopeAuctionMoney, String auctionCarInfo, String imgSrc,
+			String performanceCheckList, String evaluationGrade, String message) {
+		super();
+		this.entryNumber = entryNumber;
+		this.auctionState = auctionState;
+		this.competePeopleNum = 0;
+		this.hasRight = false;
+		this.minAuctionMoney = minAuctionMoney;
+		this.nowAuctionMoney = 0;
+		this.hopeAuctionMoney = hopeAuctionMoney;
+		this.auctionCarInfo = auctionCarInfo;
+		this.imgSrc = imgSrc;
+		this.performanceCheckList = performanceCheckList;
+		this.evaluationGrade = evaluationGrade;
+		this.successfulBidYN = "N";
+		this.message = message;
+		this.conState = "";
+	}
 	public String getBidId() {
 		return bidId;
 	}
@@ -76,11 +97,11 @@ public class BidMessage {
 	public void setNowAuctionMoney(int nowAuctionMoney) {
 		this.nowAuctionMoney = nowAuctionMoney;
 	}
-	public int getMaxAuctionMoney() {
-		return maxAuctionMoney;
+	public int getHopeAuctionMoney() {
+		return hopeAuctionMoney;
 	}
-	public void setMaxAuctionMoney(int maxAuctionMoney) {
-		this.maxAuctionMoney = maxAuctionMoney;
+	public void setHopeAuctionMoney(int hopeAuctionMoney) {
+		this.hopeAuctionMoney = hopeAuctionMoney;
 	}
 	public String getAuctionCarInfo() {
 		return auctionCarInfo;
@@ -128,7 +149,7 @@ public class BidMessage {
 	public String toString() {
 		return "BidMessage [bidId=" + bidId + ", entryNumber=" + entryNumber + ", auctionState=" + auctionState
 				+ ", competePeopleNum=" + competePeopleNum + ", hasRight=" + hasRight + ", minAuctionMoney="
-				+ minAuctionMoney + ", nowAuctionMoney=" + nowAuctionMoney + ", maxAuctionMoney=" + maxAuctionMoney
+				+ minAuctionMoney + ", nowAuctionMoney=" + nowAuctionMoney + ", hopeAuctionMoney=" + hopeAuctionMoney
 				+ ", auctionCarInfo=" + auctionCarInfo + ", imgSrc=" + imgSrc + ", performanceCheckList="
 				+ performanceCheckList + ", evaluationGrade=" + evaluationGrade + ", successfulBidYN=" + successfulBidYN
 				+ ", message=" + message + ", conState=" + conState + "]";

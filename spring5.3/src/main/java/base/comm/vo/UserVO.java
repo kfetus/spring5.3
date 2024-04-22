@@ -9,6 +9,7 @@ public class UserVO {
 	private int userNo;
 	private String userIp;
 	private String descrip;
+	private String grade;
 	
 	private String hpNo;
 	private String email;
@@ -16,21 +17,8 @@ public class UserVO {
 	private String roadAddr;
 	private String jibunAddr;
 	private String detailAddr;
-	
 	private String regId;
 	
-	public String getDescrip() {
-		return descrip;
-	}
-	public void setDescrip(String descrip) {
-		this.descrip = descrip;
-	}
-	public String getUserIp() {
-		return userIp;
-	}
-	public void setUserIp(String userIp) {
-		this.userIp = userIp;
-	}
 	public String getUserId() {
 		return userId;
 	}
@@ -61,7 +49,24 @@ public class UserVO {
 	public void setUserNo(int userNo) {
 		this.userNo = userNo;
 	}
-	
+	public String getUserIp() {
+		return userIp;
+	}
+	public void setUserIp(String userIp) {
+		this.userIp = userIp;
+	}
+	public String getDescrip() {
+		return descrip;
+	}
+	public void setDescrip(String descrip) {
+		this.descrip = descrip;
+	}
+	public String getGrade() {
+		return grade;
+	}
+	public void setGrade(String grade) {
+		this.grade = grade;
+	}
 	public String getHpNo() {
 		return hpNo;
 	}
@@ -106,10 +111,12 @@ public class UserVO {
 	}
 	@Override
 	public String toString() {
-		return "UserVO [userId=" + userId + ", userPass=" + userPass + ", userName=" + userName + ", userNo=" + userNo
-				+ ", userIp=" + userIp + ", descrip=" + descrip + ", hpNo=" + hpNo + ", email=" + email + ", zoneCode="
-				+ zoneCode + ", roadAddr=" + roadAddr + ", jibunAddr=" + jibunAddr + ", detailAddr=" + detailAddr
-				+ ", regId=" + regId + "]";
+		return "UserVO [userId=" + userId + ", userPass=" + userPass + ", salt=" + salt + ", userName=" + userName
+				+ ", userNo=" + userNo + ", userIp=" + userIp + ", descrip=" + descrip + ", grade=" + grade + ", hpNo="
+				+ hpNo + ", email=" + email + ", zoneCode=" + zoneCode + ", roadAddr=" + roadAddr + ", jibunAddr="
+				+ jibunAddr + ", detailAddr=" + detailAddr + ", regId=" + regId + "]";
 	}
+	
+
 	
 }

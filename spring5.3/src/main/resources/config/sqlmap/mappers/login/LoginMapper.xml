@@ -10,6 +10,7 @@
 			, A.USER_NAME
 			, A.USER_IP
 			, A.DESCRIP
+			, A.GRADE
 			, A.REG_DT
 			, A.CNG_DT 
 			, B.HP_NO
@@ -28,6 +29,7 @@
 			, USER_NAME
 			, USER_IP
 			, DESCRIP
+			, GRADE
 			, REG_DT
 			, CNG_DT 
 		  FROM LOGIN_INFO
@@ -47,6 +49,7 @@
 			, USER_NAME
 			, USER_IP
 			, DESCRIP
+			, GRADE
 			, REG_DT
 			, CNG_DT
 			)
@@ -58,6 +61,7 @@
 			, #{userName}
 			, #{userIp}
 			, #{descrip}
+			, #{grade}
 			, CURRENT_TIMESTAMP()
 			, CURRENT_TIMESTAMP()
 			)
