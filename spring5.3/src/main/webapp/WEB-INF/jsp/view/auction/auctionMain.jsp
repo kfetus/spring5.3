@@ -127,14 +127,14 @@
 				$("#message").html(getData);
 			};
 			
+			//$(function() {} 이렇게 선언해서 해당 ready 함수안에 $('#bidBtn').click(function...) 같이 선언하면 되나 객체방식 socket 핸들링을 위해 이벤트 핸들링을 아래와 같이 동적 이벤트로 할당 함
 			$(document).on('click','#bidBtn',function() {
 				var bidMessage = {};
 				bidMessage.entryNumber = entryNumber;
-//				bidMessage.message = $("#message").html();
 				socket.send(JSON.stringify(bidMessage));
 			});
 			$(document).on('click','#noBidBtn',function() {
-				alert('대기중');
+				alert('경매 시작 대기중');
 			});
 
 			

@@ -28,6 +28,11 @@
 				});
 	
 			}
+			
+			$(function() {
+				console.log('document.onload()');
+			})
+			
 		</script>
 	</head>
 	<body>
