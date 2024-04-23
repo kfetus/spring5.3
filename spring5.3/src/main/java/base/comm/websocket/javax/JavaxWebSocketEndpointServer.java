@@ -23,9 +23,10 @@ import org.springframework.stereotype.Service;
 /**
  * @TODO 1. 관리자가 들어와서 경매 시작 종료.=>완료
  * 2. 낙찰 또는 유찰일 경우 다음 물건 자동 조회 해서 전송
- * 3. 관리자가 경매 진행 전체 STOP 가능
- * 4. 신호등
+ * 3. 관리자가 경매 진행 전체 STOP 가능 => 완료
+ * 4. 신호등 => 진행 중. 실시간 업데이트 추가 필요. 2번과 연관.
  * 5. 4초간 입찰이 없을경우 처리(낙찰,유찰 메세지)
+ * 6. REDIS 연동해서 멀티서버일 경우 처리
  * @author USER
  * 
  *  @ServerEndpoint 이 어노테이션이 붙으면 웹소켓이 연결될때마다 객체가 인스턴스가 생성된다. Singleton으로 처리하기 위해 추가한 부분 : @Service. (@Component도 상관은 없다)
@@ -181,6 +182,7 @@ public class JavaxWebSocketEndpointServer {
     			
     			BidderVO vo = (BidderVO)session.getUserProperties().get("WEBSOCKET_USER_INFO");
     			message.setBidId(vo.getUserId());
+    			message.setUserName(vo.getUserName());
     			Basic basic = session.getBasicRemote();
                 basic.sendObject(message);
             } catch (Exception e) {
@@ -200,6 +202,7 @@ public class JavaxWebSocketEndpointServer {
         try {
         	BidderVO vo = (BidderVO)reqSession.getUserProperties().get("WEBSOCKET_USER_INFO");
 			message.setBidId(vo.getUserId());
+			message.setUserName(vo.getUserName());
         	reqSession.getBasicRemote().sendObject(message);
         	message.setBidId("");//BidMessage는 전역변수이므로 사용 후 해당 값 초기화
         } catch (Exception e) {

@@ -45,7 +45,7 @@ public class ServerConfigurator extends Configurator implements ApplicationConte
 		} else {
 			UserVO vo = (UserVO) session.getAttribute("USER_INFO");
 			bider.setUserId(vo.getUserId());
-			bider.setHpNo(vo.getHpNo());
+			bider.setUserName(vo.getUserName());
 			bider.setGrade(vo.getGrade());
 			config.getUserProperties().put("WEBSOCKET_USER_INFO", bider);
 		}

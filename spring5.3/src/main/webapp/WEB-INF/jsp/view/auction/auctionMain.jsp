@@ -61,6 +61,7 @@
 				var message = JSON.parse(getData.data);
 				entryNumber = message.entryNumber;
 				$("#userId").html(message.bidId);
+				$("#userName").html(message.userName);
 				$("#entryNumber").html(message.entryNumber);
 				$("#auctionState").html(auctionSate[message.auctionState]);
 				$("#competePeopleNum").html(message.competePeopleNum);
@@ -94,14 +95,21 @@
 				$("#message").html(message.message);
 				
 				if('S' === message.auctionState || 'C' === message.auctionState) {
-					$('#btn1').attr("disabled", false);
+					$('#bidBtn').attr("disabled", false);
+					
+					$('#activeBidBtnSpan').show();
+					$('#noActiveBidBtnSpan').hide();
+					
 					<c:if test="${'M' eq grade}">
 						$('#startBtnSpan').hide();
 						$('#stopBtnSpan').show();
 					</c:if>
 				//R 또는 O , E
 				} else {
-					$('#btn1').attr("disabled", true);
+					$('#bidBtn').attr("disabled", true);
+					$('#activeBidBtnSpan').hide();
+					$('#noActiveBidBtnSpan').show();
+
 					<c:if test="${'M' eq grade}">
 						$('#startBtnSpan').show();
 						$('#stopBtnSpan').hide();
@@ -119,12 +127,17 @@
 				$("#message").html(getData);
 			};
 			
-			$(document).on('click','#btn1',function() {
+			$(document).on('click','#bidBtn',function() {
 				var bidMessage = {};
 				bidMessage.entryNumber = entryNumber;
 //				bidMessage.message = $("#message").html();
 				socket.send(JSON.stringify(bidMessage));
 			});
+			$(document).on('click','#noBidBtn',function() {
+				alert('대기중');
+			});
+
+			
 			
 			<c:if test="${'M' eq grade}">
 			$(document).on('click','#startBtn',function() {
@@ -157,7 +170,7 @@
 				<span id="startBtnSpan"><button id="startBtn">시작</button></span>
 				<span id="stopBtnSpan" style="display: none;"><button id="stopBtn">중지</button></span>
 			</c:if><br>
-			사용자 ID:<span id="userId"></span>사용자 HP:<span id="userId"></span><br>
+			사용자 ID:<span id="userId"></span>사용자 이름:<span id="userName"></span><br>
 			접속상태:<span id="connStatus"></span>
 		</div>
 		<div>
@@ -177,7 +190,8 @@
 				<li>현재 입찰가:<span style="color: red;"  id="nowAuctionMoney"></span></li>
 				<li>응찰버튼:
 					<div>
-						<button id="btn1" style="font-size: 50px;">응찰</button>
+						<span id="activeBidBtnSpan"><button id="bidBtn" style="font-size: 50px;">응찰</button></span>
+						<span id="noActiveBidBtnSpan" style="display: none;"><button id="noBidBtn" style="font-size: 50px;">응찰</button></span>
 					</div>
 				</li>
 				<li>차량간단정보(차량번호,년식,기어,연료,주행거리,자가또는법인):<span style="color: red;"  id="auctionCarInfo"></span></li>

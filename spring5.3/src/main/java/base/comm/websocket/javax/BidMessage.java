@@ -1,9 +1,16 @@
 package base.comm.websocket.javax;
 
+/**
+ * 경매용 메세지
+ * @author USER
+ *
+ */
 public class BidMessage {
 
 	// 사용자 id
 	public String bidId;
+	// 사용자 이름
+	public String userName;
 	//출품번호
 	public String entryNumber;
 	//경매상태(준비:R,시작:S,경쟁:C,낙찰:O,경매전체종료:E)
@@ -60,6 +67,12 @@ public class BidMessage {
 	}
 	public void setBidId(String bidId) {
 		this.bidId = bidId;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	public String getEntryNumber() {
 		return entryNumber;
@@ -145,14 +158,16 @@ public class BidMessage {
 	public void setConState(String conState) {
 		this.conState = conState;
 	}
+
 	@Override
 	public String toString() {
-		return "BidMessage [bidId=" + bidId + ", entryNumber=" + entryNumber + ", auctionState=" + auctionState
-				+ ", competePeopleNum=" + competePeopleNum + ", hasRight=" + hasRight + ", minAuctionMoney="
-				+ minAuctionMoney + ", nowAuctionMoney=" + nowAuctionMoney + ", hopeAuctionMoney=" + hopeAuctionMoney
-				+ ", auctionCarInfo=" + auctionCarInfo + ", imgSrc=" + imgSrc + ", performanceCheckList="
-				+ performanceCheckList + ", evaluationGrade=" + evaluationGrade + ", successfulBidYN=" + successfulBidYN
-				+ ", message=" + message + ", conState=" + conState + "]";
+		return "BidMessage [bidId=" + bidId + ", userName=" + userName + ", entryNumber=" + entryNumber
+				+ ", auctionState=" + auctionState + ", competePeopleNum=" + competePeopleNum + ", hasRight=" + hasRight
+				+ ", minAuctionMoney=" + minAuctionMoney + ", nowAuctionMoney=" + nowAuctionMoney
+				+ ", hopeAuctionMoney=" + hopeAuctionMoney + ", auctionCarInfo=" + auctionCarInfo + ", imgSrc=" + imgSrc
+				+ ", performanceCheckList=" + performanceCheckList + ", evaluationGrade=" + evaluationGrade
+				+ ", successfulBidYN=" + successfulBidYN + ", message=" + message + ", conState=" + conState + "]";
 	}
+
 
 }

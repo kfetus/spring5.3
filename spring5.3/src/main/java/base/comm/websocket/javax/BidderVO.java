@@ -2,18 +2,23 @@ package base.comm.websocket.javax;
 
 import java.time.LocalTime;
 
+/**
+ * 경매 websocket Session 용 VO
+ * @author USER
+ *
+ */
 public class BidderVO {
 
 	private String userId;
-	private String hpNo;
+	private String userName;
 	private String grade;
 	private int nowBidMoney;
 	private LocalTime lastBidTime;
 	
-	public BidderVO(String userId, String hpNo, String grade) {
+	public BidderVO(String userId, String userName, String grade) {
 		super();
 		this.userId = userId;
-		this.hpNo = hpNo;
+		this.userName = userName;
 		this.grade = grade;
 	}
 
@@ -23,11 +28,11 @@ public class BidderVO {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public String getHpNo() {
-		return hpNo;
+	public String getUserName() {
+		return userName;
 	}
-	public void setHpNo(String hpNo) {
-		this.hpNo = hpNo;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	public String getGrade() {
 		return grade;
@@ -52,7 +57,7 @@ public class BidderVO {
 
 	@Override
 	public String toString() {
-		return "BidderVO [userId=" + userId + ", hpNo=" + hpNo + ", grade=" + grade + ", nowBidMoney=" + nowBidMoney
+		return "BidderVO [userId=" + userId + ", userName=" + userName + ", grade=" + grade + ", nowBidMoney=" + nowBidMoney
 				+ ", lastBidTime=" + lastBidTime + "]";
 	}
 	

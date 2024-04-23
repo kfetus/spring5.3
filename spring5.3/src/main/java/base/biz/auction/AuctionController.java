@@ -31,6 +31,7 @@ public class AuctionController {
 		UserVO vo = sessionManager.getUserInfo(req);
 		
 		ModelAndView mv = new ModelAndView();
+		//비 로그인 사용자가 접근시 처리
 		if(vo != null) {
 			mv.addObject("grade", vo.getGrade());
 		} else {
