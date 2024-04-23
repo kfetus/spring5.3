@@ -17,6 +17,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Configuration;
 
+import base.comm.vo.UserVO;
+
 //Singleton으로 처리하기 위해 추가된 부분 : @Configuration , implements ApplicationContextAware
 @Configuration
 public class ServerConfigurator extends Configurator implements ApplicationContextAware {
@@ -36,10 +38,16 @@ public class ServerConfigurator extends Configurator implements ApplicationConte
 			}
 		}
 
+		BidderVO bider = new BidderVO("","","");
+		
 		if (session == null || session.getAttribute("USER_INFO") == null) {
-			config.getUserProperties().put("WEBSOCKET_USER_INFO", "");
+			config.getUserProperties().put("WEBSOCKET_USER_INFO", bider);
 		} else {
-			config.getUserProperties().put("WEBSOCKET_USER_INFO", session.getAttribute("USER_INFO"));
+			UserVO vo = (UserVO) session.getAttribute("USER_INFO");
+			bider.setUserId(vo.getUserId());
+			bider.setHpNo(vo.getHpNo());
+			bider.setGrade(vo.getGrade());
+			config.getUserProperties().put("WEBSOCKET_USER_INFO", bider);
 		}
 	}
 

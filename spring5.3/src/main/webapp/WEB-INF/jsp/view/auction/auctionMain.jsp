@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -8,14 +8,31 @@
 		<script src="<c:url value="/static/js/comm/jquery-3.7.1.js" />"></script>
 		<link rel="stylesheet" href="<c:url value="/static/css/base.css" />" />
 
-<style>
+	<style>
+	button {
+	    top:50%;
+	    background-color:#22bbca;
+	    color: #fff;
+	    border:none; 
+	    border-radius:10px; 
+	    padding:5px;
+	    min-height:30px; 
+	    min-width: 120px;
+	    font-size: 30px;
+	}
+	.circle_div {
+	    display: flex;
+	}
+	.circle {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		background-color: #bebebe; 
+	}
+	
+	</style>
 
-</style>
 	<script>
-		
-		const moveTest =() => {
-			window.location.href = "/javaxWebsocketSample.do";
-		}
 		
 		const websocketTest = () => {
 
@@ -31,13 +48,40 @@
 				console.log(Event);
 			};
 			
+			const auctionSate = {
+				R:'준비',
+				S:'시작',
+				C:'경쟁',
+				O:'낙찰',
+				E:'종료'
+			}
+			
 			socket.onmessage = (getData) => {
 				console.log(getData.data);
 				var message = JSON.parse(getData.data);
 				entryNumber = message.entryNumber;
+				$("#userId").html(message.bidId);
 				$("#entryNumber").html(message.entryNumber);
-				$("#auctionState").html(message.auctionState);
+				$("#auctionState").html(auctionSate[message.auctionState]);
 				$("#competePeopleNum").html(message.competePeopleNum);
+				if(0 === message.competePeopleNum) {
+					$('#circleOne').css('backgroundColor', '#bebebe');
+					$('#circleTwo').css('backgroundColor', '#bebebe');
+					$('#circleThree').css('backgroundColor', '#bebebe');
+				} else if(1 === message.competePeopleNum) {
+					$('#circleOne').css('backgroundColor', '#99cc00');
+					$('#circleTwo').css('backgroundColor', '#bebebe');
+					$('#circleThree').css('backgroundColor', '#bebebe');
+				} else if(2 === message.competePeopleNum) {
+					$('#circleOne').css('backgroundColor', '#bebebe');
+					$('#circleTwo').css('backgroundColor', '#DB631F');
+					$('#circleThree').css('backgroundColor', '##bebebe');
+				} else {
+					$('#circleOne').css('backgroundColor', '#bebebe');
+					$('#circleTwo').css('backgroundColor', '#bebebe');
+					$('#circleThree').css('backgroundColor', '#FF0000');
+				} 
+				
 				$("#hasRight").html(message.hasRight+'');
 				$("#minAuctionMoney").html(message.minAuctionMoney);
 				$("#hopeAuctionMoney").html(message.hopeAuctionMoney);
@@ -48,6 +92,22 @@
 				$("#evaluationGrade").html(message.evaluationGrade);
 				$("#successfulBidYN").html(message.successfulBidYN);
 				$("#message").html(message.message);
+				
+				if('S' === message.auctionState || 'C' === message.auctionState) {
+					$('#btn1').attr("disabled", false);
+					<c:if test="${'M' eq grade}">
+						$('#startBtnSpan').hide();
+						$('#stopBtnSpan').show();
+					</c:if>
+				//R 또는 O , E
+				} else {
+					$('#btn1').attr("disabled", true);
+					<c:if test="${'M' eq grade}">
+						$('#startBtnSpan').show();
+						$('#stopBtnSpan').hide();
+					</c:if>
+					
+				}
 			};
 			
 			socket.onclose = (getData) =>{
@@ -65,9 +125,26 @@
 //				bidMessage.message = $("#message").html();
 				socket.send(JSON.stringify(bidMessage));
 			});
+			
+			<c:if test="${'M' eq grade}">
+			$(document).on('click','#startBtn',function() {
+				var bidMessage = {};
+				bidMessage.entryNumber = entryNumber;
+				bidMessage.message = 'START_MASTER';
+				socket.send(JSON.stringify(bidMessage));
+			});
+			$(document).on('click','#stopBtn',function() {
+				var bidMessage = {};
+				bidMessage.entryNumber = entryNumber;
+				bidMessage.message = 'STOP_MASTER';
+				socket.send(JSON.stringify(bidMessage));
+			});
+			</c:if>
 		}
 		
 		websocketTest();
+
+
 		
 	</script>
 
@@ -75,23 +152,32 @@
 <body>
 	<div>
 		<div>
-			경매 메인.<br>
-			사용자:<span id="userId">asdfasfsdf</span><br>
+			경매 메인
+			<c:if test="${'M' eq grade}">
+				<span id="startBtnSpan"><button id="startBtn">시작</button></span>
+				<span id="stopBtnSpan" style="display: none;"><button id="stopBtn">중지</button></span>
+			</c:if><br>
+			사용자 ID:<span id="userId"></span>사용자 HP:<span id="userId"></span><br>
 			접속상태:<span id="connStatus"></span>
 		</div>
 		<div>
 			<ul>
 				<li>출품번호:<span style="color: red;" id="entryNumber"></span></li>
-				<li>경매상태(준비,시작,경쟁,낙찰):<span style="color: red;"  id="auctionState"></span></li>
-				<li>신호등:<span style="color: red;"  id="competePeopleNum"></span></li>
+				<li>경매상태(준비,시작,경쟁,낙찰,종료):<span style="color: red;font-size: 30px;" id="auctionState"></span></li>
+				<li>경쟁상태 신호등:<span style="color: red;"  id="competePeopleNum"></span>
+					<div class="circle_div">
+						<div id="circleOne" class="circle" ></div>
+						<div id="circleTwo" class="circle" ></div>
+						<div id="circleThree" class="circle" ></div>
+					</div>
+				</li>
 				<li>권리여부:<span style="color: red;"  id="hasRight"></span></li>
 				<li>입찰시작가:<span style="color: red;"  id="minAuctionMoney"></span></li>
 				<li>희망낙찰가:<span style="color: red;"  id="hopeAuctionMoney"></span></li>
 				<li>현재 입찰가:<span style="color: red;"  id="nowAuctionMoney"></span></li>
 				<li>응찰버튼:
 					<div>
-						<button id="btn1">응찰</button>
-						<button onClick="javascript:moveTest()">moveTest</button>
+						<button id="btn1" style="font-size: 50px;">응찰</button>
 					</div>
 				</li>
 				<li>차량간단정보(차량번호,년식,기어,연료,주행거리,자가또는법인):<span style="color: red;"  id="auctionCarInfo"></span></li>

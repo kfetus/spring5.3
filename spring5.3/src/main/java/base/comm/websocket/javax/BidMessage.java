@@ -6,7 +6,7 @@ public class BidMessage {
 	public String bidId;
 	//출품번호
 	public String entryNumber;
-	//경매상태(준비:R,시작:S,경쟁:C,낙찰:E)
+	//경매상태(준비:R,시작:S,경쟁:C,낙찰:O,경매전체종료:E)
 	public String auctionState;
 	// 경합 인원 수(신호등)
 	public int competePeopleNum;
@@ -53,7 +53,7 @@ public class BidMessage {
 		this.evaluationGrade = evaluationGrade;
 		this.successfulBidYN = "N";
 		this.message = message;
-		this.conState = "";
+		this.conState = "0000";
 	}
 	public String getBidId() {
 		return bidId;
