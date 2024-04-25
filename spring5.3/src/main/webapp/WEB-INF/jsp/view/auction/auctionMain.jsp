@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>경매 메인</title> 
+<title>경매 메인</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <script src="<c:url value="/static/js/comm/jquery-3.7.1.js" />"></script>
 <link rel="stylesheet" href="<c:url value="/static/css/base.css" />" />
@@ -13,10 +13,10 @@ button {
 top:50%;
 background-color:#22bbca;
 color: #fff;
-border:none; 
-border-radius:10px; 
+border:none;
+border-radius:10px;
 padding:5px;
-min-height:30px; 
+min-height:30px;
 min-width: 120px;
 font-size: 30px;
 }
@@ -27,7 +27,7 @@ display: flex;
 width: 40px;
 height: 40px;
 border-radius: 50%;
-background-color: #bebebe; 
+background-color: #bebebe;
 }
 
 </style>
@@ -139,7 +139,6 @@ socket.send(JSON.stringify(bidMessage));
 $(document).on('click','#noBidBtn',function() {
 alert('경매 '+auctionSate[nowAuctionState]+' 상태');
 });
-
 
 
 <c:if test="${'M' eq grade}">
