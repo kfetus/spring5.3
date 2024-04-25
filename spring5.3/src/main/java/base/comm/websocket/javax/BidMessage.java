@@ -13,11 +13,11 @@ public class BidMessage {
 	public String userName;
 	//출품번호
 	public String entryNumber;
-	//경매상태(준비:R,시작:S,경쟁:C,낙찰:O,경매전체종료:E)
+	//경매상태(준비:R,시작:S,낙찰:O,유찰:F,경매전체종료:E)
 	public String auctionState;
 	// 경합 인원 수(신호등)
 	public int competePeopleNum;
-	// 낙찰 권리 여부
+	// 낙찰 권리 여부. 낙찰된건 아님. 현재 진행중에 낙찰 권리(최고금액)을 넣은 상태
 	public boolean hasRight;
 	// 최저 판매 금액(입찰 시작 가격)
 	public int minAuctionMoney;
@@ -27,13 +27,13 @@ public class BidMessage {
 	public int hopeAuctionMoney;
 	// 차량 간단 정보(차량번호,년식,기어,연료,주행거리,자가또는법인) 분리해야 할듯
 	public String auctionCarInfo;
-	//차량이미지 => 응찰가격이 희망가격에 도달하게 되면 이미지 주위가 번쩍임. 낙찰, 유찰 결과 보여주기
+	//차량이미지 
 	public String imgSrc;
 	//차량수리내역(성능점검) 이미지
 	public String performanceCheckList;
 	//차량 평가 급수
 	public String evaluationGrade;
-	//낙찰여부 메세지
+	//응찰가격이 희망가격을 넘어섯다. 낙찰이 되는 물건이 되었다
 	public String successfulBidYN;
 	//전송 TEXT 메세지(지금은 테스트 메세지이나 주로 위 상태와 함께 낙찰되었습니다, 유찰되었습니다 일듯)
 	public String message;

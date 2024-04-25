@@ -42,6 +42,7 @@
 			//핸드폰이나 기타 다른 피씨에서 테스트 활 경우에는 여기 IP를 서버수행 아이피로 해야 한다. session 유지를 위해서 브라우저 주소도 아이피로 연결
 			const socket = new WebSocket('ws://192.168.0.16:8080/auctionWebsocket.do');
 			let entryNumber = '';
+			let nowAuctionState = 'R';
 			
 			socket.onopen = (Event) => {
 				$("#connStatus").html("접속 중");
@@ -51,8 +52,8 @@
 			const auctionSate = {
 				R:'준비',
 				S:'시작',
-				C:'경쟁',
 				O:'낙찰',
+				F:'유찰',
 				E:'종료'
 			}
 			
@@ -64,7 +65,9 @@
 				$("#userName").html(message.userName);
 				$("#entryNumber").html(message.entryNumber);
 				$("#auctionState").html(auctionSate[message.auctionState]);
+				nowAuctionState = message.auctionState;
 				$("#competePeopleNum").html(message.competePeopleNum);
+
 				if(0 === message.competePeopleNum) {
 					$('#circleOne').css('backgroundColor', '#bebebe');
 					$('#circleTwo').css('backgroundColor', '#bebebe');
@@ -76,7 +79,7 @@
 				} else if(2 === message.competePeopleNum) {
 					$('#circleOne').css('backgroundColor', '#bebebe');
 					$('#circleTwo').css('backgroundColor', '#DB631F');
-					$('#circleThree').css('backgroundColor', '##bebebe');
+					$('#circleThree').css('backgroundColor', '#bebebe');
 				} else {
 					$('#circleOne').css('backgroundColor', '#bebebe');
 					$('#circleTwo').css('backgroundColor', '#bebebe');
@@ -89,12 +92,12 @@
 				$("#nowAuctionMoney").html(message.nowAuctionMoney);
 				$("#auctionCarInfo").html(message.auctionCarInfo);
 				$("#imgSrc").html(message.imgSrc);
+				$("#successfulBidYN").html(message.successfulBidYN);//Y => 이미지 주위가 번쩍임. 낙찰, 유찰 결과 보여주기
 				$("#performanceCheckList").html(message.performanceCheckList);
 				$("#evaluationGrade").html(message.evaluationGrade);
-				$("#successfulBidYN").html(message.successfulBidYN);
 				$("#message").html(message.message);
 				
-				if('S' === message.auctionState || 'C' === message.auctionState) {
+				if('S' === message.auctionState) {
 					$('#bidBtn').attr("disabled", false);
 					
 					$('#activeBidBtnSpan').show();
@@ -104,7 +107,7 @@
 						$('#startBtnSpan').hide();
 						$('#stopBtnSpan').show();
 					</c:if>
-				//R 또는 O , E
+				//R, O, E, F
 				} else {
 					$('#bidBtn').attr("disabled", true);
 					$('#activeBidBtnSpan').hide();
@@ -134,7 +137,7 @@
 				socket.send(JSON.stringify(bidMessage));
 			});
 			$(document).on('click','#noBidBtn',function() {
-				alert('경매 시작 대기중');
+				alert('경매 '+auctionSate[nowAuctionState]+' 상태');
 			});
 
 			
@@ -176,7 +179,7 @@
 		<div>
 			<ul>
 				<li>출품번호:<span style="color: red;" id="entryNumber"></span></li>
-				<li>경매상태(준비,시작,경쟁,낙찰,종료):<span style="color: red;font-size: 30px;" id="auctionState"></span></li>
+				<li>경매상태(준비,시작,낙찰,종료):<span style="color: red;font-size: 30px;" id="auctionState"></span></li>
 				<li>경쟁상태 신호등:<span style="color: red;"  id="competePeopleNum"></span>
 					<div class="circle_div">
 						<div id="circleOne" class="circle" ></div>
@@ -195,10 +198,10 @@
 					</div>
 				</li>
 				<li>차량간단정보(차량번호,년식,기어,연료,주행거리,자가또는법인):<span style="color: red;"  id="auctionCarInfo"></span></li>
-				<li>차량이미지 => 응찰가격이 희망가격에 도달하게 되면 이미지 주위가 번쩍임. 낙찰, 유찰 결과 보여주기:<span style="color: red;"  id="imgSrc"></span></li>
+				<li>차량이미지:<span style="color: red;"  id="imgSrc"></span></li>
+				<li>응찰가격이 희망가격을 넘어섯다. 낙찰이 되는 물건이 되었다:<span style="color: red;"  id="successfulBidYN"></span></li>
 				<li>차량수리내역(성능점검) 이미지:<span style="color: red;"  id="performanceCheckList"></span></li>
 				<li>차량 평가 급수:<span style="color: red;"  id="evaluationGrade"></span></li>
-				<li>낙찰여부:<span style="color: red;"  id="successfulBidYN"></span></li>
 				<li>서버 메세지:<span style="color: red;"  id="message"></span></li>
 			</ul>
 		</div>
