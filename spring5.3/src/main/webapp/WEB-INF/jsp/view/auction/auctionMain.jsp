@@ -84,7 +84,7 @@ $('#circleThree').css('backgroundColor', '#bebebe');
 $('#circleOne').css('backgroundColor', '#bebebe');
 $('#circleTwo').css('backgroundColor', '#bebebe');
 $('#circleThree').css('backgroundColor', '#FF0000');
-} 
+}
 
 $("#hasRight").html(message.hasRight+'');
 $("#minAuctionMoney").html(message.minAuctionMoney);
@@ -139,7 +139,6 @@ socket.send(JSON.stringify(bidMessage));
 $(document).on('click','#noBidBtn',function() {
 alert('경매 '+auctionSate[nowAuctionState]+' 상태');
 });
-
 
 <c:if test="${'M' eq grade}">
 $(document).on('click','#startBtn',function() {
