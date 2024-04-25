@@ -158,8 +158,6 @@ socket.send(JSON.stringify(bidMessage));
 
 websocketTest();
 
-
-
 </script>
 
 </head>
