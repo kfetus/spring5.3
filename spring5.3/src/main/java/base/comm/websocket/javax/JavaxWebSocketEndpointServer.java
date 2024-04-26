@@ -28,13 +28,15 @@ import org.springframework.stereotype.Service;
  * 3. 관리자가 들어와서 경매 시작 종료.=>완료
  * 4. 신호등(max 3명 정도만 관리. 1명,2명,3명 이상일 경우 상태값 전송) => 완료. 1초당 계산. 
  * 5. 5초간 응찰이 없을경우 처리(낙찰,유찰 메세지) 일반적으로 3초인데 그건 설정에 따르고 낙찰 되는 시간 정해서 낙찰되면 다음 또는 경매 전체 종료 => 완료
- * 6. REDIS 연동해서 멀티서버일 경우 처리
- * 7. 실제 입찰자 정보 세션으로 관리. 낙찰 됐을 경우 해당 낙찰자와 금액, 차량 정보 저장
- * 8. 권리 표시 => 완료
- * 9. 경매가 중간에 스톱이 됐다가 재개 됐을때 스레드 체크가 다시 시작이 되야 하는데? => 완료
- * 10. 관리자 중지 시작시 스레드 체크가 재시작 하지 않는다. => 완료
- * 11. 경매가 완전 종료 후 시작 버튼 누르면 시작 안되게.
+ * 6. 실제 입찰자 정보 세션으로 관리. 낙찰 됐을 경우 해당 낙찰자와 금액, 차량 정보 저장 => 해당 낙찰자 정보 표시 완료. DB 저장은 추 후 필요하면
+ * 7. 권리 표시 => 완료
+ * 8. 경매가 중간에 스톱이 됐다가 재개 됐을때 스레드 체크가 다시 시작이 되야 하는데? => 완료
+ * 9. 관리자 중지 시작시 스레드 체크가 재시작 하지 않는다. => 완료
+ * 10. 경매가 완전 종료 후 시작 버튼 누르면 시작 안되게. => 이건은 jsp에서 auctionState가 E이면 시작 버튼 disable 시키면 되는데 기준이 필요할듯? 재시작을 허용할 것인가 그대로 종료를 시킬 것인가
+ * 11. REDIS 연동해서 멀티서버일 경우 처리
  * 12. atomic이 정리 되지 않음. 응찰 금액, 로그인 세션 사용자 등에 대한 유일성 처리 방안 고려 필요
+ * 13. 레인 변경? 기능. 방을 여러개 만들어서 관리가 되야 한다는 뜻. => 현재 Singleton 방식으로 만들어져 있으므로 이 기능이 제공되려면 해당 url당 클래스를 만들어서 제공되는게 합당함.
+ *     일반 채팅프로그램처럼 무한히 방이 만들어 지는게 아니라 정해져 있는 숫자만 생성하기 때문. 해당 방에서 모든게 해결 되야 함.
  * @author USER
  * 
  * @ServerEndpoint 이 어노테이션이 붙으면 웹소켓이 연결될때마다 객체가 인스턴스가 생성된다. Singleton으로 처리하기 위해 추가한 부분 : @Service. (@Component도 상관은 없다). ServerConfigurator 에도 추가 내용이 있다.
@@ -44,7 +46,7 @@ import org.springframework.stereotype.Service;
 public class JavaxWebSocketEndpointServer {
 	
 	private final Logger LOGGER = LoggerFactory.getLogger(JavaxWebSocketEndpointServer.class);
-	
+	//WAS가 여러대로 운영할 경우 이 값을 redis 나 DB를 이용해서 같이 관리해야 함.
 	private List<Session> sessionList = new ArrayList<>();
 	
 	//현재 응찰 가격
@@ -57,6 +59,7 @@ public class JavaxWebSocketEndpointServer {
 	
 	//경매 순번
 	private int bidCount = 0;
+	
 	//테스트용도. 경매 물건 목록
 	private static List<BidMessage> bidList = new ArrayList<BidMessage>();
 	//경매 진행 상황 체크

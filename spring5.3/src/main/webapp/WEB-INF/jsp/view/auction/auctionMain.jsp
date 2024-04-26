@@ -169,7 +169,7 @@
 				<span id="startBtnSpan"><button id="startBtn">시작</button></span>
 				<span id="stopBtnSpan" style="display: none;"><button id="stopBtn">중지</button></span>
 				</c:if><br>
-				사용자 ID:<span id="userId"></span>사용자 이름:<span id="userName"></span><br>
+				사용자 ID:<span id="userId"></span>   사용자 이름:<span id="userName"></span><br>
 				접속상태:<span id="connStatus"></span>
 			</div>
 			<div>
