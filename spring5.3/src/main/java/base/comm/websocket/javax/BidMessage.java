@@ -41,7 +41,6 @@ public class BidMessage {
 	public String conState;
 	
 	public BidMessage() {
-		
 	};
 	
 	public BidMessage(String entryNumber, String auctionState, int minAuctionMoney, int hopeAuctionMoney, String auctionCarInfo, String imgSrc,
@@ -168,6 +167,4 @@ public class BidMessage {
 				+ ", performanceCheckList=" + performanceCheckList + ", evaluationGrade=" + evaluationGrade
 				+ ", successfulBidYN=" + successfulBidYN + ", message=" + message + ", conState=" + conState + "]";
 	}
-
-
 }

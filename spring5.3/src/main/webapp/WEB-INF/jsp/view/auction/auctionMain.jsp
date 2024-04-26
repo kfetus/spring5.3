@@ -10,7 +10,7 @@
 		
 		<style>
 			button {
-				top:50%;
+				top:60%;
 				background-color:#22bbca;
 				color: #fff;
 				border:none;
@@ -29,7 +29,6 @@
 				border-radius: 50%;
 				background-color: #bebebe;
 			}
-		
 		</style>
 		
 		<script>
