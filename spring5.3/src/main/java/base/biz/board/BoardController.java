@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,13 +65,13 @@ public class BoardController {
 			return retMap;
 		} else {
 			
-			if( StringUtils.hasText(String.valueOf(map.get("nowPage")))) {
+			if( !ObjectUtils.isEmpty(map.get("nowPage")) && StringUtils.hasText(String.valueOf(map.get("nowPage")))) {
 				nowPage = Integer.parseInt(String.valueOf(map.get("nowPage")));
 				if(nowPage > 0) {
 					nowPage = nowPage -1;
 				}
 			}
-			if( StringUtils.hasText(String.valueOf(map.get("pageListCnt")))) {
+			if( !ObjectUtils.isEmpty(map.get("pageListCnt")) && StringUtils.hasText(String.valueOf(map.get("pageListCnt")))) {
 				pageListCnt = Integer.parseInt(String.valueOf(map.get("pageListCnt")));
 			}
 			
