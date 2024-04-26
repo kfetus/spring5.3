@@ -10,7 +10,7 @@
 		
 		<style>
 			button {
-				top:60%;
+				top:50%;
 				background-color:#22bbca;
 				color: #fff;
 				border:none;
