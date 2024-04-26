@@ -11,6 +11,11 @@ public class EncryptoTest {
 			System.out.println("######## result="+sha256pass);
 			
 			System.out.println(Sha256Crypto.encSah256("tttt", "oeiXs+JyfakOpePsSAE2Mw=="));
+			
+			//새 유저 등록
+			String salt = Sha256Crypto.getSalt();
+			String encResult = Sha256Crypto.encSah256("vally1!", salt);
+			System.out.println("salt="+salt+"|encResult="+encResult);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

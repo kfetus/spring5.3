@@ -35,11 +35,12 @@
 		<script>
 		
 			const websocketTest = () => {
-			
+			<%--
 				// 웹소켓 연결. 브라우저에서 도메인으로 접속하면 도메인으로. ip로 접속했으면 ip로 해야 함. 도메인(localhost)으로 연결하고 ip로 WebSocket를 연결하면 Session이 null로 처리됨.
 				// 현재 도메인이 없으므로 핸폰 테스트를 위해서 아이피로 접속하게 함
 				//const socket = new WebSocket('ws://localhost:8080/auctionWebsocket.do');
 				//핸드폰이나 기타 다른 피씨에서 테스트 활 경우에는 여기 IP를 서버수행 아이피로 해야 한다. session 유지를 위해서 브라우저 주소도 아이피로 연결
+			--%>
 				const socket = new WebSocket('ws://192.168.0.16:8080/auctionWebsocket.do');
 				let entryNumber = '';
 				let nowAuctionState = 'R';

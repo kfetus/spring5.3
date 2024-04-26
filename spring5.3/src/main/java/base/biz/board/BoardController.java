@@ -64,13 +64,13 @@ public class BoardController {
 			return retMap;
 		} else {
 			
-			if( !StringUtils.isEmpty(map.get("nowPage")) && StringUtils.hasText(String.valueOf(map.get("nowPage")))) {
+			if( StringUtils.hasText(String.valueOf(map.get("nowPage")))) {
 				nowPage = Integer.parseInt(String.valueOf(map.get("nowPage")));
 				if(nowPage > 0) {
 					nowPage = nowPage -1;
 				}
 			}
-			if( !StringUtils.isEmpty(map.get("pageListCnt")) && StringUtils.hasText(String.valueOf(map.get("pageListCnt")))) {
+			if( StringUtils.hasText(String.valueOf(map.get("pageListCnt")))) {
 				pageListCnt = Integer.parseInt(String.valueOf(map.get("pageListCnt")));
 			}
 			

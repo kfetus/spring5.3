@@ -58,7 +58,7 @@ public class JavaxWebSocketEndpointServer {
 	//경매 순번
 	private int bidCount = 0;
 	//테스트용도. 경매 물건 목록
-	private List<BidMessage> bidList = new ArrayList<BidMessage>();
+	private static List<BidMessage> bidList = new ArrayList<BidMessage>();
 	//경매 진행 상황 체크
 	private boolean bidRunningCheck = false;
 	//마지막 응찰 시간
@@ -66,14 +66,16 @@ public class JavaxWebSocketEndpointServer {
 	//해당 물건 낙찰자 ID
 	private String finalSuccessBidderId = null;
 	
+	//DB 조회해서 셋팅. 테스트를 위해서 임시로 static으로 처리
+	static {
+		bidList.add(new BidMessage("2023", "R", 1500, 1550, "차량번호=12가1234,년식=2020,기어=auto,연료=가솔린,주행거리=10000,자가또는법인=자가", "차량 외부 이미지", "성능점검 이미지", "A++",""));
+		bidList.add(new BidMessage("2024", "R", 5000, 5100, "차량번호=12가0001,년식=2024,기어=auto,연료=가솔린,주행거리=1000,자가또는법인=자가", "차량 외부 이미지1","성능점검 이미지1", "A",""));
+		bidList.add(new BidMessage("2025", "R", 500, 550, "차량번호=12가5678,년식=2000,기어=auto,연료=디젤,주행거리=100000,자가또는법인=법인", "차량 외부 이미지2","성능점검 이미지2", "B+",""));
+		bidList.add(new BidMessage("2026", "R", 1000, 1050, "차량번호=12가9012,년식=2010,기어=auto,연료=가솔린,주행거리=10000,자가또는법인=자가", "차량 외부 이미지3","성능점검 이미지3", "C",""));
+	}
 	
 	//경매 물건 정보 초기화. 물건이 바뀔때마다 조회해서 전송해 줘야 함 
 	public void initAuction() {
-		//DB 조회해서 셋팅
-		bidList.add(new BidMessage("2023", "R", 1500, 1550, "차량번호=12가1234,년식=2020,기어=auto,연료=가솔린,주행거리=10000,자가또는법인=자가", "차량 외부 이미지", "성능점검 이미지", "A++",""));
-		bidList.add(new BidMessage("2024", "R", 5000, 5100, "차량번호=12가0001,년식=2024,기어=auto,연료=가솔린,주행거리=1000,자가또는법인=자가", "차량 외부 이미지","성능점검 이미지", "A++",""));
-		bidList.add(new BidMessage("2025", "R", 500, 550, "차량번호=12가5678,년식=2000,기어=auto,연료=디젤,주행거리=100000,자가또는법인=자가", "차량 외부 이미지","성능점검 이미지", "A++",""));
-		bidList.add(new BidMessage("2026", "R", 1000, 1050, "차량번호=12가9012,년식=2010,기어=auto,연료=가솔린,주행거리=10000,자가또는법인=자가", "차량 외부 이미지","성능점검 이미지", "A++",""));
 
 		//테스트용도. 경매 낙찰 또는 유찰 후 자동 넘어가기 위해.
 		bidMessage = bidList.get(bidCount);

@@ -27,5 +27,5 @@
 	<!-- 운영, 테스트 나눌때 톰켓 스탙 쉘에 -Dactivemode=test 추가해 주고 아래 설정을 적용하면 횜 그러면 msg_test.properties 파일이 로드 됨
 	     <util:properties id="config" location="classpath:/config/properties/msg_#{systemProperties['activemode']}.properties"/> -->
 	<util:properties id="controlsite" location="classpath:/config/properties/controlSite.properties"/>
-	<util:properties id="msg" location="classpath:/config/properties/msg.properties"/>	 
+	<util:properties id="msg" location="classpath:/config/properties/msg.properties"/>
 </beans>
