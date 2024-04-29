@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,8 +36,11 @@ public class LoginController {
 	@Autowired
 	private LoginServiceImpl loginService;
 	
+	@Autowired
+	private JwtComponent jwt;
+	
 	@RequestMapping(value = "/restLogin.do")
-	public Map<String,Object> restLogin(@RequestBody  UserVO vo, HttpServletRequest req) throws Exception {
+	public Map<String,Object> restLogin(@RequestBody  UserVO vo, HttpServletRequest req, HttpServletResponse res) throws Exception {
 		LOGGER.debug("@@@@@@@@@@@ restLogin 시작="+vo.toString());
 		Map<String , Object> retMap = new HashMap<String,Object>();
 		
@@ -67,6 +71,10 @@ public class LoginController {
 				vo2.setUserPass("");
 				retMap.put("userInfo", vo2);
 				sessionManager.createUserInfo(req, vo2);
+				
+				//JWT 관련 심플 셋팅
+				String token = jwt.makeToken(vo2, jwt.HEADER_KEY);
+				retMap.put("token", token);
 			} else {
 				retMap.put("RESCODE","0001");
 				retMap.put("RESMSG","사용자가 없습니다.");

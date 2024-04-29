@@ -7,8 +7,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+
+import base.comm.login.JwtComponent;
 
 /**
  * 
@@ -18,6 +21,9 @@ import org.springframework.web.servlet.ModelAndView;
 public class BaseIntercepter implements AsyncHandlerInterceptor {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseIntercepter.class);
+	
+	@Autowired
+	private JwtComponent jwt;
 	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -31,6 +37,10 @@ public class BaseIntercepter implements AsyncHandlerInterceptor {
         	String paramKey = (String) en.nextElement();            	
         	LOGGER.debug("key : " + paramKey +";value="+request.getParameter(paramKey));
         }
+        //jwt 관련 샘플 보기
+        LOGGER.debug("request.getHeader(jwt.HEADER_KEY)="+request.getHeader(jwt.HEADER_KEY));
+        
+        
 /*
         LOGGER.debug("¿¿¿¿¿¿¿¿¿¿¿¿ Attribute ¿¿¿¿¿¿¿¿¿¿¿¿");
 		Enumeration<?> attrNames = request.getAttributeNames();

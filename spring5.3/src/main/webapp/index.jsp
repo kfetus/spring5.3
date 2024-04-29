@@ -6,6 +6,7 @@
 		<title>Index</title> 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 		<script src="<c:url value="/static/js/comm/jquery-3.7.1.js" />"></script>
+		<script src="<c:url value="/static/js/comm/siteComm.js" />"></script>
 		<link rel="stylesheet" href="<c:url value="/static/css/base.css" />" />
 
 <style>
@@ -32,7 +33,7 @@ button:focus {
 }
 </style>
 	<script>
-	
+		
 		function fn_Login(){
 			if( !$('#userId').val() ) {
 				alert('ID 입력');
@@ -51,11 +52,18 @@ button:focus {
 				async : true,
 				dataType : 'text',
  				headers : {"Content-Type" : "application/json"},
+ 				//jwt를 사용하려면 아래 헤더도 추가 token은 아래 sessionStorage에서 가져온다
+ 				//headers:{'token':token}, 
 				data : JSON.stringify( {'userId':$('#userId').val(), 'userPass':$('#userPass').val()}),
 				success : function(result) {
 					console.log(result);
 					let retData = JSON.parse(result);
 					if(retData.RESCODE === '0000') {
+						//jwt 관련 access Token ,refresh token 저장이 필요하면 사용. 구현하지 않음
+						fnSetSessionStorage('token',retData.token);
+
+						console.log(fnGetSessionStorage('token'));
+												
 						//utl to view 컨트롤러 호출
 						window.location.href = "/auction/auctionBidMain.do";
 					} else {
