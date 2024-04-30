@@ -4,7 +4,9 @@
 <%@ page import="java.util.Enumeration" %>
 
 <%
-
+/**
+ * ExceptionHandler로 구현할 수도 있다. 귀찬다. 똑같은 결과가 전송된다.
+ */
 	//개발시 참고용 로그. 운영시 삭제
 	System.out.println("baseError.jsp=>"+request.getContentType());
 	System.out.println("¿¿¿¿¿¿¿¿¿¿¿¿ Attribute ¿¿¿¿¿¿¿¿¿¿¿¿");
