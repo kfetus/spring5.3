@@ -65,7 +65,7 @@ button:focus {
 						console.log(fnGetSessionStorage(G_TOKEN_KEY));
 												
 						//utl to view 컨트롤러 호출
-						window.location.href = "/auction/auctionBidMain.do";
+						window.location.href = "/welcome.jsp";
 					} else {
 						alert('로그인 실패');
 					}

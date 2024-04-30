@@ -39,7 +39,7 @@ button:focus {
 				url : '<c:url value="/restBaseError.do" />',
 				async : true,
 				dataType : 'text',
- 				headers : {"Content-Type" : "application/json","Authorization":fnGetSessionStorage(G_TOKEN_KEY)},
+ 				headers : {"Content-Type" : "application/json","AccessKeyJwt":fnGetSessionStorage(G_TOKEN_KEY)},
  				//jwt를 사용하려면 아래 헤더도 추가 token은 아래 sessionStorage에서 가져온다
  				//headers:{'token':token}, 
 				data : JSON.stringify( {'param':'test'}),
@@ -49,7 +49,7 @@ button:focus {
 					if(retData.RESCODE === '0000') {
 						console.log(fnGetSessionStorage('token'));
 					} else {
-						alert('로그인 실패');
+						alert(retData.RESMSG);
 					}
 				},
 				error : function(request, status, error) {        
@@ -75,6 +75,9 @@ button:focus {
 		</li>
 		<li>
 			<a href="<c:url value="/urlToView/board/boardList.do" />">urltoView</a>
+		</li>
+		<li>
+			<a href="<c:url value="/auction/auctionBidMain.do" />">경매</a>
 		</li>
 		<li>
 			<button onClick="javascript:testRest()">restError테스트</button>

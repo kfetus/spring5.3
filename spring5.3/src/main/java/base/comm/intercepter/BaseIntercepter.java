@@ -38,6 +38,14 @@ public class BaseIntercepter implements AsyncHandlerInterceptor {
         	LOGGER.debug("key : " + paramKey +";value="+request.getParameter(paramKey));
         }
         
+        //jwt 관련 샘플 보기. url 별로 셋팅해서 체크해야 하는데 그냥 샘플이라 있으면 하고 아니면 말고임.
+        String jwtToken = request.getHeader(jwt.HEADER_KEY);
+        LOGGER.debug("request.getHeader(jwt.HEADER_KEY)="+jwtToken);
+        if(jwtToken != null) {
+            jwt.verifyJWT(jwtToken);
+        }
+        
+/*
 		LOGGER.debug("¿¿¿¿¿¿¿¿¿¿¿¿ header ######");
         Enumeration<?> eheader = request.getHeaderNames();
         while(eheader.hasMoreElements()) {
@@ -45,10 +53,6 @@ public class BaseIntercepter implements AsyncHandlerInterceptor {
         	LOGGER.debug("headerKey : " + headerKey+";value="+request.getHeader(headerKey));
         }
         
-        //jwt 관련 샘플 보기
-        LOGGER.debug("request.getHeader(jwt.HEADER_KEY)="+request.getHeader(jwt.HEADER_KEY));
-        
-/*
         LOGGER.debug("¿¿¿¿¿¿¿¿¿¿¿¿ Attribute ¿¿¿¿¿¿¿¿¿¿¿¿");
 		Enumeration<?> attrNames = request.getAttributeNames();
 		while (attrNames.hasMoreElements()) {

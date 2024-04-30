@@ -50,6 +50,13 @@ public class TimeTest {
 		SimpleDateFormat formatterCal = new SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분 ss초");
 		String formatedNowCal = formatterCal.format(nowCal);
 		System.out.println(formatedNowCal);
+		
+		long cTime = System.currentTimeMillis();
+		System.out.println("System.currentTimeMillis()"+cTime);
+		System.out.println(new Date(cTime));
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		System.out.println(sdf.format(new Date(cTime)));
+		
 	}
 
 }

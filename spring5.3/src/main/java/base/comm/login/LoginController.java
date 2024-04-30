@@ -72,8 +72,8 @@ public class LoginController {
 				retMap.put("userInfo", vo2);
 				sessionManager.createUserInfo(req, vo2);
 				
-				//JWT 관련 심플 셋팅
-				String token = jwt.makeToken(vo2, jwt.HEADER_KEY);
+				//JWT 관련 심플 셋팅. 30분 expire Time 설정
+				String token = jwt.makeToken(vo2, jwt.HEADER_KEY,1800000);
 				retMap.put("token", token);
 			} else {
 				retMap.put("RESCODE","0001");
