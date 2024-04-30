@@ -60,9 +60,9 @@ button:focus {
 					let retData = JSON.parse(result);
 					if(retData.RESCODE === '0000') {
 						//jwt 관련 access Token ,refresh token 저장이 필요하면 사용. 구현하지 않음
-						fnSetSessionStorage('token',retData.token);
+						fnSetSessionStorage(G_TOKEN_KEY,retData.token);
 
-						console.log(fnGetSessionStorage('token'));
+						console.log(fnGetSessionStorage(G_TOKEN_KEY));
 												
 						//utl to view 컨트롤러 호출
 						window.location.href = "/auction/auctionBidMain.do";

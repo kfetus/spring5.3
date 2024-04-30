@@ -1,9 +1,20 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ page import="java.util.Enumeration" %>
 
 <%
+
+	//개발시 참고용 로그. 운영시 삭제
 	System.out.println("baseError.jsp=>"+request.getContentType());
+	System.out.println("¿¿¿¿¿¿¿¿¿¿¿¿ Attribute ¿¿¿¿¿¿¿¿¿¿¿¿");
+	Enumeration<?> attrNames = request.getAttributeNames();
+	while (attrNames.hasMoreElements()) {
+		String attrName = (String) attrNames.nextElement();
+		System.out.println("key : " + attrName +";value="+request.getAttribute(attrName));
+
+	}
+
 	String contentType = request.getContentType();
 	if ("application/json".equals(contentType)) {
 %>

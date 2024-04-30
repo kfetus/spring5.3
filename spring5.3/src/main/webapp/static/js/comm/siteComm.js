@@ -2,6 +2,7 @@
  * 일반적인 공통 함수
  */
 
+const G_TOKEN_KEY = 'Authorization';
 /**
  * LocalStorage 관리
  */

@@ -37,9 +37,16 @@ public class BaseIntercepter implements AsyncHandlerInterceptor {
         	String paramKey = (String) en.nextElement();            	
         	LOGGER.debug("key : " + paramKey +";value="+request.getParameter(paramKey));
         }
+        
+		LOGGER.debug("¿¿¿¿¿¿¿¿¿¿¿¿ header ######");
+        Enumeration<?> eheader = request.getHeaderNames();
+        while(eheader.hasMoreElements()) {
+        	String headerKey = (String) eheader.nextElement();
+        	LOGGER.debug("headerKey : " + headerKey+";value="+request.getHeader(headerKey));
+        }
+        
         //jwt 관련 샘플 보기
         LOGGER.debug("request.getHeader(jwt.HEADER_KEY)="+request.getHeader(jwt.HEADER_KEY));
-        
         
 /*
         LOGGER.debug("¿¿¿¿¿¿¿¿¿¿¿¿ Attribute ¿¿¿¿¿¿¿¿¿¿¿¿");

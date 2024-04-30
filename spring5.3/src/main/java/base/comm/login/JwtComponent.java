@@ -77,6 +77,7 @@ public class JwtComponent {
 		JwtComponent jwt = new JwtComponent();
 		
 		jwt.JWT_KEY="TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT";
+//		jwt.JWT_KEY="255bytemorekeylength-so-no-reason-data-domain-version-target98761&&^^%**@";
 		UserVO vo = new UserVO();
 		vo.setUserId("TESXT");
 		vo.setUserName("아무개");
@@ -86,6 +87,9 @@ public class JwtComponent {
 		String token = jwt.makeToken(vo, jwt.HEADER_KEY);
 		System.out.println("###### jwt token="+token);
 		System.out.println("###### verifyJWT(token)="+jwt.verifyJWT(token));
+//		System.out.println("###### verifyJWT(token)="+jwt.verifyJWT("eyJhbGciOiJIUzUxMiJ9.eyJncmFkZSI6Ik0iLCJuYW1lIjoi7Jik7Yag7KSR6rOg7LCoIiwiaHBubyI6IjAxMDU1NTU0NDQ0IiwiaWQiOiJhdXRvIiwic3ViIjoiQXV0aG9yaXphdGlvbiIsImlhdCI6MTcxNDM4MDkxMywiZXhwIjoxNzE0MzgyNzEzfQ.qTROxPZ1hVW9UNVo1JOdp2FaJjb0SYwRRoxrKqYPkVtQK8r6p3HWr0DfDyLMZy0sMXn3Us8oKWu6SZj2tHr-MQ"));
+		
+		
 		System.out.println("###### END ######");
 	}
 
