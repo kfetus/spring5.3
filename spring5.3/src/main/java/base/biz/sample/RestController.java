@@ -61,7 +61,7 @@ public class RestController {
 		LOGGER.debug("@@@@@@@@@@@ restBaseModel 시작="+map);
 		
 
-
+		map.put("reply","test");
 		LOGGER.debug("@@@@@@@@@@@ restBaseModel 종료");
 		return map;
 	}

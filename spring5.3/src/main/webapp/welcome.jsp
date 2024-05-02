@@ -80,6 +80,9 @@
 			<a href="<c:url value="/urlToView/board/boardList.do" />">urltoView</a>
 		</li>
 		<li>
+			<a href="<c:url value="/restTest.jsp" />">restTest</a>
+		</li>
+		<li>
 			<a href="<c:url value="/auction/auctionBidMain.do" />">경매</a>
 		</li>
 		<li>
