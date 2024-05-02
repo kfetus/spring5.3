@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c"    uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -73,7 +74,7 @@
 			<a href="<c:url value="/index.jsp" />">index</a>
 		</li>
 		<li>
-			<a href="<c:url value="/baseList.do" />">기본리스트</a>
+			<a href="<c:url value="/baseList.do" />">기본리스트 <spring:message code='button.list' /></a>
 		</li>
 		<li>
 			<a href="<c:url value="/urlToView/board/boardList.do" />">urltoView</a>
