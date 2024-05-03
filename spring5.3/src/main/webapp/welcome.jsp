@@ -83,6 +83,9 @@
 			<a href="<c:url value="/restTest.jsp" />">restTest</a>
 		</li>
 		<li>
+			<a href="<c:url value="/urlToView/sample/gridTest.do" />">gridTest</a>
+		</li>
+		<li>
 			<a href="<c:url value="/auction/auctionBidMain.do" />">경매</a>
 		</li>
 		<li>
