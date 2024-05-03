@@ -19,7 +19,7 @@
 <script>
 
 	function baseSearch(wantPageNo) {
-		let pagePerCnt = 15;
+		let pagePerCnt = 9;
 		$.ajax({
 			type : 'post',
 			url : '/boardList.do',
@@ -30,6 +30,7 @@
 			success : function(result) {
 				console.log(result);
 				pageGrid.resetData(result.RESULT_LIST);
+				makePaging(wantPageNo,result.RESULT_TOTAL_CNT,pagePerCnt);
 			},
 			error : function(request, status, error) {        
 				console.log(error);
@@ -65,9 +66,9 @@
 		if( nowPage == 1 ) {
 			pagingHtml = pagingHtml + '';
 		} else if ( nowPage > 1) {
-			pagingHtml = pagingHtml + '<span><span onclick="makePaging(1,'+totalCnt+','+pagePerCnt+');"> 처음 </span></span>';
+			pagingHtml = pagingHtml + '<span><span onclick="baseSearch(1);"> 처음 </span></span>';
 			if ( nowPage >= 2) {
-				pagingHtml = pagingHtml + '<span onclick="makePaging('+(nowPage-1)+','+totalCnt+','+pagePerCnt+');"><span> 이전 </span></span>';
+				pagingHtml = pagingHtml + '<span onclick="baseSearch('+(nowPage-1)+');"><span> 이전 </span></span>';
 			}
 		}
 		
@@ -75,30 +76,17 @@
 			if( i == nowPage) {
 				pagingHtml = pagingHtml + '<strong> '+nowPage+' </strong>';
 			} else {
-				pagingHtml = pagingHtml + '<a href="javascript:makePaging('+i+','+totalCnt+','+pagePerCnt+');" > '+i+' </a>';
+				pagingHtml = pagingHtml + '<a href="javascript:baseSearch('+i+');" > '+i+' </a>';
 			}
 		}
 		if ( maxPagingCnt < totalPageCnt) {
-			pagingHtml = pagingHtml + '<a href="javascript:makePaging('+(nowPage+1)+','+totalCnt+','+pagePerCnt+');" ><span > 다음 </span></a>';
+			pagingHtml = pagingHtml + '<a href="javascript:baseSearch('+(nowPage+1)+');" ><span > 다음 </span></a>';
 		}
 		if ( nowPage < totalPageCnt) {
-			pagingHtml = pagingHtml + '<a href="javascript:makePaging('+totalPageCnt+','+totalCnt+','+pagePerCnt+');" ><span > 마지막 </span></a>';
+			pagingHtml = pagingHtml + '<a href="javascript:baseSearch('+totalPageCnt+');" ><span > 마지막 </span></a>';
 		}
 		
 		$("#paging").append(pagingHtml);
-		
-		
-/*		<div>
-		<span><span>first</span></span>
-		<span><span>prev</span></span>
-		<strong>1</strong>
-		<a href="#" >2</a>
-		<a href="#" >3</a>
-		<a href="#" >4</a>
-		<a href="#" ><span >next</span></a>
-		<a href="#" ><span >last</span></a>
-		</div>
-*/
 	}
 	
 	function saveExcel() {
