@@ -8,6 +8,7 @@
 			SELECT URL
 				, PARENT_URL
 				, MENU_NAME
+				, LINK_YN
 				, MENU_LEVEL
 				, ORDER_NUM
 				, URL AS URL_PATH
@@ -19,6 +20,7 @@
 			SELECT A.URL
 				, A.PARENT_URL
 				, A.MENU_NAME
+				, A.LINK_YN
 				, A.MENU_LEVEL
 				, A.ORDER_NUM
 				, CONCAT(B.URL_PATH,'->',A.URL) AS URL_PATH
@@ -30,6 +32,7 @@
 		SELECT URL
 			, PARENT_URL
 			, MENU_NAME
+			, LINK_YN
 			, MENU_LEVEL
 			, ORDER_NUM
 			, URL_PATH

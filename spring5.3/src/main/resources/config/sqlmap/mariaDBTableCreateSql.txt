@@ -95,7 +95,7 @@ ENGINE=InnoDB
 ;
 
 
-
+--이 테이블은 seq로 PK를 잡아서 하는게 낫다.
 CREATE TABLE `system_menu` (
 	`URL` VARCHAR(100) NOT NULL COMMENT '메뉴  URL' COLLATE 'utf8mb4_bin',
 	`SYS_GROUP` VARCHAR(3) NOT NULL COMMENT '시스템 그룹 PCW , MOW, APP' COLLATE 'utf8mb4_bin',
@@ -104,16 +104,17 @@ CREATE TABLE `system_menu` (
 	`MENU_LEVEL` VARCHAR(2) NOT NULL COMMENT '레벨' COLLATE 'utf8mb4_bin',
 	`ORDER_NUM` INT(10) NOT NULL DEFAULT '0' COMMENT '정렬순서',
 	`USE_YN` CHAR(1) NULL DEFAULT 'Y' COMMENT '사용여부' COLLATE 'utf8mb4_bin',
+	`LINK_YN` VARCHAR(1) NULL DEFAULT 'N' COMMENT '링크여부(일반중간메뉴)' COLLATE 'utf8mb4_general_ci',
 	`REG_ID` INT(20) NULL DEFAULT NULL COMMENT '등록자ID',
 	`REG_DT` DATETIME NULL DEFAULT current_timestamp() COMMENT '생성일',
 	`CNG_DT` DATETIME NULL DEFAULT current_timestamp() COMMENT '수정일',
-	`FILE_PATH` VARCHAR(100) NULL DEFAULT NULL COMMENT 'SPA용 컴포넌트 파일 경로' COLLATE 'utf8mb4_general_ci',
 	PRIMARY KEY (`URL`, `SYS_GROUP`) USING BTREE
 )
 COMMENT='메뉴'
 COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 ;
+
 
 INSERT INTO `system_menu` (`URL`, `SYS_GROUP`, `PARENT_URL`, `MENU_NAME`, `MENU_LEVEL`, `ORDER_NUM`, `USE_YN`, `REG_ID`, `REG_DT`, `CNG_DT`) VALUES
 	('/', 'MOW', 'ROOT', '앱 홈', '0', 1, 'Y', NULL, '2023-12-21 17:35:01', '2023-12-21 17:35:01'),
