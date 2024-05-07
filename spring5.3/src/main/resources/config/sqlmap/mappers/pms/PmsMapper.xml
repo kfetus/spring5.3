@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="base.biz.pms.PmsMapper">
+
+   <select id="selectPmsListCnt" parameterType="java.util.HashMap" resultType="int">
+		SELECT /* PmsMapper.selectPmsListCnt 일정관리 목록 갯수 조회 */
+				COUNT(PROG_FILE_NM) AS TOTAL_CNT
+		  FROM PROJECT_MANAGE_PLAN 
+		<where>
+			<if test="title != null and title != '' ">AND MENU_NAME LIKE CONCAT('%',#{menuName},'%')</if>
+			<if test="category != null and category != '' ">AND MASTER_NAME = #{masterName}</if>
+		</where>
+    </select>
+
+
+   <select id="selectPmsList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT B.CODE /* PmsMapper.selectPmsList 일정관리 목록 조회 */
+			, (SELECT CODE_NAME FROM CODE A WHERE A.CODE_TYPE = 'P_TYPE' AND A.CODE = B.CODE) AS TYPE
+			, B.PROG_FILE_NM
+			, B.MENU_NAME
+			, B.STATE
+			, (SELECT CODE_NAME FROM CODE A WHERE A.CODE_TYPE = 'P_STATE' AND A.CODE = B.STATE) AS STATE_NM
+			, B.MASTER_NAME
+			, DATE_FORMAT(STR_TO_DATE(B.START_DT, '%Y%m%d'),'%Y-%m-%d ') START_DT
+			, DATE_FORMAT(STR_TO_DATE(B.DUE_DT, '%Y%m%d'),'%Y-%m-%d ') DUE_DT
+			, DATE_FORMAT(STR_TO_DATE(B.FIN_DT, '%Y%m%d'),'%Y-%m-%d ') FIN_DT
+			, DATE_FORMAT(B.REG_DT, '%Y-%m-%d %H:%i:%s') REG_DT
+			, DATE_FORMAT(B.CNG_DT, '%Y-%m-%d %H:%i:%s') CNG_DT
+		FROM PROJECT_MANAGE_PLAN B
+		<where>
+			<if test="title != null and title != '' ">AND B.MENU_NAME LIKE CONCAT('%',#{menuName},'%')</if>
+			<if test="category != null and category != '' ">AND B.MASTER_NAME = #{masterName}</if>
+		</where>
+		LIMIT #{pageListCnt} OFFSET #{startIdx}
+    </select>
+<!-- 
+	<select id="selectBoardOne" parameterType="String" resultType="java.util.HashMap">
+		SELECT /* BoardMapper.selectBoardOne 게시판 상세 조회 */
+				A.SEQ
+				, A.CATEGORY
+				, B.CODE_NAME
+				, A.TITLE
+				, A.BODY_TEXT
+				, A.ORIGIN_BOARD_SEQ
+				, A.ORDER_NUM
+				, A.USER_NO
+				, DATE_FORMAT(A.REG_DT, '%Y-%m-%d') REG_DT
+				, A.CNG_DT
+				, CONCAT(C.FILE_NAME, '.', C.FILE_EXTENSION) AS FILE_NAME
+				, C.FILE_SEQ
+		  FROM MAIN_BOARD A INNER JOIN CODE B ON A.CATEGORY = B.CODE LEFT JOIN BOARD_ADD_FILE C ON A.SEQ = C.SEQ
+		 WHERE A.SEQ = #{seq}
+		   AND B.CODE_TYPE = 'BOARD'
+	</select>
+    
+	<select id="selectBoardFileOne" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+			SELECT CONCAT(FILE_NAME, '.', FILE_EXTENSION) AS FILE_NAME 
+				   , FILE_EXTENSION
+				   , FILE_DATA
+			  FROM BOARD_ADD_FILE
+			 WHERE SEQ = #{seq}
+			   AND FILE_SEQ = #{fileSeq}
+	</select>
+    
+	<insert id="insertBoardOne" parameterType="java.util.HashMap">
+		<selectKey resultType="int" keyProperty="boardSeq" keyColumn="SEQ" order="BEFORE">
+			SELECT nextval(BOARD_SEQ)
+		</selectKey>
+
+		INSERT /* BoardMapper.insertBoardOne 게시판 Insert */
+		INTO MAIN_BOARD(
+			SEQ
+			, CATEGORY
+			, TITLE
+			, BODY_TEXT
+			, ORIGIN_BOARD_SEQ
+			, ORDER_NUM
+			, USER_NO
+			, REG_DT
+			, CNG_DT
+			)
+		VALUES(
+			#{boardSeq}
+			, #{category}
+			, #{title}
+			, #{bodyText}
+			, #{originBoardSeq}
+			, #{orderNum}
+			, #{userNo}
+			, CURRENT_TIMESTAMP()
+			, CURRENT_TIMESTAMP()
+			)
+	</insert>
+
+	<insert id="insertBoardFile" parameterType="java.util.HashMap">
+		<selectKey resultType="int" keyProperty="fileSeq" keyColumn="FILE_SEQ" order="BEFORE">
+			SELECT IFNULL(MAX(FILE_SEQ)+1 , '1') AS FILE_SEQ
+			  FROM board_add_file
+			 WHERE SEQ = #{boardSeq}
+		</selectKey>
+
+		INSERT /* BoardMapper.insertBoardFile 게시판 첨부파일 Insert */
+		INTO BOARD_ADD_FILE(
+			SEQ
+			, FILE_SEQ
+			, FILE_NAME
+			, FILE_DATA
+			, FILE_SIZE
+			, FILE_EXTENSION
+			, REG_DT
+			, CNG_DT
+			)
+		VALUES(
+			#{boardSeq}
+			, #{fileSeq}
+			, #{fileName}
+			, #{fileData}
+			, #{fileSize}
+			, #{fileExtension}
+			, CURRENT_TIMESTAMP()
+			, CURRENT_TIMESTAMP()
+			)
+	</insert>
+
+	<update id="updateBoardOne">
+		UPDATE MAIN_BOARD /* BoardMapper.updateBoardOne 게시판 update */
+		SET    CATEGORY  = #{category},
+		       TITLE     = #{title},
+		       BODY_TEXT = #{bodyText},
+		       CNG_DT    = CURRENT_TIMESTAMP()
+		WHERE SEQ = #{seq}
+	</update>
+	
+	<delete id="deleteBoardOne">
+		DELETE FROM MAIN_BOARD /* BoardMapper.deleteBoardOne 게시판 delete */
+		WHERE  SEQ = #{seq}
+	</delete>
+
+	<delete id="deleteBoardFile">
+		DELETE FROM BOARD_ADD_FILE /* BoardMapper.deleteBoardFile 게시판 첨부파일 delete */
+		WHERE  SEQ = #{seq}
+	</delete>
+	
+ -->
+		
+</mapper>

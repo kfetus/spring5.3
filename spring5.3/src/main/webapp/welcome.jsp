@@ -86,6 +86,12 @@
 			<a href="<c:url value="/urlToView/sample/gridTest.do" />">gridTest</a>
 		</li>
 		<li>
+			<a href="<c:url value="/urlToView/sample/gridDate.do" />">gridDate</a>
+		</li>
+		<li>
+			<a href="<c:url value="/pmsMain.do" />">일정관리</a>
+		</li>
+		<li>
 			<a href="<c:url value="/auction/auctionBidMain.do" />">경매</a>
 		</li>
 		<li>
