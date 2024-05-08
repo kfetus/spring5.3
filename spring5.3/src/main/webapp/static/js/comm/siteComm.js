@@ -35,8 +35,8 @@
 
 
 	//nowPage가 시작. 최대 5개까지만 보여주기.
-	function makePaging(nowPage,totalCnt,pagePerCnt,divName) {
-//		$("#paging").empty();
+	function makePaging(nowPage,totalCnt,pagePerCnt,divName,fn) {
+//			$("#paging").empty();
 		$('#'+divName).empty();
 		
 		let showPagingCnt = 5;//페이징은 5개까지만
@@ -63,9 +63,9 @@
 		if( nowPage == 1 ) {
 			pagingHtml = pagingHtml + '';
 		} else if ( nowPage > 1) {
-			pagingHtml = pagingHtml + '<span><span onclick="baseSearch(1);"> 처음 </span></span>';
+			pagingHtml = pagingHtml + '<span><span onclick="'+fn+'(1);"> 처음 </span></span>';
 			if ( nowPage >= 2) {
-				pagingHtml = pagingHtml + '<span onclick="baseSearch('+(nowPage-1)+');"><span> 이전 </span></span>';
+				pagingHtml = pagingHtml + '<span onclick="'+fn+'('+(nowPage-1)+');"><span> 이전 </span></span>';
 			}
 		}
 		
@@ -73,14 +73,14 @@
 			if( i == nowPage) {
 				pagingHtml = pagingHtml + '<strong> '+nowPage+' </strong>';
 			} else {
-				pagingHtml = pagingHtml + '<a href="javascript:baseSearch('+i+');" > '+i+' </a>';
+				pagingHtml = pagingHtml + '<a href="javascript:'+fn+'('+i+');" > '+i+' </a>';
 			}
 		}
 		if ( maxPagingCnt < totalPageCnt) {
-			pagingHtml = pagingHtml + '<a href="javascript:baseSearch('+(nowPage+1)+');" ><span > 다음 </span></a>';
+			pagingHtml = pagingHtml + '<a href="javascript:'+fn+'('+(nowPage+1)+');" ><span > 다음 </span></a>';
 		}
 		if ( nowPage < totalPageCnt) {
-			pagingHtml = pagingHtml + '<a href="javascript:baseSearch('+totalPageCnt+');" ><span > 마지막 </span></a>';
+			pagingHtml = pagingHtml + '<a href="javascript:'+fn+'('+totalPageCnt+');" ><span > 마지막 </span></a>';
 		}
 		
 		$('#'+divName).append(pagingHtml);

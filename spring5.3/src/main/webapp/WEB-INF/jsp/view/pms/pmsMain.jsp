@@ -22,21 +22,21 @@
 	<script src="<c:url value="/static/js/comm/siteComm.js" />"></script>
 
 	<script>
-	var DatePicker = tui.DatePicker;
-	
-	DatePicker.localeTexts['ko'] = {
-		titles: {
-			DD: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
-			D: ['일', '월', '화', '수', '목', '금', '토'],
-			MMM: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-			MMMM: ['1월', '2월', '3월', '4월', '5월', '6월','7월', '8월', '9월', '10월', '11월', '12월']
-		},
-		titleFormat: 'yyyy년 MMM',
-		todayFormat: 'yyyy년 MMM d일 (DD)'
-	};
-
-	
-	
+		var DatePicker = tui.DatePicker;
+		
+		DatePicker.localeTexts['ko'] = {
+			titles: {
+				DD: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
+				D: ['일', '월', '화', '수', '목', '금', '토'],
+				MMM: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+				MMMM: ['1월', '2월', '3월', '4월', '5월', '6월','7월', '8월', '9월', '10월', '11월', '12월']
+			},
+			titleFormat: 'yyyy년 MMM',
+			todayFormat: 'yyyy년 MMM d일 (DD)'
+		};
+		
+		
+		let pageGrid;
 		function baseSearch(wantPageNo) {
 			let pagePerCnt = 9;
 			$.ajax({
@@ -49,7 +49,7 @@
 				success : function(result) {
 					console.log(result);
 					pageGrid.resetData(result.RESULT_LIST);
-					makePaging(wantPageNo,result.RESULT_TOTAL_CNT,pagePerCnt,'paging');
+					makePaging(wantPageNo,result.RESULT_TOTAL_CNT,pagePerCnt,'paging','baseSearch');
 				},
 				error : function(request, status, error) {        
 					console.log(error);
@@ -57,27 +57,12 @@
 			});
 		}
 		
-
-		function saveExcel() {
-			pageGrid.export('csv');
-		}
-		
-		let pageGrid;
-
 		$(function() {
 			pageGrid = new tui.Grid({
 				el : $("#toastGrid")[0],
-	//			data : gridData,
 				scrollX : false,
 				scrollY : false,
-/*				rowHeaders: [
-					{
-		                type: 'rowNum',
-		                header: "순번",
-		                width: 50,
-	            	}
-				],
-*/				columns : [ 
+				columns : [ 
 					{
 						header : '유형',
 						name : 'TYPE',
@@ -145,13 +130,10 @@
 							}
 						}						
 					}, 
-
-					
 				],
 			});
 	
 			console.log('document.onload()');
-	//		pageGrid.resetData(gridData);
 			baseSearch(1);
 		})
 	</script>
@@ -164,10 +146,7 @@
 			<button type="button" id="s1" onclick="javascript:baseSearch(1);">
 				<span><strong>조회</strong></span>
 			</button>
-			<button type="button" id="s1" onclick="javascript:saveExcel();">
-				<span><strong>엑셀저장</strong></span>
-			</button>
-			<button type="button" id="s1" onclick="javascript:makePaging(3,76,10,'paging');">
+			<button type="button" id="s1" onclick="javascript:makePaging(3,11,10,'paging','baseSearch');">
 				<span><strong>페이징생성</strong></span>
 			</button>
 		</div>
@@ -175,18 +154,6 @@
 		<div>
 			<div id="toastGrid"></div>
 			<div id="paging" ></div>
-<%--
-<div>
-<span><span>first</span></span>
-<span><span>prev</span></span>
-<strong>1</strong>
-<a href="#" >2</a>
-<a href="#" >3</a>
-<a href="#" >4</a>
-<a href="#" ><span >next</span></a>
-<a href="#" ><span >last</span></a>
-</div>
---%>
 
 		</div>
 	</div>
