@@ -8,8 +8,8 @@
 				COUNT(PROG_FILE_NM) AS TOTAL_CNT
 		  FROM PROJECT_MANAGE_PLAN 
 		<where>
-			<if test="title != null and title != '' ">AND MENU_NAME LIKE CONCAT('%',#{menuName},'%')</if>
-			<if test="category != null and category != '' ">AND MASTER_NAME = #{masterName}</if>
+			<if test="menuName != null and menuName != '' ">AND MENU_NAME LIKE CONCAT('%',#{menuName},'%')</if>
+			<if test="masterName != null and masterName != '' ">AND MASTER_NAME LIKE CONCAT('%',#{masterName},'%')</if>
 		</where>
     </select>
 
@@ -29,8 +29,8 @@
 			, DATE_FORMAT(B.CNG_DT, '%Y-%m-%d %H:%i:%s') CNG_DT
 		FROM PROJECT_MANAGE_PLAN B
 		<where>
-			<if test="title != null and title != '' ">AND B.MENU_NAME LIKE CONCAT('%',#{menuName},'%')</if>
-			<if test="category != null and category != '' ">AND B.MASTER_NAME = #{masterName}</if>
+			<if test="menuName != null and menuName != '' ">AND B.MENU_NAME LIKE CONCAT('%',#{menuName},'%')</if>
+			<if test="masterName != null and masterName != '' ">AND B.MASTER_NAME LIKE CONCAT('%',#{masterName},'%')</if>
 		</where>
 		LIMIT #{pageListCnt} OFFSET #{startIdx}
     </select>

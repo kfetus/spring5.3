@@ -37,7 +37,7 @@
 		
 		
 		let pageGrid;
-		function baseSearch(wantPageNo) {
+		function pmsSearch(wantPageNo) {
 			let pagePerCnt = 9;
 			$.ajax({
 				type : 'post',
@@ -45,11 +45,15 @@
 				async : true,
 				dataType : 'json',
 				headers : {"Content-Type" : "application/json"},
-				data : JSON.stringify( {'nowPage':wantPageNo, 'pageListCnt':pagePerCnt}),    
+				data : JSON.stringify( {'nowPage':wantPageNo, 'pageListCnt':pagePerCnt, 'menuName' : $("#menuName").val() ,'masterName': $("#masterName").val()}),    
 				success : function(result) {
 					console.log(result);
-					pageGrid.resetData(result.RESULT_LIST);
-					makePaging(wantPageNo,result.RESULT_TOTAL_CNT,pagePerCnt,'paging','baseSearch');
+					if(result.RESULT_SIZE == 0) {
+						pageGrid.clear();
+					} else {
+						pageGrid.resetData(result.RESULT_LIST);
+					}
+					makePaging(wantPageNo,result.RESULT_TOTAL_CNT,pagePerCnt,'paging','pmsSearch');
 				},
 				error : function(request, status, error) {        
 					console.log(error);
@@ -134,7 +138,7 @@
 			});
 	
 			console.log('document.onload()');
-			baseSearch(1);
+			pmsSearch(1);
 		})
 	</script>
 
@@ -142,12 +146,13 @@
 <body>
 	<div>
 		<div>
-			본문
-			<button type="button" id="s1" onclick="javascript:baseSearch(1);">
+			<input name="menuName" id="menuName" value="" placeholder="프로그램명" onkeyup="if(window.event.keyCode==13){pmsSearch('1')}">
+			<input name="masterName" id="masterName" value="" placeholder="담당자" onkeyup="if(window.event.keyCode==13){pmsSearch('1')}">
+			<button type="button" onclick="javascript:pmsSearch(1);">
 				<span><strong>조회</strong></span>
 			</button>
-			<button type="button" id="s1" onclick="javascript:makePaging(3,11,10,'paging','baseSearch');">
-				<span><strong>페이징생성</strong></span>
+			<button type="button" onclick="alert('저장');">
+				<span><strong>저장</strong></span>
 			</button>
 		</div>
 
