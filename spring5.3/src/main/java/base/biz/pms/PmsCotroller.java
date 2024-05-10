@@ -54,7 +54,7 @@ public class PmsCotroller {
 	public Map<String, Object> pmsList(@RequestBody HashMap<String, Object> map,HttpServletRequest req) throws Exception {
 		LOGGER.debug("@@@@@@@@@@@ pmsList 시작=" + map);
 		Map<String, Object> retMap = new HashMap<String, Object>();
-		LOGGER.debug("@@@@@@@@@@@ pmsList 시작=" + sessionManager.getUserInfo(req));
+//		LOGGER.debug("@@@@@@@@@@@ pmsList 사용자정보=" + sessionManager.getUserInfo(req));
 		
 		int totalCnt = pmsService.selectPmsListCnt(map);
 		
@@ -97,5 +97,21 @@ public class PmsCotroller {
 		return retMap;
 	}
 
+
+	@ResponseBody
+	@RequestMapping(value = "/changePmsList.do")
+	public Map<String, Object> changePmsList(@RequestBody List<Map<String, Object>> map, HttpServletRequest req) throws Exception {
+		LOGGER.debug("@@@@@@@@@@@ changePmsList 시작=" + map);
+		Map<String, Object> retMap = new HashMap<String, Object>();
+		
+//		List<HashMap<String, String>> resultList = pmsService.selectPmsList(map);
+		
+		retMap.put("RESCODE", "0000");
+		retMap.put("RESMSG", "");
+
+		LOGGER.debug("@@@@@@@@@@@ changePmsList 종료" + retMap);
+		return retMap;
+	}
+	
 	
 }

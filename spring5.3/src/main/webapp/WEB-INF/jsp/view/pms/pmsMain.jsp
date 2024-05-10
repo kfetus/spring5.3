@@ -36,24 +36,83 @@
 		};
 		
 		function saveTable() {
-			alert('저장');
+			let sendData = [];
+			
 			if(pageGrid.getModifiedRows().updatedRows.length > 0) {
 				for(var i = 0 ; i < pageGrid.getModifiedRows().updatedRows.length ; i++) {
 					console.log(pageGrid.getModifiedRows().updatedRows[i]);
+/*					
+					let rowData= {};
+					rowData.MODE = 'U';
+					rowData.CNG_DT = pageGrid.getModifiedRows().updatedRows[i].CNG_DT;
+					rowData.CODE = pageGrid.getModifiedRows().updatedRows[i].CODE;
+					rowData.DUE_DT = pageGrid.getModifiedRows().updatedRows[i].DUE_DT;
+					rowData.FIN_DT = pageGrid.getModifiedRows().updatedRows[i].FIN_DT;
+					rowData.MASTER_NAME = pageGrid.getModifiedRows().updatedRows[i].MASTER_NAME;
+					rowData.MENU_DEPTH_1 = pageGrid.getModifiedRows().updatedRows[i].MENU_DEPTH_1;
+					rowData.MENU_DEPTH_2 = pageGrid.getModifiedRows().updatedRows[i].MENU_DEPTH_2;
+					rowData.MENU_DEPTH_3 = pageGrid.getModifiedRows().updatedRows[i].MENU_DEPTH_3;
+					rowData.MENU_DEPTH_4 = pageGrid.getModifiedRows().updatedRows[i].MENU_DEPTH_4;
+					rowData.MENU_NAME = pageGrid.getModifiedRows().updatedRows[i].MENU_NAME;
+					rowData.PROG_FILE_NM = pageGrid.getModifiedRows().updatedRows[i].PROG_FILE_NM;
+					rowData.REG_DT = pageGrid.getModifiedRows().updatedRows[i].REG_DT;
+					rowData.SEQ = pageGrid.getModifiedRows().updatedRows[i].SEQ;
+					rowData.START_DT = pageGrid.getModifiedRows().updatedRows[i].START_DT;
+					rowData.STATE = pageGrid.getModifiedRows().updatedRows[i].STATE;
+					
+					sendData.push(rowData);
+*/					
+					let { _attributes,CNG_DT,REG_DT,rowKey, ...rest } = pageGrid.getModifiedRows().updatedRows[i];//rest parameter 방식.
+					rest.MODE = 'U';
+					rest.START_DT = pageGrid.getModifiedRows().updatedRows[i].START_DT.replace(/-/g, '');
+					rest.DUE_DT = pageGrid.getModifiedRows().updatedRows[i].DUE_DT.replace(/-/g, '');
+					if( !!pageGrid.getModifiedRows().updatedRows[i].FIN_DT) {
+						rest.FIN_DT = pageGrid.getModifiedRows().updatedRows[i].FIN_DT.replace(/-/g, '');
+					}
+					sendData.push(rest);
 				}
 			}
+			console.log(sendData);
+			if(pageGrid.getModifiedRows().createdRows.length > 0) {
+				for(var i = 0 ; i < pageGrid.getModifiedRows().createdRows.length ; i++) {
+					console.log(pageGrid.getModifiedRows().createdRows[i]);
+					let { _attributes, ...rest } = pageGrid.getModifiedRows().createdRows[i];
+					rest.MODE = 'I';
+					rest.START_DT = pageGrid.getModifiedRows().createdRows[i].START_DT.replace(/-/g, '');
+					rest.DUE_DT = pageGrid.getModifiedRows().createdRows[i].DUE_DT.replace(/-/g, '');
+					if( !!pageGrid.getModifiedRows().createdRows[i].FIN_DT) {
+						rest.FIN_DT = pageGrid.getModifiedRows().createdRows[i].FIN_DT.replace(/-/g, '');
+					}
+					sendData.push(rest);
+				}
+			}
+			console.log(sendData);			
+			$.ajax({
+				type : 'post',
+				url : 'changePmsList.do',
+				async : true,
+				dataType : 'json',
+				headers : {"Content-Type" : "application/json"},
+				data : JSON.stringify( sendData ),    
+				success : function(result) {
+					console.log(result);
+					pmsSearch(pageGrid.nowPage);
+				},
+				error : function(request, status, error) {        
+					console.log(error);
+				}
+			});
 		}
 
-
-
 		function addTableRow() {
-			pageGrid.appendRow({CODE: "WEB",DUE_DT: fn_getTodayYYYYMMDD(),FIN_DT: null, MASTER_NAME: "${userNm}",MENU_DEPTH_1: "",MENU_NAME: "",PROG_FILE_NM: "",START_DT: fn_getTodayYYYYMMDD(), STATE: "R"});
-//			pageGrid.appendRow({CODE: "WEB",DUE_DT: fn_getTodayYYYYMMDD(),FIN_DT: null, MASTER_NAME: "홍길동",MENU_DEPTH_1: "",MENU_NAME: "",PROG_FILE_NM: "",START_DT: fn_getTodayYYYYMMDD(), STATE: "R"},{at:7});
+			pageGrid.appendRow({CODE: "WEB",DUE_DT: fn_getTodayYYYY_MM_DD(),FIN_DT: null, MASTER_NAME: "${userNm}",MENU_DEPTH_1: "",MENU_NAME: "",PROG_FILE_NM: "",START_DT: fn_getTodayYYYY_MM_DD(), STATE: "R"});
+//			pageGrid.appendRow({CODE: "WEB",DUE_DT: fn_getTodayYYYY_MM_DD(),FIN_DT: null, MASTER_NAME: "홍길동",MENU_DEPTH_1: "",MENU_NAME: "",PROG_FILE_NM: "",START_DT: fn_getTodayYYYY_MM_DD(), STATE: "R"},{at:7});
 		}
 
 
 		let pageGrid;
 		function pmsSearch(wantPageNo) {
+			pageGrid.nowPage = wantPageNo;<%-- 현재페이지 셋팅 --%>
 			let pagePerCnt = 9;
 			$.ajax({
 				type : 'post',
