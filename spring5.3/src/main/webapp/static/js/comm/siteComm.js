@@ -6,36 +6,52 @@
 	/**
 	 * LocalStorage 관리
 	 */
-	function fnSetLocalStorage(key, value){
+	function fn_SetLocalStorage(key, value){
 		localStorage.setItem(key, value);
 	}
 	
-	function fnGetLocalStorage(key){
+	function fn_GetLocalStorage(key){
 		return localStorage.getItem(key);
 	}
 	
-	function fnDelLocalStorage(key){
+	function fn_DelLocalStorage(key){
 		 localStorage.removeItem(key);
 	}
 	
 	/**
 	 * SessionStorage 관리
 	 */
-	function fnSetSessionStorage(key, value){
+	function fn_SetSessionStorage(key, value){
 		sessionStorage.setItem(key, value);
 	}
 	
-	function fnGetSessionStorage(key){
+	function fn_GetSessionStorage(key){
 		return sessionStorage.getItem(key);
 	}
 	
-	function fnDelSessionStorage(key){
+	function fn_DelSessionStorage(key){
 		 sessionStorage.removeItem(key);
+	}
+
+	function fn_getTodayYYYYMMDD() {
+		let today = new Date(); 
+		let year = today.getFullYear();
+		let month = (today.getMonth() + 1).toString().padStart(2, '0');
+		let day = today.getDate().toString().padStart(2, '0');
+		return `${year}${month}${day}`;
+	}
+
+	function fn_getTodayYYYY_MM_DD() {
+		let today = new Date(); 
+		let year = today.getFullYear();
+		let month = (today.getMonth() + 1).toString().padStart(2, '0');
+		let day = today.getDate().toString().padStart(2, '0');
+		return `${year}-${month}-${day}`;
 	}
 
 
 	//nowPage가 시작. 최대 5개까지만 보여주기.
-	function makePaging(nowPage,totalCnt,pagePerCnt,divName,fn) {
+	function fn_makePaging(nowPage,totalCnt,pagePerCnt,divName,fn) {
 //			$("#paging").empty();
 		$('#'+divName).empty();
 		if(totalCnt > 0) {
@@ -58,7 +74,7 @@
 				maxPagingCnt = totalPageCnt;
 			}
 			
-			console.log(totalPageCnt);
+//			console.log(totalPageCnt);
 			
 			let pagingHtml =  '';
 			if( nowPage == 1 ) {

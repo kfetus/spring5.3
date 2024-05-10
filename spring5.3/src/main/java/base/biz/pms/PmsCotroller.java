@@ -16,8 +16,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import base.comm.util.SessionManager;
+import base.comm.vo.UserVO;
 
 @Controller
 public class PmsCotroller {
@@ -37,9 +39,14 @@ public class PmsCotroller {
 	 * @return
 	 */
 	@RequestMapping(value = "/pmsMain.do")
-	public String sockJsSample(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView pmsMain(HttpServletRequest req, HttpServletResponse res) {
 		LOGGER.debug("####################### pmsMain");
-		return "pms/pmsMain";
+		
+		ModelAndView mv = new ModelAndView();
+		UserVO vo = sessionManager.getUserInfo(req);
+		mv.addObject("userNm", vo.getUserName());
+		mv.setViewName("pms/pmsMain");
+		return mv;
 	}
 
 	@ResponseBody

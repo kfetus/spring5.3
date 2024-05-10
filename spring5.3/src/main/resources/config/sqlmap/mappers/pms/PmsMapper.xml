@@ -15,8 +15,13 @@
 
 
    <select id="selectPmsList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
-		SELECT B.CODE /* PmsMapper.selectPmsList 일정관리 목록 조회 */
+		SELECT B.SEQ /* PmsMapper.selectPmsList 일정관리 목록 조회 */
+			, B.CODE 
 			, (SELECT CODE_NAME FROM CODE A WHERE A.CODE_TYPE = 'P_TYPE' AND A.CODE = B.CODE) AS TYPE
+			, B.MENU_DEPTH_1
+			, B.MENU_DEPTH_2
+			, B.MENU_DEPTH_3
+			, B.MENU_DEPTH_4
 			, B.PROG_FILE_NM
 			, B.MENU_NAME
 			, B.STATE
@@ -32,6 +37,7 @@
 			<if test="menuName != null and menuName != '' ">AND B.MENU_NAME LIKE CONCAT('%',#{menuName},'%')</if>
 			<if test="masterName != null and masterName != '' ">AND B.MASTER_NAME LIKE CONCAT('%',#{masterName},'%')</if>
 		</where>
+<!--	ORDER BY B.SEQ DESC-->
 		LIMIT #{pageListCnt} OFFSET #{startIdx}
     </select>
 <!-- 

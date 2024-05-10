@@ -30,7 +30,7 @@
 				success : function(result) {
 					console.log(result);
 					pageGrid.resetData(result.RESULT_LIST);
-					makePaging(wantPageNo,result.RESULT_TOTAL_CNT,pagePerCnt,'paging','baseSearch');
+					fn_makePaging(wantPageNo,result.RESULT_TOTAL_CNT,pagePerCnt,'paging','baseSearch');
 				},
 				error : function(request, status, error) {        
 					console.log(error);
@@ -123,7 +123,7 @@
 			<button type="button" id="s1" onclick="javascript:saveExcel();">
 				<span><strong>엑셀저장</strong></span>
 			</button>
-			<button type="button" id="s1" onclick="javascript:makePaging(3,76,10,'paging','baseSearch');">
+			<button type="button" id="s1" onclick="javascript:fn_makePaging(3,76,10,'paging','baseSearch');">
 				<span><strong>페이징생성</strong></span>
 			</button>
 		</div>

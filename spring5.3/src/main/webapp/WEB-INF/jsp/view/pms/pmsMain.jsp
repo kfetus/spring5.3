@@ -35,7 +35,23 @@
 			todayFormat: 'yyyy년 MMM d일 (DD)'
 		};
 		
-		
+		function saveTable() {
+			alert('저장');
+			if(pageGrid.getModifiedRows().updatedRows.length > 0) {
+				for(var i = 0 ; i < pageGrid.getModifiedRows().updatedRows.length ; i++) {
+					console.log(pageGrid.getModifiedRows().updatedRows[i]);
+				}
+			}
+		}
+
+
+
+		function addTableRow() {
+			pageGrid.appendRow({CODE: "WEB",DUE_DT: fn_getTodayYYYYMMDD(),FIN_DT: null, MASTER_NAME: "${userNm}",MENU_DEPTH_1: "",MENU_NAME: "",PROG_FILE_NM: "",START_DT: fn_getTodayYYYYMMDD(), STATE: "R"});
+//			pageGrid.appendRow({CODE: "WEB",DUE_DT: fn_getTodayYYYYMMDD(),FIN_DT: null, MASTER_NAME: "홍길동",MENU_DEPTH_1: "",MENU_NAME: "",PROG_FILE_NM: "",START_DT: fn_getTodayYYYYMMDD(), STATE: "R"},{at:7});
+		}
+
+
 		let pageGrid;
 		function pmsSearch(wantPageNo) {
 			let pagePerCnt = 9;
@@ -53,7 +69,7 @@
 					} else {
 						pageGrid.resetData(result.RESULT_LIST);
 					}
-					makePaging(wantPageNo,result.RESULT_TOTAL_CNT,pagePerCnt,'paging','pmsSearch');
+					fn_makePaging(wantPageNo,result.RESULT_TOTAL_CNT,pagePerCnt,'paging','pmsSearch');
 				},
 				error : function(request, status, error) {        
 					console.log(error);
@@ -67,43 +83,89 @@
 				scrollX : false,
 				scrollY : false,
 				columns : [ 
-					{
-						header : '유형',
-						name : 'TYPE',
+/*					{
+						header : '순번',
+						name : 'SEQ',
+						width : 50,
 						sortable: true,			<%-- 정렬 여부 --%>
+					},
+*/					{
+						header : '유형',
+						name : 'CODE',
+						width : 100,
+						sortable: true,
+						formatter: 'listItemText',
+						editor: {
+							type: 'select',
+							options: {
+								listItems: [
+									{ text: '웹프로그램', value: 'WEB' },
+									{ text: '배치프로그램', value: 'BATCH' },
+									{ text: '앱프로그램', value: 'APP' }
+								]
+							}
+						}
+					},
+					{
+						header : '메뉴1뎁스',
+						name : 'MENU_DEPTH_1',
+						width : 80,
+						editor: 'text',			<%-- edit 여부 --%>
+					},
+					{
+						header : '메뉴2뎁스',
+						name : 'MENU_DEPTH_2',
+						width : 130,
+						editor: 'text',			<%-- edit 여부 --%>
+					},
+					{
+						header : '메뉴3뎁스',
+						name : 'MENU_DEPTH_3',
+						width : 100,
+						editor: 'text',			<%-- edit 여부 --%>
 					},
 					{
 						header : '프로그램파일명',
 						name : 'PROG_FILE_NM',
-						sortable: true,			<%-- 정렬 여부 --%>
+						sortable: true,
+						editor: 'text',			<%-- edit 여부 --%>
 					},
 					{
 						header : '프로그램명',
 						name : 'MENU_NAME',
-						sortable: true,			<%-- 정렬 여부 --%>
+						width : 150,
+						sortable: true,
+						editor: 'text',			<%-- edit 여부 --%>
 					},
 					{
-						header : '상태',		<%-- 헤더 명 --%>
-						name : 'STATE_NM',			<%-- data 키값 --%>
+						header : '상태',			<%-- 헤더 명 --%>
+						name : 'STATE',		<%-- data 키값 --%>
+						width : 100,				<%-- 컬럼 width --%>
 						sortable: true,			<%-- 정렬 여부 --%>
 						resizable: true,		<%-- 컬럼 크기 조절 여부 --%>
-						editor: 'text',			<%-- edit 여부 --%> 					
-					}, 
-/*개발 후 통테용					{
-						header : '우선순위',
-						name : 'REG_DT',
+						formatter: 'listItemText',
+						editor: {
+							type: 'select',
+							options: {
+								listItems: [
+									{ text: '준비', value: 'R' },
+									{ text: '진행중', value: 'I' },
+									{ text: '완료', value: 'E' },
+									{ text: '지연', value: 'D' }
+								]
+							}
+						}
 					}, 
 					{
-						header : '발견자',
-						name : 'REG_DT',
-					}, 
-*/					{
 						header : '담당자',
+						width : 70,
 						name : 'MASTER_NAME',
+						editor: 'text',			<%-- edit 여부 --%>
 					}, 
 					{
 						header : '시작일',
 						name : 'START_DT',
+						width : 80,
 						editor: {
 							type: 'datePicker',
 							options: {
@@ -115,6 +177,7 @@
 					{
 						header : '목표예정일',
 						name : 'DUE_DT',
+						width : 80,
 						editor: {
 							type: 'datePicker',
 							options: {
@@ -126,6 +189,7 @@
 					{
 						header : '완료일',
 						name : 'FIN_DT',
+						width : 80,
 						editor: {
 							type: 'datePicker',
 							options: {
@@ -148,12 +212,9 @@
 		<div>
 			<input name="menuName" id="menuName" value="" placeholder="프로그램명" onkeyup="if(window.event.keyCode==13){pmsSearch('1')}">
 			<input name="masterName" id="masterName" value="" placeholder="담당자" onkeyup="if(window.event.keyCode==13){pmsSearch('1')}">
-			<button type="button" onclick="javascript:pmsSearch(1);">
-				<span><strong>조회</strong></span>
-			</button>
-			<button type="button" onclick="alert('저장');">
-				<span><strong>저장</strong></span>
-			</button>
+			<button type="button" onclick="javascript:pmsSearch(1);"><span><strong>조회</strong></span></button>
+			<button type="button" onclick="javascript:saveTable();"><span><strong>저장</strong></span></button>
+			<button type="button" onclick="javascript:addTableRow();"><span><strong>추가</strong></span></button>
 		</div>
 
 		<div>

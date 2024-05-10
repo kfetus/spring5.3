@@ -36,13 +36,13 @@
 
 	<script>
 		function testRest(){
-			console.log(fnGetSessionStorage(G_TOKEN_KEY));
+			console.log(fn_GetSessionStorage(G_TOKEN_KEY));
 			$.ajax({
 				type : 'post',
 				url : '<c:url value="/restBaseError.do" />',
 				async : true,
 				dataType : 'text',
- 				headers : {"Content-Type" : "application/json","AccessKeyJwt":fnGetSessionStorage(G_TOKEN_KEY)},
+ 				headers : {"Content-Type" : "application/json","AccessKeyJwt":fn_GetSessionStorage(G_TOKEN_KEY)},
  				//jwt를 사용하려면 아래 헤더도 추가 token은 아래 sessionStorage에서 가져온다
  				//headers:{'token':token}, 
 				data : JSON.stringify( {'param':'test'}),
@@ -50,7 +50,7 @@
 					console.log(result);
 					let retData = JSON.parse(result);
 					if(retData.RESCODE === '0000') {
-						console.log(fnGetSessionStorage('token'));
+						console.log(fn_GetSessionStorage('token'));
 					} else {
 						alert(retData.RESMSG);
 					}
