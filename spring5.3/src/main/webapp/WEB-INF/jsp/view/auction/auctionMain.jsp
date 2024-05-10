@@ -40,7 +40,7 @@
 				//const socket = new WebSocket('ws://localhost:8080/auctionWebsocket.do');
 				//핸드폰이나 기타 다른 피씨에서 테스트 활 경우에는 여기 IP를 서버수행 아이피로 해야 한다. session 유지를 위해서 브라우저 주소도 아이피로 연결
 			--%>
-				const socket = new WebSocket('ws://192.168.0.16:8080/auctionWebsocket.do');
+				const socket = new WebSocket('ws://192.168.0.6:8080/auctionWebsocket.do');
 				let entryNumber = '';
 				let nowAuctionState = 'R';
 				
