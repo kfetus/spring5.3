@@ -10,6 +10,7 @@
 		<where>
 			<if test="menuName != null and menuName != '' ">AND MENU_NAME LIKE CONCAT('%',#{menuName},'%')</if>
 			<if test="masterName != null and masterName != '' ">AND MASTER_NAME LIKE CONCAT('%',#{masterName},'%')</if>
+			<if test="menu1Depth != null and menu1Depth != '' ">AND MENU_DEPTH_1 LIKE CONCAT('%',#{menu1Depth},'%')</if>
 		</where>
     </select>
 
@@ -36,6 +37,7 @@
 		<where>
 			<if test="menuName != null and menuName != '' ">AND B.MENU_NAME LIKE CONCAT('%',#{menuName},'%')</if>
 			<if test="masterName != null and masterName != '' ">AND B.MASTER_NAME LIKE CONCAT('%',#{masterName},'%')</if>
+			<if test="menu1Depth != null and menu1Depth != '' ">AND MENU_DEPTH_1 LIKE CONCAT('%',#{menu1Depth},'%')</if>
 		</where>
 <!--	ORDER BY B.SEQ DESC-->
 		LIMIT #{pageListCnt} OFFSET #{startIdx}
