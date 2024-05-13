@@ -40,6 +40,69 @@
 <!--	ORDER BY B.SEQ DESC-->
 		LIMIT #{pageListCnt} OFFSET #{startIdx}
     </select>
+    
+	<update id="updatePmsList" parameterType="java.util.List">
+
+		<foreach collection="list" item="rowData" separator=";">
+			UPDATE PROJECT_MANAGE_PLAN /* PmsMapper.updatePmsList PMS 리스트 update */
+				SET
+					CODE = #{rowData.CODE}
+					, MENU_DEPTH_1 = #{rowData.MENU_DEPTH_1}
+					, MENU_DEPTH_2 = #{rowData.MENU_DEPTH_2}
+					, MENU_DEPTH_3 = #{rowData.MENU_DEPTH_3}
+					, MENU_DEPTH_4 = #{rowData.MENU_DEPTH_4}
+					, PROG_FILE_NM = #{rowData.PROG_FILE_NM}
+					, MENU_NAME = #{rowData.MENU_NAME}
+					, STATE = #{rowData.STATE}
+					, MASTER_NAME = #{rowData.MASTER_NAME}
+					, START_DT = #{rowData.START_DT}
+					, DUE_DT = #{rowData.DUE_DT}
+					, FIN_DT = #{rowData.FIN_DT}
+					, CNG_DT = CURRENT_TIMESTAMP()
+				WHERE SEQ = #{rowData.SEQ}
+		</foreach>
+	</update>
+
+	<insert id="insertPmsList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="SEQ">
+		INSERT INTO PROJECT_MANAGE_PLAN ( /* PmsMapper.insertPmsList PMS 리스트 insert */
+<!-- 					SEQ, --> 
+					CODE
+					, MENU_DEPTH_1
+					, MENU_DEPTH_2
+					, MENU_DEPTH_3
+					, MENU_DEPTH_4
+					, PROG_FILE_NM
+					, MENU_NAME
+					, STATE
+					, MASTER_NAME
+					, START_DT
+					, DUE_DT
+					, FIN_DT
+					, REG_DT
+					, CNG_DT
+				) VALUES
+			<foreach collection="list" item="rowData" separator=",">
+				(
+<!-- 					(SELECT IFNULL(MAX(SEQ), 0) + 1 FROM PROJECT_MANAGE_PLAN A), --> 
+					#{rowData.CODE}
+					, #{rowData.MENU_DEPTH_1}
+					, #{rowData.MENU_DEPTH_2}
+					, #{rowData.MENU_DEPTH_3}
+					, #{rowData.MENU_DEPTH_4}
+					, #{rowData.PROG_FILE_NM}
+					, #{rowData.MENU_NAME}
+					, #{rowData.STATE}
+					, #{rowData.MASTER_NAME}
+					, #{rowData.START_DT}
+					, #{rowData.DUE_DT}
+					, #{rowData.FIN_DT}
+					, CURRENT_TIMESTAMP()
+					, CURRENT_TIMESTAMP() 
+				)
+			</foreach>
+	</insert>
+    
+    
 <!-- 
 	<select id="selectBoardOne" parameterType="String" resultType="java.util.HashMap">
 		SELECT /* BoardMapper.selectBoardOne 게시판 상세 조회 */

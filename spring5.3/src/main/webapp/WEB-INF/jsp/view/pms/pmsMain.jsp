@@ -64,10 +64,10 @@
 */					
 					let { _attributes,CNG_DT,REG_DT,rowKey, ...rest } = pageGrid.getModifiedRows().updatedRows[i];//rest parameter 방식.
 					rest.MODE = 'U';
-					rest.START_DT = pageGrid.getModifiedRows().updatedRows[i].START_DT.replace(/-/g, '');
-					rest.DUE_DT = pageGrid.getModifiedRows().updatedRows[i].DUE_DT.replace(/-/g, '');
+					rest.START_DT = pageGrid.getModifiedRows().updatedRows[i].START_DT.replace(/-/g, '').trim();
+					rest.DUE_DT = pageGrid.getModifiedRows().updatedRows[i].DUE_DT.replace(/-/g, '').trim();
 					if( !!pageGrid.getModifiedRows().updatedRows[i].FIN_DT) {
-						rest.FIN_DT = pageGrid.getModifiedRows().updatedRows[i].FIN_DT.replace(/-/g, '');
+						rest.FIN_DT = pageGrid.getModifiedRows().updatedRows[i].FIN_DT.replace(/-/g, '').trim();
 					}
 					sendData.push(rest);
 				}
@@ -76,12 +76,12 @@
 			if(pageGrid.getModifiedRows().createdRows.length > 0) {
 				for(var i = 0 ; i < pageGrid.getModifiedRows().createdRows.length ; i++) {
 					console.log(pageGrid.getModifiedRows().createdRows[i]);
-					let { _attributes, ...rest } = pageGrid.getModifiedRows().createdRows[i];
+					let { _attributes,rowKey, ...rest } = pageGrid.getModifiedRows().createdRows[i];
 					rest.MODE = 'I';
-					rest.START_DT = pageGrid.getModifiedRows().createdRows[i].START_DT.replace(/-/g, '');
-					rest.DUE_DT = pageGrid.getModifiedRows().createdRows[i].DUE_DT.replace(/-/g, '');
+					rest.START_DT = pageGrid.getModifiedRows().createdRows[i].START_DT.replace(/-/g, '').trim();
+					rest.DUE_DT = pageGrid.getModifiedRows().createdRows[i].DUE_DT.replace(/-/g, '').trim();
 					if( !!pageGrid.getModifiedRows().createdRows[i].FIN_DT) {
-						rest.FIN_DT = pageGrid.getModifiedRows().createdRows[i].FIN_DT.replace(/-/g, '');
+						rest.FIN_DT = pageGrid.getModifiedRows().createdRows[i].FIN_DT.replace(/-/g, '').trim();
 					}
 					sendData.push(rest);
 				}
@@ -263,6 +263,29 @@
 			console.log('document.onload()');
 			pmsSearch(1);
 		})
+		
+		function fn_Login(){
+			$.ajax({
+				type : 'post',
+				url : '<c:url value="/restLogin.do" />',
+				async : true,
+				dataType : 'text',
+				headers : {"Content-Type" : "application/json"},
+				data : JSON.stringify( {'userId':'auto', 'userPass':'auto1!'}),
+				success : function(result) {
+					let retData = JSON.parse(result);
+					if(retData.RESCODE === '0000') {
+						window.location.href = "/pmsMain.do";
+					} else {
+						alert('로그인 실패');
+					}
+				},
+				error : function(request, status, error) {        
+					console.log(error);
+					console.log(status);
+				}
+			});
+		}
 	</script>
 
 </head>
@@ -274,6 +297,7 @@
 			<button type="button" onclick="javascript:pmsSearch(1);"><span><strong>조회</strong></span></button>
 			<button type="button" onclick="javascript:saveTable();"><span><strong>저장</strong></span></button>
 			<button type="button" onclick="javascript:addTableRow();"><span><strong>추가</strong></span></button>
+			<button type="button" onclick="javascript:fn_Login();"><span><strong>로그인</strong></span></button>
 		</div>
 
 		<div>

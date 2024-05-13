@@ -100,14 +100,15 @@ public class PmsCotroller {
 
 	@ResponseBody
 	@RequestMapping(value = "/changePmsList.do")
-	public Map<String, Object> changePmsList(@RequestBody List<Map<String, Object>> map, HttpServletRequest req) throws Exception {
-		LOGGER.debug("@@@@@@@@@@@ changePmsList 시작=" + map);
+	public Map<String, Object> changePmsList(@RequestBody List<Map<String, String>> list, HttpServletRequest req) throws Exception {
+		LOGGER.debug("@@@@@@@@@@@ changePmsList 시작=" + list);
 		Map<String, Object> retMap = new HashMap<String, Object>();
 		
-//		List<HashMap<String, String>> resultList = pmsService.selectPmsList(map);
+		int resultCount = pmsService.changePmsList(list);
 		
 		retMap.put("RESCODE", "0000");
 		retMap.put("RESMSG", "");
+		retMap.put("CHANGE_COUNT", resultCount);
 
 		LOGGER.debug("@@@@@@@@@@@ changePmsList 종료" + retMap);
 		return retMap;

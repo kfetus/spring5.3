@@ -1,7 +1,9 @@
 package base.biz.pms;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +28,30 @@ public class PmsServiceImpl {
 		LOGGER.debug("@@@@@@@@@@@ selectPmsList Service 시작=" + map);
 		List<HashMap<String,String>> result = pmsMapper.selectPmsList(map);
 		return result;
+	}
+	
+	public int changePmsList(List<Map<String, String>> list) throws Exception {
+		//의미 없는 카운트. multi update를 해도 건수는 1건으로 잡힘. insert는 제대로 잡힘
+		int count = 0;
+		
+		List<Map<String, String>> updateList = new ArrayList<Map<String, String>>();
+		List<Map<String, String>> insertList = new ArrayList<Map<String, String>>();
+		
+		for(int i = 0 ; i < list.size();i++) {
+			if( "I".equals(list.get(i).get("MODE")) ) {
+				insertList.add(list.get(i));
+			} else {
+				updateList.add(list.get(i));
+			}
+		}
+		if(updateList.size()>0) {
+			count = pmsMapper.updatePmsList(updateList);
+		}
+		if(insertList.size() > 0) {
+			count += pmsMapper.insertPmsList(insertList);
+		}
+		
+		return count;
 	}
 
 }
