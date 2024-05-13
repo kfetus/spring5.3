@@ -80,21 +80,21 @@
 			if( nowPage == 1 ) {
 				pagingHtml = pagingHtml + '';
 			} else if ( nowPage > 1) {
-				pagingHtml = pagingHtml + '<span><span onclick="'+fn+'(1);"> 처음 </span></span>';
+				pagingHtml = pagingHtml + '<a href="javascript:'+fn+'(1);" ><span > 처음 </span></a>&nbsp;';
 				if ( nowPage >= 2) {
-					pagingHtml = pagingHtml + '<span onclick="'+fn+'('+(nowPage-1)+');"><span> 이전 </span></span>';
+					pagingHtml = pagingHtml + '<a href="javascript:'+fn+'('+(nowPage-1)+');" ><span > 이전 </span></a>&nbsp;';
 				}
 			}
 			
 			for(var i = nowPage ; i <= maxPagingCnt ; i++) {
 				if( i == nowPage) {
-					pagingHtml = pagingHtml + '<strong> '+nowPage+' </strong>';
+					pagingHtml = pagingHtml + '<strong> '+nowPage+' </strong>&nbsp;';
 				} else {
-					pagingHtml = pagingHtml + '<a href="javascript:'+fn+'('+i+');" > '+i+' </a>';
+					pagingHtml = pagingHtml + '<a href="javascript:'+fn+'('+i+');" > '+i+' </a>&nbsp;';
 				}
 			}
 			if ( maxPagingCnt < totalPageCnt) {
-				pagingHtml = pagingHtml + '<a href="javascript:'+fn+'('+(nowPage+1)+');" ><span > 다음 </span></a>';
+				pagingHtml = pagingHtml + '<a href="javascript:'+fn+'('+(nowPage+1)+');" ><span > 다음 </span></a>&nbsp;';
 			}
 			if ( nowPage < totalPageCnt) {
 				pagingHtml = pagingHtml + '<a href="javascript:'+fn+'('+totalPageCnt+');" ><span > 마지막 </span></a>';

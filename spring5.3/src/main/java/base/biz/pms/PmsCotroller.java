@@ -1,5 +1,6 @@
 package base.biz.pms;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,5 +115,20 @@ public class PmsCotroller {
 		return retMap;
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/deletePmsList.do")
+	public Map<String, Object> deletePmsList(@RequestBody ArrayList<String> list, HttpServletRequest req) throws Exception {
+		LOGGER.debug("@@@@@@@@@@@ deletePmsList 시작=" + list);
+		Map<String, Object> retMap = new HashMap<String, Object>();
+		
+		int resultCount = pmsService.deletePmsList(list);
+		
+		retMap.put("RESCODE", "0000");
+		retMap.put("RESMSG", "");
+		retMap.put("CHANGE_COUNT", resultCount);
+
+		LOGGER.debug("@@@@@@@@@@@ changePmsList 종료" + retMap);
+		return retMap;
+	}
 	
 }

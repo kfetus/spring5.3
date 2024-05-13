@@ -31,6 +31,7 @@ public class PmsServiceImpl {
 	}
 	
 	public int changePmsList(List<Map<String, String>> list) throws Exception {
+		LOGGER.debug("@@@@@@@@@@@ PmsService.changePmsList 시작=" +list);
 		//의미 없는 카운트. multi update를 해도 건수는 1건으로 잡힘. insert는 제대로 잡힘
 		int count = 0;
 		
@@ -51,6 +52,13 @@ public class PmsServiceImpl {
 			count += pmsMapper.insertPmsList(insertList);
 		}
 		
+		return count;
+	}
+
+	public int deletePmsList(ArrayList<String> list) throws Exception {
+		LOGGER.debug("@@@@@@@@@@@ PmsService.deletePmsList 시작=" +list);
+		int count = 0;
+		count = pmsMapper.deletePmsOne(list);
 		return count;
 	}
 

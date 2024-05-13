@@ -32,6 +32,9 @@
 		<logger name="jdbc.sqlonly" level="DEBUG" additivity="false"> 
 			<AppenderRef ref="console" />
 		</logger>
+		<logger name="jdbc.sqltiming" level="WARN" additivity="false"> 
+			<AppenderRef ref="console" />
+		</logger>
 		<Logger name="jdbc.resultsettable" level="DEBUG" additivity="false"> 
 			<AppenderRef ref="console" />
 		</Logger> 

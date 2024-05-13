@@ -36,6 +36,7 @@
 		};
 		
 		function saveTable() {
+			pageGrid.finishEditing();//페이지 에디팅 종료
 			let sendData = [];
 			
 			if(pageGrid.getModifiedRows().updatedRows.length > 0) {
@@ -86,7 +87,7 @@
 					sendData.push(rest);
 				}
 			}
-			console.log(sendData);			
+			console.log(sendData);
 			$.ajax({
 				type : 'post',
 				url : 'changePmsList.do',
@@ -105,10 +106,44 @@
 		}
 
 		function addTableRow() {
+			pageGrid.finishEditing();//페이지 에디팅 종료
 			pageGrid.appendRow({CODE: "WEB",DUE_DT: fn_getTodayYYYY_MM_DD(),FIN_DT: null, MASTER_NAME: "${userNm}",MENU_DEPTH_1: "",MENU_NAME: "",PROG_FILE_NM: "",START_DT: fn_getTodayYYYY_MM_DD(), STATE: "R"});
 //			pageGrid.appendRow({CODE: "WEB",DUE_DT: fn_getTodayYYYY_MM_DD(),FIN_DT: null, MASTER_NAME: "홍길동",MENU_DEPTH_1: "",MENU_NAME: "",PROG_FILE_NM: "",START_DT: fn_getTodayYYYY_MM_DD(), STATE: "R"},{at:7});
 		}
 
+		
+		function deleteRows() {
+			pageGrid.finishEditing();//페이지 에디팅 종료
+			if( pageGrid.getCheckedRows().length == 0) {
+				alert('삭제하려는 행을 선택하세요');
+				return;
+			}
+			console.log(pageGrid.getCheckedRows());
+
+			let delList = [];
+			for(var i = 0 ; i < pageGrid.getCheckedRows().length ; i++) {
+				console.log(pageGrid.getCheckedRows()[i]);
+				delList.push(pageGrid.getCheckedRows()[i].SEQ);
+//				delList[i] = pageGrid.getCheckedRows()[i].SEQ;
+			}
+
+			$.ajax({
+				type : 'post',
+				url : 'deletePmsList.do',
+				async : true,
+				dataType : 'json',
+				headers : {"Content-Type" : "application/json"},
+				data : JSON.stringify( delList ),    
+				success : function(result) {
+					console.log(result);
+					pmsSearch(pageGrid.nowPage);
+				},
+				error : function(request, status, error) {        
+					console.log(error);
+				}
+			});
+		}
+		
 
 		let pageGrid;
 		function pmsSearch(wantPageNo) {
@@ -141,6 +176,9 @@
 				el : $("#toastGrid")[0],
 				scrollX : false,
 				scrollY : false,
+				rowHeaders: [
+					{ type: 'checkbox', header: '선택'}
+				],
 				columns : [ 
 /*					{
 						header : '순번',
@@ -297,6 +335,7 @@
 			<button type="button" onclick="javascript:pmsSearch(1);"><span><strong>조회</strong></span></button>
 			<button type="button" onclick="javascript:saveTable();"><span><strong>저장</strong></span></button>
 			<button type="button" onclick="javascript:addTableRow();"><span><strong>추가</strong></span></button>
+			<button type="button" onclick="javascript:deleteRows();"><span><strong>삭제</strong></span></button>
 			<button type="button" onclick="javascript:fn_Login();"><span><strong>로그인</strong></span></button>
 		</div>
 

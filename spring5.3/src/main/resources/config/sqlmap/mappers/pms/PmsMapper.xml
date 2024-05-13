@@ -101,116 +101,20 @@
 				)
 			</foreach>
 	</insert>
-    
-    
-<!-- 
-	<select id="selectBoardOne" parameterType="String" resultType="java.util.HashMap">
-		SELECT /* BoardMapper.selectBoardOne 게시판 상세 조회 */
-				A.SEQ
-				, A.CATEGORY
-				, B.CODE_NAME
-				, A.TITLE
-				, A.BODY_TEXT
-				, A.ORIGIN_BOARD_SEQ
-				, A.ORDER_NUM
-				, A.USER_NO
-				, DATE_FORMAT(A.REG_DT, '%Y-%m-%d') REG_DT
-				, A.CNG_DT
-				, CONCAT(C.FILE_NAME, '.', C.FILE_EXTENSION) AS FILE_NAME
-				, C.FILE_SEQ
-		  FROM MAIN_BOARD A INNER JOIN CODE B ON A.CATEGORY = B.CODE LEFT JOIN BOARD_ADD_FILE C ON A.SEQ = C.SEQ
-		 WHERE A.SEQ = #{seq}
-		   AND B.CODE_TYPE = 'BOARD'
-	</select>
-    
-	<select id="selectBoardFileOne" parameterType="java.util.HashMap" resultType="java.util.HashMap">
-			SELECT CONCAT(FILE_NAME, '.', FILE_EXTENSION) AS FILE_NAME 
-				   , FILE_EXTENSION
-				   , FILE_DATA
-			  FROM BOARD_ADD_FILE
-			 WHERE SEQ = #{seq}
-			   AND FILE_SEQ = #{fileSeq}
-	</select>
-    
-	<insert id="insertBoardOne" parameterType="java.util.HashMap">
-		<selectKey resultType="int" keyProperty="boardSeq" keyColumn="SEQ" order="BEFORE">
-			SELECT nextval(BOARD_SEQ)
-		</selectKey>
 
-		INSERT /* BoardMapper.insertBoardOne 게시판 Insert */
-		INTO MAIN_BOARD(
-			SEQ
-			, CATEGORY
-			, TITLE
-			, BODY_TEXT
-			, ORIGIN_BOARD_SEQ
-			, ORDER_NUM
-			, USER_NO
-			, REG_DT
-			, CNG_DT
-			)
-		VALUES(
-			#{boardSeq}
-			, #{category}
-			, #{title}
-			, #{bodyText}
-			, #{originBoardSeq}
-			, #{orderNum}
-			, #{userNo}
-			, CURRENT_TIMESTAMP()
-			, CURRENT_TIMESTAMP()
-			)
-	</insert>
+<!--  pk가 포함되서 넘어올 경우 아래와 같이 mariadb에서는 사용할 수 있다. -->
+<insert id="insertDup" parameterType="java.util.HashMap">
+	INSERT INTO PROJECT_MANAGE_PLAN (SEQ, CODE, MASTER_NAME) VALUES (${SEQ}, ${CODE}, ${MASTER_NAME}) AS new
+	ON DUPLICATE KEY UPDATE CODE = new.CODE, MASTER_NAME = new.MASTER_NAME	
+</insert>
 
-	<insert id="insertBoardFile" parameterType="java.util.HashMap">
-		<selectKey resultType="int" keyProperty="fileSeq" keyColumn="FILE_SEQ" order="BEFORE">
-			SELECT IFNULL(MAX(FILE_SEQ)+1 , '1') AS FILE_SEQ
-			  FROM board_add_file
-			 WHERE SEQ = #{boardSeq}
-		</selectKey>
-
-		INSERT /* BoardMapper.insertBoardFile 게시판 첨부파일 Insert */
-		INTO BOARD_ADD_FILE(
-			SEQ
-			, FILE_SEQ
-			, FILE_NAME
-			, FILE_DATA
-			, FILE_SIZE
-			, FILE_EXTENSION
-			, REG_DT
-			, CNG_DT
-			)
-		VALUES(
-			#{boardSeq}
-			, #{fileSeq}
-			, #{fileName}
-			, #{fileData}
-			, #{fileSize}
-			, #{fileExtension}
-			, CURRENT_TIMESTAMP()
-			, CURRENT_TIMESTAMP()
-			)
-	</insert>
-
-	<update id="updateBoardOne">
-		UPDATE MAIN_BOARD /* BoardMapper.updateBoardOne 게시판 update */
-		SET    CATEGORY  = #{category},
-		       TITLE     = #{title},
-		       BODY_TEXT = #{bodyText},
-		       CNG_DT    = CURRENT_TIMESTAMP()
-		WHERE SEQ = #{seq}
-	</update>
 	
-	<delete id="deleteBoardOne">
-		DELETE FROM MAIN_BOARD /* BoardMapper.deleteBoardOne 게시판 delete */
-		WHERE  SEQ = #{seq}
+	<delete id="deletePmsOne" parameterType="java.util.ArrayList">
+		DELETE FROM PROJECT_MANAGE_PLAN /* PmsMapper.deletePmsOne 일정관리 delete */
+		 WHERE SEQ IN 
+			<foreach item="seq" index="index" collection="list" open="(" separator="," close=")">
+			  #{seq}
+			</foreach>
 	</delete>
-
-	<delete id="deleteBoardFile">
-		DELETE FROM BOARD_ADD_FILE /* BoardMapper.deleteBoardFile 게시판 첨부파일 delete */
-		WHERE  SEQ = #{seq}
-	</delete>
-	
- -->
 		
 </mapper>

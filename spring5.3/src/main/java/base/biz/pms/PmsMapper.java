@@ -1,5 +1,6 @@
 package base.biz.pms;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,4 +17,6 @@ public interface PmsMapper {
 	public int updatePmsList(List<Map<String, String>> list);
 	
 	public int insertPmsList(List<Map<String, String>> list);
+	
+	public int deletePmsOne(ArrayList<String> seqList);
 }
