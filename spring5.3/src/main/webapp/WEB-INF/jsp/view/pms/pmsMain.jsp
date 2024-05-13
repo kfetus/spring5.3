@@ -99,7 +99,7 @@
 					console.log(result);
 					pmsSearch(pageGrid.nowPage);
 				},
-				error : function(request, status, error) {        
+				error : function(error) {        
 					console.log(error);
 				}
 			});
@@ -122,9 +122,16 @@
 
 			let delList = [];
 			for(var i = 0 ; i < pageGrid.getCheckedRows().length ; i++) {
-				console.log(pageGrid.getCheckedRows()[i]);
-				delList.push(pageGrid.getCheckedRows()[i].SEQ);
-//				delList[i] = pageGrid.getCheckedRows()[i].SEQ;
+				if (!!pageGrid.getCheckedRows()[i].SEQ) {
+					console.log(pageGrid.getCheckedRows()[i]);
+					delList.push(pageGrid.getCheckedRows()[i].SEQ);
+//					delList[i] = pageGrid.getCheckedRows()[i].SEQ;
+				}
+			}
+
+			if( delList.length == 0) {
+				pageGrid.removeCheckedRows();
+				return;
 			}
 
 			$.ajax({

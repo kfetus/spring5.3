@@ -1,14 +1,17 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <%
-	System.out.println("bizException.jsp=>"+request.getContentType());
 	String contentType = request.getContentType();
+	System.out.println("bizException.jsp=>"+contentType);
 	if ("application/json".equals(contentType)) {
+		response.setContentType("application/json");
+		
+//		{"RESMSG":"${exception.message}","RESCODE":"9999"} 이렇게 처리할 때 exception.message에서 줄바꿈(newline)문자가 있을 경우 제대로 된 값이 나가지 않는다.
 %>
-{"RESMSG":"${exception.message}","RESCODE":"9999"}
+{"RESMSG":"비지니스 에러 처리 중 에러가 발생했습니다.","RESCODE":"9999"}
 <%
 	} else {
 %>
