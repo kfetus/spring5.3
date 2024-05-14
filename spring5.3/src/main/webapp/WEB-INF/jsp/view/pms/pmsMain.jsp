@@ -97,6 +97,10 @@
 				data : JSON.stringify( sendData ),    
 				success : function(result) {
 					console.log(result);
+					if(result.RESCODE != '0000') {
+						alert('데이터 수정에 실패하였습니다.');
+						return;
+					}
 					pmsSearch(pageGrid.nowPage);
 				},
 				error : function(error) {        
@@ -155,7 +159,7 @@
 		let pageGrid;
 		function pmsSearch(wantPageNo) {
 			pageGrid.nowPage = wantPageNo;<%-- 현재페이지 셋팅 --%>
-			let pagePerCnt = 9;
+			let pagePerCnt = $('#pagePerCnt').val();
 			$.ajax({
 				type : 'post',
 				url : '/pmsList.do',
@@ -341,6 +345,12 @@
 			<input name="menu1Depth" id="menu1Depth" value="" placeholder="메뉴1뎁스" onkeyup="if(window.event.keyCode==13){pmsSearch('1')}">
 			<input name="menuName" id="menuName" value="" placeholder="프로그램명" onkeyup="if(window.event.keyCode==13){pmsSearch('1')}">
 			<input name="masterName" id="masterName" value="" placeholder="담당자" onkeyup="if(window.event.keyCode==13){pmsSearch('1')}">
+<select name="pagePerCnt" id="pagePerCnt">
+	<option value="5">5</option>
+	<option value="10" selected="selected">10</option>
+	<option value="20">20</option>
+	<option value="30">30</option>
+</select>
 			<button type="button" onclick="javascript:pmsSearch(1);"><span><strong>조회</strong></span></button>
 			<button type="button" onclick="javascript:saveTable();"><span><strong>저장</strong></span></button>
 			<button type="button" onclick="javascript:addTableRow();"><span><strong>추가</strong></span></button>

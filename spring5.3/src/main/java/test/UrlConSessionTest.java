@@ -17,7 +17,7 @@ public class UrlConSessionTest {
 		URL url;
 
 		try {
-			url = new URL("http://192.168.0.6:8080/restLogin.do");
+			url = new URL("http://192.168.0.7:8080/restLogin.do");
 			con = (HttpURLConnection) url.openConnection();
 			
 			con.setRequestMethod("POST");
@@ -66,7 +66,7 @@ public class UrlConSessionTest {
 		URL url;
 
 		try {
-			url = new URL("http://192.168.0.6:8080"+reqUrl);
+			url = new URL("http://192.168.0.7:8080"+reqUrl);
 			con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("POST");
 			con.setDoOutput(true);
