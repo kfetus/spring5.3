@@ -80,6 +80,9 @@
 			<a href="<c:url value="/urlToView/board/boardList.do" />">urltoView(게시판)</a>
 		</li>
 		<li>
+			<a href="<c:url value="/urlToView/schedule/schedule.do" />">urltoView(스케쥴)</a>
+		</li>
+		<li>
 			<a href="<c:url value="/restTest.jsp" />">restTest</a>
 		</li>
 		<li>
