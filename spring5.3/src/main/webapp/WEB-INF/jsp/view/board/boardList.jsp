@@ -5,17 +5,22 @@
 	<head>
 		<title>게시판</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-		<script src="<c:url value="/static/js/comm/jquery-3.7.1.js" />"></script>
+
 		<link rel="stylesheet" href="<c:url value="/static/css/base.css" />" />
+		<script src="<c:url value="/static/js/comm/jquery-3.7.1.js" />"></script>
+		<script src="<c:url value="/static/js/comm/siteComm.js" />"></script>
 		
 		<script>
 		
-			const boardList = () => {
+			const boardList = (nowPage) => {
 				console.log('ajax start');
-				
+
+				$("#boardList").show();
+				$("#boardDetail").hide();
+
+				let pageListCnt = 8;
 				console.log($("#listTable tr").length);
 				if ( $("#listTable tr").length != 1) {
-					
 					while($("#listTable tr").length != 1) {
 						$("#listTable > tbody:last > tr:last").remove();
 					}
@@ -25,30 +30,29 @@
 					type : 'post',
 					url : '/boardList.do',
 					async : true,
-					dataType : 'text',
+					dataType : 'json',
 	 				headers : {"Content-Type" : "application/json"},
-					data : JSON.stringify( {'type1':'name', 'type2':'identity'}),    
+					data : JSON.stringify({ 'nowPage':nowPage, 'pageListCnt':pageListCnt, 'category':$("#category").val(), 'title':$("#title").val() }),
 					success : function(result) {
 						console.log(result);
-						let listData = JSON.parse(result); 
-						console.log(listData.RESULT_LIST);
-
+//						let listData = JSON.parse(result);//dataType : 'text'로 선언했을 경우 json 파싱 
 						let appendStr;
 
-						$(listData.RESULT_LIST).each(function(index){
+						$(result.RESULT_LIST).each(function(index){
 							appendStr += "<TR>";
-							appendStr += '<TD>'+listData.RESULT_LIST[index].SEQ + '</TD>';
-							appendStr += '<TD>'+listData.RESULT_LIST[index].CATEGORY + '</TD>';
-							appendStr += '<TD>'+listData.RESULT_LIST[index].CODE_NAME + '</TD>';
-							appendStr += '<TD>'+listData.RESULT_LIST[index].TITLE + '</TD>';
-							appendStr += '<TD>'+listData.RESULT_LIST[index].BODY_TEXT + '</TD>';
-							appendStr += '<TD>'+listData.RESULT_LIST[index].USER_NO + '</TD>';
-							appendStr += '<TD>'+listData.RESULT_LIST[index].REG_DT + '</TD>';
-							appendStr += '<TD>'+listData.RESULT_LIST[index].CNG_DT + '</TD>';
+							appendStr += '<TD>'+result.RESULT_LIST[index].SEQ + '</TD>';
+							appendStr += '<TD>'+result.RESULT_LIST[index].CATEGORY + '</TD>';
+							appendStr += '<TD>'+result.RESULT_LIST[index].CODE_NAME + '</TD>';
+							appendStr += '<TD><a href="javascript:showDetail('+result.RESULT_LIST[index].SEQ+')">'+result.RESULT_LIST[index].TITLE + '</a></TD>';
+							appendStr += '<TD>'+result.RESULT_LIST[index].BODY_TEXT + '</TD>';
+							appendStr += '<TD>'+result.RESULT_LIST[index].USER_NO + '</TD>';
+							appendStr += '<TD>'+result.RESULT_LIST[index].REG_DT + '</TD>';
+							appendStr += '<TD>'+result.RESULT_LIST[index].CNG_DT + '</TD>';
 							appendStr += '</TR>';
 						});
 						
-	                    $("#listTable").append(appendStr);						
+	                    $("#listTable").append(appendStr);
+	                    fn_makePaging(nowPage,result.RESULT_TOTAL_CNT,pageListCnt,'paging','boardList');
 						
 					},
 					error : function(request, status, error) {        
@@ -57,8 +61,33 @@
 				});
 			}
 			
+			function showDetail(seq) {
+				$("#boardList").hide();
+				$("#boardDetail").show();
+				
+				$.ajax({
+					type : 'post',
+					url : '/boardOne.do',
+					async : true,
+					dataType : 'json',
+	 				headers : {"Content-Type" : "application/json"},
+					data : JSON.stringify({ 'SEQ':seq }),
+					success : function(result) {
+						console.log(result);
+						$("#detailTitle").text(result.RESULT_DATA.TITLE);
+						$("#detailContent").text(result.RESULT_DATA.BODY_TEXT);
+						$("#detailCategory").text(result.RESULT_DATA.CATEGORY);
+						$("#detailFileName").text(result.RESULT_DATA.FILE_NAME);
+						$("#detailTitle").data("seq",result.RESULT_DATA.SEQ);
+ 					},
+					error : function(request, status, error) {        
+						console.log(error);
+					}
+				});
+			}
+			
 			$(function() {
-				boardList();
+				boardList(1);
 				console.log('document.onload()');
 			})
 		
@@ -66,10 +95,16 @@
 	
 	</head>
 	<body>
-		<div>
+		<div id="boardList">
 			<div>
-				본문
-				<button type="button" id="s1" onclick="javascript:boardList();"><span><strong>조회</strong></span></button>
+				<select name="category" id="category">
+					<option value="" selected="selected">게시판종류</option>
+					<option value="BASE">기본</option>
+					<option value="NOTICE">공지</option>
+				</select>
+				<input name="title" id="title" value="" placeholder="제목" onkeyup="if(window.event.keyCode==13){boardList('1')}">
+
+				<button type="button" id="s1" onclick="javascript:boardList('1');"><span><strong>조회</strong></span></button>
 			</div>
 		
 	       	<div>
@@ -108,6 +143,17 @@
 	       			</c:forEach>
 	       		</table>
 	       	</div>
+	       	<div id="paging" ></div>
+		</div>
+		<div id="boardDetail" style="display:none">
+			<div>
+				상세
+				<button type="button" id="s1" onclick="javascript:boardList('1');"><span><strong>목록</strong></span></button>
+			</div>
+			<div>제목<span id="detailTitle" data-seq=""></span></div>
+			<div>내용<span id="detailContent"></span></div>
+			<div>카테고리<span id="detailCategory"></span></div> 
+			<div>파일명<span id="detailFileName"></span></div> 
 		</div>
 	</body>
 </html>

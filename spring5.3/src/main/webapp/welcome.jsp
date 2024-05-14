@@ -77,7 +77,7 @@
 			<a href="<c:url value="/baseList.do" />">기본리스트 <spring:message code='button.list' /></a>
 		</li>
 		<li>
-			<a href="<c:url value="/urlToView/board/boardList.do" />">urltoView</a>
+			<a href="<c:url value="/urlToView/board/boardList.do" />">urltoView(게시판)</a>
 		</li>
 		<li>
 			<a href="<c:url value="/restTest.jsp" />">restTest</a>
