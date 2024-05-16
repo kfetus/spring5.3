@@ -55,7 +55,6 @@ public class MenuController {
 			mv.addObject("RESCODE", "0000");
 			mv.addObject("RESMSG", "데이타 없습니다.");
 			mv.addObject("RESULT_TOTAL_CNT", "0");
-			return mv;
 		} else {
 			
 			if( !ObjectUtils.isEmpty(map.get("nowPage")) && StringUtils.hasText(String.valueOf(map.get("nowPage")))) {
@@ -84,6 +83,7 @@ public class MenuController {
 		}
 		mv.addObject("nowPage",nowPage);
 		mv.addObject("pageListCnt",pageListCnt);
+		mv.addAllObjects(map);
 		LOGGER.debug("####################### menuList END");
 		return mv;
 	}

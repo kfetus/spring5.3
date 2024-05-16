@@ -30,9 +30,16 @@
 			let initData = "<c:out value="${RESULT_LIST}"/>";
 			console.log(initData);
 --%>
-			let jsonListMapData = JSON.parse('${RESULT_JSON_LIST}');
-			console.log(jsonListMapData);
 
+			<c:choose>
+				<c:when test="${'0' eq RESULT_TOTAL_CNT }">
+				let jsonListMapData = JSON.parse('[]');
+				</c:when>
+				<c:otherwise>
+				let jsonListMapData = JSON.parse('${RESULT_JSON_LIST}');
+				</c:otherwise>
+			</c:choose>
+			
 			mainGrid = new tui.Grid({
 				el : $("#mainGrid")[0],
 				scrollX : true,
@@ -103,8 +110,18 @@
 		})
 		
 		function pagingMove(wantPageNo) {
-			window.location.href = "/menu/menuList.do?nowPage="+wantPageNo;
+			$("#nowPage").val(wantPageNo);
+			$("#mainForm").submit();
 		}
+		
+		function formSubmit() {
+//			$("#mainForm").attr("action", "/menu/menuList.do");
+//			$("#mainForm").attr("method", "post");
+			$("#nowPage").val(0);
+			$("#mainForm").submit();
+			return false;
+		}
+		
 		function fn_Login(){
 			$.ajax({
 				type : 'post',
@@ -131,15 +148,24 @@
 
 
 <body>
-
+<form action="/menu/menuList.do" method="post" id="mainForm" name="mainForm">
+<input type="hidden" name="nowPage" id="nowPage" value="">
 	<div>
 		<div style="border: 1px solid #bcbcbc;">
 			<c:out value="${userNm}"/>
 		</div>
 		<div>
+			<select name="sysGroup" id="sysGroup">
+				<option value="" <c:if test="${'' eq sysGroup}">selected="selected"</c:if>>선택</option>
+				<option value="MOW" <c:if test="${'MOW' eq sysGroup}">selected="selected"</c:if>>MOW</option>
+				<option value="PCW" <c:if test="${'PCW' eq sysGroup}">selected="selected"</c:if>>PCW</option>
+				<option value="APP" <c:if test="${'APP' eq sysGroup}">selected="selected"</c:if>>APP</option>
+				<option value="CAR" <c:if test="${'CAR' eq sysGroup}">selected="selected"</c:if>>CAR</option>
+			</select>
 			<input name="menu1Depth" id="menu1Depth" value="" placeholder="메뉴1뎁스" onkeyup="if(window.event.keyCode==13){pmsSearch('1')}">
 			<input name="masterName" id="masterName" value="" placeholder="담당자" onkeyup="if(window.event.keyCode==13){pmsSearch('1')}">
-			<button type="button" onclick="javascript:pmsSearch(1);"><span><strong>조회</strong></span></button>
+			 
+			<button type="button" onclick="javascript:formSubmit();"><span><strong>조회</strong></span></button>
 			<button type="button" onclick="javascript:fn_Login();"><span><strong>로그인</strong></span></button>
 		</div>
 		<div>
@@ -148,6 +174,6 @@
 		</div>
 
 	</div>
-
+</form>
 </body>
 </html>

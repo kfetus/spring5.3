@@ -38,39 +38,37 @@
 			white-space: nowrap;
 		}
 		
-.arrow_box {
-  display: none;
-  position: absolute;
-  width: 200px;
-  height: 100px;
-  padding: 8px;
-  left: 0;
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  border-radius: 8px;
-  background: #333;
-  color: #fff;
-  font-size: 14px;
-  word-break: break-all;
-}
-.arrow_box:after {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  margin-left: -10px;
-  border: solid transparent;
-  border-color: rgba(51, 51, 51, 0);
-  border-bottom-color: #333;
-  border-width: 10px;
-  pointer-events: none;
-  content: ' ';
-}
-
-span:hover + p.arrow_box {
-  display: block;
-}
+		.arrow_box {
+			display: none;
+			position: absolute;
+			width: 200px;
+			height: 110px;
+			padding: 8px;
+			left: 0;
+			border-radius: 8px;
+			background: #07708b;
+			color: #fff;
+			font-size: 14px;
+			white-space: pre-wrap;
+		}
+		.arrow_box:after {
+			position: absolute;
+			bottom: 100%;
+			left: 50%;
+			width: 0;
+			height: 0;
+			margin-left: -10px;
+			border: solid transparent;
+			border-color: rgba(51, 51, 51, 0);
+			border-bottom-color: #07708b;
+			border-width: 10px;
+			pointer-events: none;
+			content: ' ';
+		}
+		
+		span:hover + p.arrow_box {
+			display: block;
+		}
 		
 	</style>	
 

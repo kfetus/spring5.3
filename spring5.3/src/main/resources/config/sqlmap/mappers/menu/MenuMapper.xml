@@ -10,6 +10,7 @@
 		<where>
 			<if test="menuName != null and menuName != '' ">AND MENU_NAME LIKE CONCAT('%',#{menuName},'%')</if>
 			<if test="useYn != null and useYn != '' ">AND USE_YN = #{useYn}</if>
+			<if test="sysGroup != null and sysGroup != '' ">AND SYS_GROUP = #{sysGroup}</if>
 		</where>
     </select>
 
@@ -30,6 +31,7 @@
 		<where>
 			<if test="menuName != null and menuName != '' ">AND B.MENU_NAME LIKE CONCAT('%',#{menuName},'%')</if>
 			<if test="useYn != null and useYn != '' ">AND USE_YN = #{useYn}</if>
+			<if test="sysGroup != null and sysGroup != '' ">AND SYS_GROUP = #{sysGroup}</if>
 		</where>
 <!--	ORDER BY B.SEQ DESC-->
 		LIMIT #{pageListCnt} OFFSET #{startIdx}
