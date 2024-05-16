@@ -83,6 +83,9 @@
 			<a href="<c:url value="/urlToView/schedule/schedule.do" />">urltoView(스케쥴)</a>
 		</li>
 		<li>
+			<a href="<c:url value="/menu/menuList.do" />">메뉴관리(JSP버전)</a>
+		</li>
+		<li>
 			<a href="<c:url value="/restTest.jsp" />">restTest</a>
 		</li>
 		<li>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="base.biz.menu.MenuMapper">
+
+   <select id="selectMenuListCnt" parameterType="java.util.HashMap" resultType="int">
+		SELECT /* MenuMapper.selectMenuListCnt 메뉴관리 목록 갯수 조회 */
+				COUNT(URL) AS TOTAL_CNT
+		  FROM SYSTEM_MENU 
+		<where>
+			<if test="menuName != null and menuName != '' ">AND MENU_NAME LIKE CONCAT('%',#{menuName},'%')</if>
+			<if test="useYn != null and useYn != '' ">AND USE_YN = #{useYn}</if>
+		</where>
+    </select>
+
+
+   <select id="selectMenuList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT URL /* MenuMapper.selectMenuList 메뉴관리 목록 조회 */
+			, SYS_GROUP
+			, PARENT_URL
+			, MENU_NAME
+			, MENU_LEVEL
+			, ORDER_NUM
+			, USE_YN
+			, LINK_YN
+			, REG_ID
+			, REG_DT
+			, CNG_DT 
+		FROM SYSTEM_MENU 
+		<where>
+			<if test="menuName != null and menuName != '' ">AND B.MENU_NAME LIKE CONCAT('%',#{menuName},'%')</if>
+			<if test="useYn != null and useYn != '' ">AND USE_YN = #{useYn}</if>
+		</where>
+<!--	ORDER BY B.SEQ DESC-->
+		LIMIT #{pageListCnt} OFFSET #{startIdx}
+    </select>
+    
+    
+<!--
+	<update id="updatePmsList" parameterType="java.util.List">
+
+		<foreach collection="list" item="rowData" separator=";">
+			UPDATE PROJECT_MANAGE_PLAN /* MenuMapper.updatePmsList PMS 리스트 update */
+				SET
+					CODE = #{rowData.CODE}
+					, MENU_DEPTH_1 = #{rowData.MENU_DEPTH_1}
+					, MENU_DEPTH_2 = #{rowData.MENU_DEPTH_2}
+					, MENU_DEPTH_3 = #{rowData.MENU_DEPTH_3}
+					, MENU_DEPTH_4 = #{rowData.MENU_DEPTH_4}
+					, PROG_FILE_NM = #{rowData.PROG_FILE_NM}
+					, MENU_NAME = #{rowData.MENU_NAME}
+					, STATE = #{rowData.STATE}
+					, MASTER_NAME = #{rowData.MASTER_NAME}
+					, START_DT = #{rowData.START_DT}
+					, DUE_DT = #{rowData.DUE_DT}
+					, FIN_DT = #{rowData.FIN_DT}
+					, CNG_DT = CURRENT_TIMESTAMP()
+				WHERE SEQ = #{rowData.SEQ}
+		</foreach>
+	</update>
+
+	<insert id="insertPmsList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="SEQ">
+		INSERT INTO PROJECT_MANAGE_PLAN ( /* MenuMapper.insertPmsList PMS 리스트 insert */
+ 
+					CODE
+					, MENU_DEPTH_1
+					, MENU_DEPTH_2
+					, MENU_DEPTH_3
+					, MENU_DEPTH_4
+					, PROG_FILE_NM
+					, MENU_NAME
+					, STATE
+					, MASTER_NAME
+					, START_DT
+					, DUE_DT
+					, FIN_DT
+					, REG_DT
+					, CNG_DT
+				) VALUES
+			<foreach collection="list" item="rowData" separator=",">
+				(
+
+					#{rowData.CODE}
+					, #{rowData.MENU_DEPTH_1}
+					, #{rowData.MENU_DEPTH_2}
+					, #{rowData.MENU_DEPTH_3}
+					, #{rowData.MENU_DEPTH_4}
+					, #{rowData.PROG_FILE_NM}
+					, #{rowData.MENU_NAME}
+					, #{rowData.STATE}
+					, #{rowData.MASTER_NAME}
+					, #{rowData.START_DT}
+					, #{rowData.DUE_DT}
+					, #{rowData.FIN_DT}
+					, CURRENT_TIMESTAMP()
+					, CURRENT_TIMESTAMP() 
+				)
+			</foreach>
+	</insert>
+
+	
+	<delete id="deletePmsOne" parameterType="java.util.ArrayList">
+		DELETE FROM PROJECT_MANAGE_PLAN /* MenuMapper.deletePmsOne 일정관리 delete */
+		 WHERE SEQ IN 
+			<foreach item="seq" index="index" collection="list" open="(" separator="," close=")">
+			  #{seq}
+			</foreach>
+	</delete>
+-->		
+</mapper>

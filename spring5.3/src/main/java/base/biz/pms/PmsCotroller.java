@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import base.comm.SystemConstance;
 import base.comm.util.SessionManager;
 import base.comm.vo.UserVO;
 
@@ -60,7 +61,7 @@ public class PmsCotroller {
 		int totalCnt = pmsService.selectPmsListCnt(map);
 		
 		int nowPage = 0;
-		int pageListCnt = 5;
+		int pageListCnt = SystemConstance.DEFAULT_PAGE_LIST_COUNT;
 		int startIdx = 0;
 		
 		if (totalCnt == 0) {

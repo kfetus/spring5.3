@@ -93,7 +93,7 @@
 					pagingHtml = pagingHtml + '<a href="javascript:'+fn+'('+i+');" > '+i+' </a>&nbsp;';
 				}
 			}
-			if ( maxPagingCnt < totalPageCnt) {
+			if ( nowPage < totalPageCnt) {
 				pagingHtml = pagingHtml + '<a href="javascript:'+fn+'('+(nowPage+1)+');" ><span > 다음 </span></a>&nbsp;';
 			}
 			if ( nowPage < totalPageCnt) {
