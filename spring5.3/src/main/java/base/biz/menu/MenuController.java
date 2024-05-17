@@ -2,6 +2,7 @@ package base.biz.menu;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,13 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import base.biz.pms.PmsCotroller;
 import base.comm.SystemConstance;
 import base.comm.util.SessionManager;
 import base.comm.vo.UserVO;
@@ -27,7 +29,7 @@ import base.comm.vo.UserVO;
 @RequestMapping(value = "/menu")
 public class MenuController {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(PmsCotroller.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(MenuController.class);
 	
 	@Autowired
 	private SessionManager sessionManager;
@@ -42,7 +44,9 @@ public class MenuController {
 		ModelAndView mv = new ModelAndView();
 
 		UserVO vo = sessionManager.getUserInfo(req);
+//일반 jsp 리턴 방식. 새로고침을 해도 같은 이전 요청 데이터가 유지 됨		
 		mv.setViewName("menu/menuList");
+//리다이렉트 방식. 이전 post 요청 파라미터들 리셋이 필요할 때. 같은 url을 보내면 무한루프임		mv.setViewName("redirect:/menu/menuDetail.do");
 		mv.addObject("userNm", vo.getUserName());
 		
 		int totalCnt = menuService.selectMenuListCnt(map);
@@ -84,8 +88,72 @@ public class MenuController {
 		mv.addObject("nowPage",nowPage);
 		mv.addObject("pageListCnt",pageListCnt);
 		mv.addAllObjects(map);
-		LOGGER.debug("####################### menuList END");
+		LOGGER.debug("####################### menuList END" +mv);
 		return mv;
+	}
+
+	
+	@ResponseBody
+	@RequestMapping(value = "/updateMenuList.do")
+	public Map<String, Object> updateMenuList(@RequestBody List<Map<String, String>> list, HttpServletRequest req) throws Exception {
+		LOGGER.debug("@@@@@@@@@@@ updateMenuList 시작=" + list);
+		
+		UserVO vo = sessionManager.getUserInfo(req);
+		Map<String, Object> retMap = new HashMap<String, Object>();
+		for(int i = 0 ; i < list.size(); i++) {
+			list.get(i).put("REG_ID", vo.getUserNo()+"");
+		}
+		//multi update는 무조건 1건으로 처리되므로 conut가 의미 없다
+		menuService.updateMenuList(list);
+		
+		retMap.put("RESCODE", "0000");
+		retMap.put("RESMSG", "");
+//		retMap.put("CHANGE_COUNT", resultCount);
+
+		LOGGER.debug("@@@@@@@@@@@ updateMenuList 종료" + retMap);
+		return retMap;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/saveMenuOne.do")
+	public Map<String, Object> saveMenuOne(@RequestBody Map<String, String> map, HttpServletRequest req) throws Exception {
+		LOGGER.debug("@@@@@@@@@@@ saveMenuOne 시작=" + map);
+		
+		UserVO vo = sessionManager.getUserInfo(req);
+		Map<String, Object> retMap = new HashMap<String, Object>();
+
+		map.put("REG_ID", vo.getUserNo()+"");
+
+		int resultCount = menuService.saveMenuOne(map);
+		if (resultCount != 1) {
+			retMap.put("RESCODE", "9999");
+			retMap.put("RESMSG", "중복된 데이터가 있습니다.");
+		} else {
+			retMap.put("RESCODE", "0000");
+			retMap.put("RESMSG", "");
+		}
+		retMap.put("CHANGE_COUNT", resultCount);
+
+		LOGGER.debug("@@@@@@@@@@@ saveMenuOne 종료" + retMap);
+		return retMap;
+	}
+
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/deleteMenuList.do")
+	public Map<String, Object> deleteMenuList(@RequestBody List<Map<String,String>> list, HttpServletRequest req) throws Exception {
+		LOGGER.debug("@@@@@@@@@@@ deleteMenuList 시작=" + list);
+		Map<String, Object> retMap = new HashMap<String, Object>();
+		
+		int resultCount = menuService.deleteMenuList(list);
+		
+		retMap.put("RESCODE", "0000");
+		retMap.put("RESMSG", "");
+		retMap.put("CHANGE_COUNT", resultCount);
+
+		LOGGER.debug("@@@@@@@@@@@ deleteMenuList 종료" + retMap);
+		return retMap;
 	}
 
 }

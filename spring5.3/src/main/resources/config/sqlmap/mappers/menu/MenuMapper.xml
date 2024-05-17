@@ -29,7 +29,7 @@
 			, CNG_DT 
 		FROM SYSTEM_MENU 
 		<where>
-			<if test="menuName != null and menuName != '' ">AND B.MENU_NAME LIKE CONCAT('%',#{menuName},'%')</if>
+			<if test="menuName != null and menuName != '' ">AND MENU_NAME LIKE CONCAT('%',#{menuName},'%')</if>
 			<if test="useYn != null and useYn != '' ">AND USE_YN = #{useYn}</if>
 			<if test="sysGroup != null and sysGroup != '' ">AND SYS_GROUP = #{sysGroup}</if>
 		</where>
@@ -37,63 +37,88 @@
 		LIMIT #{pageListCnt} OFFSET #{startIdx}
     </select>
     
-    
-<!--
-	<update id="updatePmsList" parameterType="java.util.List">
 
+	<update id="updateMenuList" parameterType="java.util.List">
 		<foreach collection="list" item="rowData" separator=";">
-			UPDATE PROJECT_MANAGE_PLAN /* MenuMapper.updatePmsList PMS 리스트 update */
-				SET
-					CODE = #{rowData.CODE}
-					, MENU_DEPTH_1 = #{rowData.MENU_DEPTH_1}
-					, MENU_DEPTH_2 = #{rowData.MENU_DEPTH_2}
-					, MENU_DEPTH_3 = #{rowData.MENU_DEPTH_3}
-					, MENU_DEPTH_4 = #{rowData.MENU_DEPTH_4}
-					, PROG_FILE_NM = #{rowData.PROG_FILE_NM}
-					, MENU_NAME = #{rowData.MENU_NAME}
-					, STATE = #{rowData.STATE}
-					, MASTER_NAME = #{rowData.MASTER_NAME}
-					, START_DT = #{rowData.START_DT}
-					, DUE_DT = #{rowData.DUE_DT}
-					, FIN_DT = #{rowData.FIN_DT}
-					, CNG_DT = CURRENT_TIMESTAMP()
-				WHERE SEQ = #{rowData.SEQ}
+			UPDATE SYSTEM_MENU /* MenuMapper.updateMenuList MENU 리스트 update */
+				SET 
+					PARENT_URL = #{rowData.PARENT_URL} 
+					, MENU_NAME = #{rowData.MENU_NAME} 
+					, MENU_LEVEL = #{rowData.MENU_LEVEL} 
+					, ORDER_NUM = #{rowData.ORDER_NUM} 
+					, USE_YN = #{rowData.USE_YN} 
+					, LINK_YN = #{rowData.LINK_YN} 
+					, REG_ID = #{rowData.REG_ID} 
+					, CNG_DT = CURRENT_TIMESTAMP() 
+				WHERE URL = #{rowData.URL} 
+				  AND SYS_GROUP = #{rowData.SYS_GROUP} 
 		</foreach>
 	</update>
 
-	<insert id="insertPmsList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="SEQ">
-		INSERT INTO PROJECT_MANAGE_PLAN ( /* MenuMapper.insertPmsList PMS 리스트 insert */
- 
-					CODE
-					, MENU_DEPTH_1
-					, MENU_DEPTH_2
-					, MENU_DEPTH_3
-					, MENU_DEPTH_4
-					, PROG_FILE_NM
+
+   <select id="selectMenuOne" parameterType="java.util.HashMap" resultType="int">
+		SELECT /* MenuMapper.selectMenuOne 메뉴관리 중복 갯수 조회 */
+				COUNT(URL) AS TOTAL_CNT
+		  FROM SYSTEM_MENU
+		 WHERE URL = #{URL}
+		   AND SYS_GROUP = #{SYS_GROUP}
+    </select>
+
+	<insert id="insertMenuOne" parameterType="java.util.HashMap" >
+		INSERT INTO SYSTEM_MENU ( /* MenuMapper.insertMenuOne MENU 리스트 insert */
+					URL 
+					, SYS_GROUP
+					, PARENT_URL
 					, MENU_NAME
-					, STATE
-					, MASTER_NAME
-					, START_DT
-					, DUE_DT
-					, FIN_DT
+					, MENU_LEVEL
+					, ORDER_NUM
+					, USE_YN
+					, LINK_YN
+					, REG_ID
+					, REG_DT
+					, CNG_DT
+				) VALUES
+				(
+					#{URL}
+					, #{SYS_GROUP}
+					, #{PARENT_URL}
+					, #{MENU_NAME}
+					, #{MENU_LEVEL}
+					, #{ORDER_NUM}
+					, #{USE_YN}
+					, #{LINK_YN}
+					, #{REG_ID}
+					, CURRENT_TIMESTAMP()
+					, CURRENT_TIMESTAMP() 
+				)
+	</insert>
+
+
+	<insert id="insertMenuList" parameterType="java.util.List">
+		INSERT INTO SYSTEM_MENU ( /* MenuMapper.insertMenuList MENU 리스트 insert */
+					URL 
+					, SYS_GROUP
+					, PARENT_URL
+					, MENU_NAME
+					, MENU_LEVEL
+					, ORDER_NUM
+					, USE_YN
+					, LINK_YN
+					, REG_ID
 					, REG_DT
 					, CNG_DT
 				) VALUES
 			<foreach collection="list" item="rowData" separator=",">
 				(
-
-					#{rowData.CODE}
-					, #{rowData.MENU_DEPTH_1}
-					, #{rowData.MENU_DEPTH_2}
-					, #{rowData.MENU_DEPTH_3}
-					, #{rowData.MENU_DEPTH_4}
-					, #{rowData.PROG_FILE_NM}
+					#{rowData.URL}
+					, #{rowData.SYS_GROUP}
+					, #{rowData.PARENT_URL}
 					, #{rowData.MENU_NAME}
-					, #{rowData.STATE}
-					, #{rowData.MASTER_NAME}
-					, #{rowData.START_DT}
-					, #{rowData.DUE_DT}
-					, #{rowData.FIN_DT}
+					, #{rowData.MENU_LEVEL}
+					, #{rowData.ORDER_NUM}
+					, #{rowData.USE_YN}
+					, #{rowData.LINK_YN}
+					, #{rowData.REG_ID}
 					, CURRENT_TIMESTAMP()
 					, CURRENT_TIMESTAMP() 
 				)
@@ -101,12 +126,13 @@
 	</insert>
 
 	
-	<delete id="deletePmsOne" parameterType="java.util.ArrayList">
-		DELETE FROM PROJECT_MANAGE_PLAN /* MenuMapper.deletePmsOne 일정관리 delete */
-		 WHERE SEQ IN 
-			<foreach item="seq" index="index" collection="list" open="(" separator="," close=")">
-			  #{seq}
+	<delete id="deleteMenuList" parameterType="java.util.ArrayList">
+		DELETE FROM SYSTEM_MENU /* MenuMapper.deleteMenuList 메뉴관리 delete */
+		 <where>  
+			<foreach item="rowData" index="index" collection="list" open="" separator="OR" close="">
+			  ( URL = #{rowData.URL} AND SYS_GROUP = #{rowData.SYS_GROUP} )
 			</foreach>
+		</where>
 	</delete>
--->		
+		
 </mapper>

@@ -65,6 +65,7 @@
 		</foreach>
 	</update>
 
+	<!-- useGeneratedKeys="true" keyProperty="SEQ" SEQ 컬럼이 autoIncrement로 DB에 설정되어 있을 경우 자동 증가하면서 insert -->	
 	<insert id="insertPmsList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="SEQ">
 		INSERT INTO PROJECT_MANAGE_PLAN ( /* PmsMapper.insertPmsList PMS 리스트 insert */
 <!-- 					SEQ, --> 

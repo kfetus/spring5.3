@@ -4,8 +4,7 @@
 <html>
 <head>
 	<title>일정관리</title>
-	<meta name="viewport"
-		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<script src="<c:url value="/static/js/comm/jquery-3.7.1.js" />"></script>
 	<link rel="stylesheet" href="<c:url value="/static/css/base.css" />" />
 
