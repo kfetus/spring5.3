@@ -18,40 +18,65 @@
 		<script src="<c:url value="/static/js/comm/siteComm.js" />"></script>	</head>
 
 		<style>
-#layer_bg {
-    display:none;
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.5);
-	z-index: 30;
-}
+			#loadingDim {
+			    position:absolute;
+			    top:0;
+			    left:0;
+			    width:100%;
+			    height:100%;
+			    background:rgba(0,0,0,0.5);
+				z-index: 3000;
+			}
+			#dimSpinner {
+				margin: calc(50% - 25px) auto;
+				width: 50px;
+				height: 50px;
+				border: 3px solid rgba(255, 255, 255, 0.3);
+			    background-color: cornflowerblue;
+				box-sizing: border-box;
+				border-top-color: white;
+				border-radius: 100%;
+				animation: spin 1s ease-in-out infinite;
+				}
+				
+				@keyframes spin {100%{transform: rotate(360deg);}
+			}
 
-#layer_bg > #popup {
-    position:absolute;
-    padding:15px;
-    border-radius:15px; 
-    top:50%;
-    left:50%;
-    transform:translate(-50%, -50%);
-    width:80%;
-    height:80%;
-    background:#fff;
-    box-shadow: 7px 7px 5px rgba(0,0,0,0.2); 
-}
 
-#layer_bg > #popup > h2 {
-    margin-bottom:25px;
-}
-
-#layer_bg > #popup > h2 > button {
-    float: right;
-}
-#layer_bg > #popup > button {
-    float: right;
-}
+			#dimLayerPopUp {
+			    display:none;
+			    position:absolute;
+			    top:0;
+			    left:0;
+			    width:100%;
+			    height:100%;
+			    background:rgba(0,0,0,0.5);
+				z-index: 30;
+			}
+			
+			#dimLayerPopUp > #dimContent {
+			    position:absolute;
+			    padding:15px;
+			    border-radius:15px; 
+			    top:50%;
+			    left:50%;
+			    transform:translate(-50%, -50%);
+			    width:80%;
+			    height:80%;
+			    background:#fff;
+			    box-shadow: 7px 7px 5px rgba(0,0,0,0.2); 
+			}
+			
+			#dimLayerPopUp > #dimContent > h2 {
+			    margin-bottom:25px;
+			}
+			
+			#dimLayerPopUp > #dimContent > h2 > button {
+			    float: right;
+			}
+			#dimLayerPopUp > #dimContent > button {
+			    float: right;
+			}
 
 		</style>	
 
@@ -220,6 +245,8 @@
 			console.log(sendData);
 --%>
 			
+			$("body").append("<div id='loadingDim'><div id='dimSpinner'></div></div>");
+			
 			$.ajax({
 				type : 'post',
 				url : 'updateMenuList.do',
@@ -229,6 +256,8 @@
 				data : JSON.stringify( sendData ),    
 				success : function(result) {
 					console.log(result);
+					$('#loadingDim').remove();
+
 					if(result.RESCODE != '0000') {
 						alert('데이터 수정에 실패하였습니다.');
 						return false;
@@ -236,13 +265,13 @@
 					$("#nowPage").val(0);
 					$("#mainForm").submit();
 				},
-				error : function(error) {        
+				error : function(error) {
+					$('#loadingDim').remove();
 					console.log(error);
 				}
 			});
-			
 		}
-
+		
 		<%-- 페이지 로딩시 그리면 그려지지 않음.... --%>
 		let addGrid;
 		function addTableRow() {
@@ -368,7 +397,7 @@
 				addGrid.clear();
 			}
 			addGrid.appendRow({URL: "",SYS_GROUP: "",PARENT_URL: "", MENU_NAME: "",MENU_LEVEL: "1",ORDER_NUM: "1",USE_YN: "Y", LINK_YN: "Y"});			
-			$("#layer_bg").show();
+			$("#dimLayerPopUp").show();
 		}
 
 		<%-- 그리드 해당 셀 추가벨리데이션 리턴 함수 false 일 경우 빨간색으로 표시됨--%>
@@ -426,7 +455,7 @@
 		
 		
 		function closeDim() {
-			$("#layer_bg").hide();
+			$("#dimLayerPopUp").hide();
 		}
 		
 		function deleteRows() {
@@ -536,8 +565,8 @@
 	</div>
 </form>
 
-<div id="layer_bg">
-	<div id="popup">
+<div id="dimLayerPopUp">
+	<div id="dimContent">
 		<h2>추가
 		<button type="button" onclick="closeDim();">닫기</button>
 		</h2>
