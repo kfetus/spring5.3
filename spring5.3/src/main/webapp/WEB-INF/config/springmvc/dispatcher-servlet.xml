@@ -49,6 +49,11 @@
 
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
 
+	<bean class="base.comm.exception.BaseExceptionResolver">
+		<property name="order" value="1"/>
+	</bean>
+
+<!-- 
     <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
         <property name="defaultErrorView" value="common/exception/baseError"/>
         <property name="exceptionMappings">
@@ -59,7 +64,7 @@
             </props>
         </property>
     </bean>
-
+ -->
     <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="1"
 	    p:viewClass="org.springframework.web.servlet.view.JstlView"
 	    p:prefix="/WEB-INF/jsp/view/" p:suffix=".jsp"/>
