@@ -176,8 +176,10 @@
 					}
 					fn_makePaging(wantPageNo,result.RESULT_TOTAL_CNT,pagePerCnt,'paging','pmsSearch');
 				},
-				error : function(request, status, error) {        
+				error : function(request, error) {        
+					console.log(request);
 					console.log(error);
+					alert(request.responseJSON.RESMSG);
 				}
 			});
 		}

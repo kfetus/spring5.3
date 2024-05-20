@@ -35,38 +35,24 @@
     
     <body>
     
-        <!-- page start -->
         <div data-role="page" data-theme="d">
-        
-            <!-- header start -->
             <div data-role="header" data-position="inline" data-theme="g">
             	<h1>Error Page</h1>
                 <a href="<c:url value="/index.jsp" />" data-ajax="false" data-icon="back" class="ui-btn-right">Back</a>
             </div>  
-            <!-- header end -->
-            
-            <!-- content start -->      
             <div data-role="content" >
                 <h1>시스템 에러(BASE)</h1>
                 <p>관리자에게 문의해주세요.</p>
                 <a href="<c:url value="/index.jsp" />"  data-ajax="false" data-role="button" data-inline="true">돌아가기</a>
                 <br>
                 <p><c:out value="${exception.message}"/></p>
-                
                 <br><br><br>
                 <br><br><br>
             </div>
-            <!-- content end -->
-            
-            <!-- footer start -->
-            <div data-role="footer" data-theme="g">
-                 <h4 class="main">메인</h4>
+            <div>
+                 <h4>풋터</h4>
             </div>
-            <!-- footer end --> 
-            
         </div>
-        <!-- page end -->   
-        		
   	</body>
 </html>
 <%

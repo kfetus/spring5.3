@@ -68,7 +68,6 @@ public class PmsCotroller {
 			retMap.put("RESCODE", "0000");
 			retMap.put("RESMSG", "데이타 없습니다.");
 			retMap.put("RESULT_SIZE", "0");
-			return retMap;
 		} else {
 			
 			if( !ObjectUtils.isEmpty(map.get("nowPage")) && StringUtils.hasText(String.valueOf(map.get("nowPage")))) {

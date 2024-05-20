@@ -268,6 +268,7 @@
 				error : function(error) {
 					$('#loadingDim').remove();
 					console.log(error);
+					alert(error.responseJSON.RESMSG);
 				}
 			});
 		}

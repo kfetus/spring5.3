@@ -26,12 +26,10 @@
     <body>
     
         <div data-role="page" data-theme="d">
-        
             <div data-role="header" data-position="inline" data-theme="g">
             	<h1>Error Page</h1>
                 <a href="/index.jsp" data-icon="back" class="ui-btn-right">Back</a>
             </div>  
-            
             <div data-role="content" >
                 <h1>시스템 에러(biz exception)</h1>
                 <p>관리자에게 문의해주세요.</p>
@@ -39,13 +37,10 @@
                 <br>
                 <p><c:out value="${exception.message}"/></p>
             </div>
-            
             <div data-role="footer" data-theme="g">
-                 <h4 class="main">메인</h4>
+                 <h4>풋터</h4>
             </div>
-            
         </div>
-        		
   	</body>
 </html>
 <%
