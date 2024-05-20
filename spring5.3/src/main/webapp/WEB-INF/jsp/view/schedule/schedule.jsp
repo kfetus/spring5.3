@@ -68,6 +68,42 @@
 		span:hover + p.arrow_box {
 			display: block;
 		}
+
+		#dimLayerPopUp {
+		    display:none;
+		    position:absolute;
+		    top:0;
+		    left:0;
+		    width:100%;
+		    height:100%;
+		    background:rgba(0,0,0,0.5);
+			z-index: 30;
+		}
+		
+		#dimLayerPopUp > #dimContent {
+		    position:absolute;
+		    padding:15px;
+		    border-radius:15px; 
+		    top:50%;
+		    left:50%;
+		    transform:translate(-50%, -50%);
+		    width:80%;
+		    height:80%;
+		    background:#fff;
+		    box-shadow: 7px 7px 5px rgba(0,0,0,0.2); 
+		}
+		
+		#dimLayerPopUp > #dimContent > h2 {
+		    margin-bottom:25px;
+		}
+		
+		#dimLayerPopUp > #dimContent > h2 > button {
+		    float: right;
+		}
+		#dimLayerPopUp > #dimContent > button {
+		    float: right;
+		}
+		
 		
 	</style>	
 
@@ -95,13 +131,13 @@
 						for ( let row = 0 ; row < result.RESULT_DATA.length ; row++ ) {
 							console.log(result.RESULT_DATA[row]);
 
-							makeDiv(result.RESULT_DATA,row,'SUN');
-							makeDiv(result.RESULT_DATA,row,'MON');
-							makeDiv(result.RESULT_DATA,row,'TUE');
-							makeDiv(result.RESULT_DATA,row,'WED');
-							makeDiv(result.RESULT_DATA,row,'THU');
-							makeDiv(result.RESULT_DATA,row,'FRI');
-							makeDiv(result.RESULT_DATA,row,'SAT');
+							makeDiv(result.RESULT_DATA, row, 'SUN');
+							makeDiv(result.RESULT_DATA, row, 'MON');
+							makeDiv(result.RESULT_DATA, row, 'TUE');
+							makeDiv(result.RESULT_DATA, row, 'WED');
+							makeDiv(result.RESULT_DATA, row, 'THU');
+							makeDiv(result.RESULT_DATA, row, 'FRI');
+							makeDiv(result.RESULT_DATA ,row, 'SAT');
 /*							
 							let SUNDay = result.RESULT_DATA[row].SUN.split('|')[0];
 							if ( SUNDay != '' ) {
@@ -159,15 +195,16 @@
 				});
 			}
 			
-			function makeDiv(data,rowIndex,dayName) {
+			function makeDiv(data, rowIndex, dayName) {
 				let day = data[rowIndex][dayName].split('|')[0];
+				let text = data[rowIndex][dayName].split('|')[1];
+				
 				if ( day != '' ) {
 					$("#DAY-"+dayName+"-"+rowIndex).html(day);	
 					$("#divCell_"+rowIndex+"_"+dayName).click(function () {
-						divCellClick(rowIndex+'_'+dayName,data[rowIndex][dayName].split('|'));
+						divCellClick(day,text);
 					});
 				}							
-				let text = data[rowIndex][dayName].split('|')[1];
 				if (!!text) {
 					if(text.indexOf('@') == -1 ) {
 						$("#T-"+dayName+"-"+rowIndex).html(text);
@@ -177,14 +214,97 @@
 						$("#ADD-"+dayName+"-"+rowIndex).html(text.replace('@','<BR>'));
 					}
 				}
+			}
+
+			function divCellClick(day,data) {
+				let yyyymmdd = String(yyyymm);
+				if(Number(day) < 10 ) {
+					yyyymmdd = yyyymmdd + '0' + day;
+				} else {
+					yyyymmdd = yyyymmdd + day;
+				}
+
+				$("#changeTitle").text(yyyymmdd);
+				$("#addSchedule").find("tr:gt(0)").remove();
+
 				
+				let rowTimeList = [];
+				let rowMinuteList = [];
+				let html = '';
+
+				if(data == '') {
+					html = makeTableTr(0);
+				} else {
+					
+					let dataList = data.split('@');
+					console.log(dataList);
+					for( let i = 0 ; i < dataList.length ; i++) {
+						let rowData = dataList[i];
+						let rowTime = Number(rowData.substr(0,2));
+						let rowMinute = rowData.substr(3,2);
+						let rowText = rowData.substr(6);
+						console.log(rowData);
+						rowTimeList.push(rowTime);
+						rowMinuteList.push(rowMinute);
+						
+						html += '<tr>';
+						html += '<td><select name="time'+i+'" id="time'+i+'">';
+		   			<c:forEach begin="1" end="23" varStatus="status">
+						html += '<option value="<c:out value="${status.index}"/>"><c:out value="${status.index}"/></option>';
+		   			</c:forEach>
+						html += '</select></td>';
+						html += '<td><select name="minute'+i+'" id="minute'+i+'">';
+						html += '<option value="00">00</option><option value="10">10</option><option value="20">20</option>';
+						html += '<option value="30">30</option><option value="40">40</option><option value="50">50</option>';
+						html += '</select></td>';
+						html += '<td><input type="text" style="width: 500px; name="schduleText'+i+'" id="schduleText'+i+'" value="'+rowText+'" /></td>';				
+						html += '</tr>';
+					}
+				}
+				
+				$("#addSchedule").append(html);
+				if(rowTimeList.length > 0) {
+					for(var i = 0 ; i < rowTimeList.length ; i++) {
+						$("#time"+i).val(rowTimeList[i]);
+						$("#minute"+i).val(rowMinuteList[i]);
+					}
+				}
+				$("#dimLayerPopUp").show();
 			}
 
-			function divCellClick(cell,data) {
-				console.log(cell);
-				alert(cell+""+data);
+			
+			function addRow() {
+				console.log($("#addSchedule > tbody tr").length);
+				let trStr = makeTableTr($("#addSchedule > tbody tr").length);
+				$("#addSchedule").append(trStr);
 			}
 
+			function makeTableTr(rowCnt) {
+				let html = "";
+				html += '<tr>';
+				html += '<td><select name="time'+rowCnt+'" id="time'+rowCnt+'">';
+   			<c:forEach begin="1" end="23" varStatus="status">
+				html += '<option value="<c:out value="${status.index}"/>"><c:out value="${status.index}"/></option>';
+   			</c:forEach>
+				html += '</select></td>';
+				html += '<td><select name="minute'+rowCnt+'" id="minute'+rowCnt+'">';
+				html += '<option value="00">00</option><option value="10">10</option><option value="20">20</option>';
+				html += '<option value="30">30</option><option value="40">40</option><option value="50">50</option>';
+				html += '</select></td>';
+				html += '<td><input type="text" style="width: 500px; name="schduleText'+rowCnt+'" id="schduleText'+rowCnt+'" value="" /></td>';				
+				html += '</tr>';
+				return html;
+			}
+			
+			function saveSchedule() {
+				alert('save');
+				$("#dimLayerPopUp").hide();
+			}
+
+			function closeDim() {
+				$("#dimLayerPopUp").hide();
+			}
+			
 			function nextSchedule() {
 				let strYyyymm = String(yyyymm);
 				let yyyy = strYyyymm.substr(0,4);
@@ -206,6 +326,7 @@
 	
 	</head>
 	<body>
+	<div>
 		<div id="schedule">
 			<div>
 				<button type="button" id="s1" onclick="javascript:schedule();"><span><strong>조회</strong></span></button>
@@ -429,9 +550,53 @@
 				<p id="ADD-SAT-4" class="arrow_box"></p>
 				</div>
 			</div>
-			
 		</div>
 
-
+		<div id="dimLayerPopUp">
+			<div id="dimContent">
+				<h2><span id="changeTitle"></span> 일
+				<button type="button" onclick="$('#dimLayerPopUp').hide();">닫기</button>
+				</h2>
+				<button type="button" onclick="addRow();">추가</button> 
+				<div id="addGrid">
+		       		<table id="addSchedule">
+		       			<colgroup>
+		       				<col width="10%"/>
+		       				<col width="10%"/>
+		       				<col width=""/>
+		       			</colgroup>
+		       			<tr>
+		       				<th align="center">시간</th>
+		       				<th align="center">분</th>
+		       				<th align="center">내용</th>
+		       			</tr>
+	           			<tr>
+	           				<td>
+								<select name="time">
+			       			<c:forEach begin="1" end="23" varStatus="status">
+			           				<option value="<c:out value="${status.index}"/>"><c:out value="${status.index}"/></option>
+			       			</c:forEach>
+								</select>
+	           				</td>
+	           				<td>
+								<select name="minute">
+									<option value="00">00</option>
+									<option value="10">10</option>
+									<option value="20">20</option>
+									<option value="30">30</option>
+									<option value="40">40</option>
+									<option value="50">50</option>
+								</select>
+	           				</td>
+	           				<td>
+	           					<input type="text" style="width: 500px; name="schduleText" value="" />
+	           				</td>
+	           			</tr>
+		       		</table>
+				</div>
+				<button type="button" onclick="javascript:saveSchedule();">저장</button>
+			</div>
+		</div>
+	</div>
 	</body>
 </html>
