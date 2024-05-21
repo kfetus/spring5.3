@@ -120,6 +120,9 @@
 						console.log(result);
 						if(result.RESCODE != '0000') {
 							alert(result.RESMSG);
+							if( result.RESCODE == '9998' ){
+								window.location.href = "/index.jsp";
+							}
 							return false;
 						}
 						yyyymm = Number(result.YYYYMMDD.replace('-',''));
