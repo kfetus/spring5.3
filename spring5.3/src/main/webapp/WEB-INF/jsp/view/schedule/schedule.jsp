@@ -10,103 +10,100 @@
 		<script src="<c:url value="/static/js/comm/jquery-3.7.1.js" />"></script>
 		<script src="<c:url value="/static/js/comm/siteComm.js" />"></script>
 
-	<style>
-		div {
-			border: 1px solid #bcbcbc;
-		}
-		.div-table {
-			display: table;
-			table-layout: fixed;
-			width: 100%;
-		}
-		.div-table-row {
-			display: table-row;
-			vertical-align: top;			
-		}
-		.div-table-header {
-			display: table-cell;
-			text-align: center;
-			height: 30px;
-			background-color: orchid;
-		}
-		.div-table-cell {
-			display: table-cell;
-			padding: 0px 20px;
-			height: 130px;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-		}
-		
-		.arrow_box {
-			display: none;
-			position: absolute;
-			width: 200px;
-			height: 110px;
-			padding: 8px;
-			border-radius: 8px;
-			background: #07708b;
-			color: #fff;
-			font-size: 14px;
-			white-space: pre-wrap;
-		}
-		.arrow_box:after {
-			position: absolute;
-			bottom: 100%;
-			left: 50%;
-			width: 0;
-			height: 0;
-			margin-left: -10px;
-			border: solid transparent;
-			border-color: rgba(51, 51, 51, 0);
-			border-bottom-color: #07708b;
-			border-width: 10px;
-			pointer-events: none;
-			content: ' ';
-		}
-		
-		span:hover + p.arrow_box {
-			display: block;
-		}
-
-		#dimLayerPopUp {
-		    display:none;
-		    position:absolute;
-		    top:0;
-		    left:0;
-		    width:100%;
-		    height:100%;
-		    background:rgba(0,0,0,0.5);
-			z-index: 30;
-		}
-		
-		#dimLayerPopUp > #dimContent {
-		    position:absolute;
-		    padding:15px;
-		    border-radius:15px; 
-		    top:50%;
-		    left:50%;
-		    transform:translate(-50%, -50%);
-		    width:80%;
-		    height:80%;
-		    background:#fff;
-		    box-shadow: 7px 7px 5px rgba(0,0,0,0.2); 
-		}
-		
-		#dimLayerPopUp > #dimContent > h2 {
-		    margin-bottom:25px;
-		}
-		
-		#dimLayerPopUp > #dimContent > h2 > button {
-		    float: right;
-		}
-		#dimLayerPopUp > #dimContent > button {
-		    float: right;
-		}
-		
-		
-	</style>	
-
+		<style>
+			div {
+				border: 1px solid #bcbcbc;
+			}
+			.div-table {
+				display: table;
+				table-layout: fixed;
+				width: 100%;
+			}
+			.div-table-row {
+				display: table-row;
+				vertical-align: top;			
+			}
+			.div-table-header {
+				display: table-cell;
+				text-align: center;
+				height: 30px;
+				background-color: orchid;
+			}
+			.div-table-cell {
+				display: table-cell;
+				padding: 0px 20px;
+				height: 130px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+			
+			.arrow_box {
+				display: none;
+				position: absolute;
+				width: 200px;
+				height: 110px;
+				padding: 8px;
+				border-radius: 8px;
+				background: #07708b;
+				color: #fff;
+				font-size: 14px;
+				white-space: pre-wrap;
+			}
+			.arrow_box:after {
+				position: absolute;
+				bottom: 100%;
+				left: 50%;
+				width: 0;
+				height: 0;
+				margin-left: -10px;
+				border: solid transparent;
+				border-color: rgba(51, 51, 51, 0);
+				border-bottom-color: #07708b;
+				border-width: 10px;
+				pointer-events: none;
+				content: ' ';
+			}
+			
+			span:hover + p.arrow_box {
+				display: block;
+			}
+	
+			#dimLayerPopUp {
+			    display:none;
+			    position:absolute;
+			    top:0;
+			    left:0;
+			    width:100%;
+			    height:100%;
+			    background:rgba(0,0,0,0.5);
+				z-index: 30;
+			}
+			
+			#dimLayerPopUp > #dimContent {
+			    position:absolute;
+			    padding:15px;
+			    border-radius:15px; 
+			    top:50%;
+			    left:50%;
+			    transform:translate(-50%, -50%);
+			    width:80%;
+			    height:80%;
+			    background:#fff;
+			    box-shadow: 7px 7px 5px rgba(0,0,0,0.2); 
+			}
+			
+			#dimLayerPopUp > #dimContent > h2 {
+			    margin-bottom:25px;
+			}
+			
+			#dimLayerPopUp > #dimContent > h2 > button {
+			    float: right;
+			}
+			#dimLayerPopUp > #dimContent > button {
+			    float: right;
+			}
+		</style>
 		
 		<script>
 			let yyyymm;
@@ -155,7 +152,7 @@
 						}
 */
 					},
-					error : function(error, status) {        
+					error : function(error, status) {
 						console.log(error);
 						alert(error.responseJSON.RESMSG);
 					}
@@ -182,8 +179,8 @@
 						$("#T-"+dayName+"-"+rowIndex).html(text);
 						$("#ADD-"+dayName+"-"+rowIndex).html(text);
 					} else {
-						$("#T-"+dayName+"-"+rowIndex).html(text.replace('@','<BR>'));
-						$("#ADD-"+dayName+"-"+rowIndex).html(text.replace('@','<BR>'));
+						$("#T-"+dayName+"-"+rowIndex).html(text.replaceAll('@','<BR>'));
+						$("#ADD-"+dayName+"-"+rowIndex).html(text.replaceAll('@','<BR>'));
 					}
 				}
 			}
@@ -196,7 +193,6 @@
 					$("#T-SUN-"+row).html('');
 					$("#ADD-SUN-"+row).html('');
 				}
-				
 			}
 
 			function divCellClick(day,data) {
@@ -209,7 +205,6 @@
 
 				$("#changeTitle").text(yyyymmdd);
 				$("#addSchedule").find("tr:gt(0)").remove();
-
 				
 				let rowTimeList = [];
 				let rowMinuteList = [];
@@ -285,7 +280,11 @@
 				$("select[id^='time']").each(function(index, el) {
 					let paramRow = {YYYYMMDD:"",HH:"",MM:"",SCHEDULE:""};
 					paramRow["YYYYMMDD"] = $("#changeTitle").text();
-					paramRow["HH"] = $("#time"+index).val();
+					let tempHH = $("#time"+index).val();
+					if(tempHH.length == 1) {
+						tempHH = '0' + tempHH;
+					}
+					paramRow["HH"] = tempHH;
 					paramRow["MM"] = $("#minute"+index).val();
 					paramRow["SCHEDULE"] = $("#schduleText"+index).val();
 					paramList.push(paramRow);
@@ -325,6 +324,7 @@
 							alert(result.RESMSG);
 							return false;
 						}
+						schedule();
 					}, 
 					error : function(error, status) {        
 						console.log(error);
@@ -333,15 +333,20 @@
 				});				
 				
 				$("#dimLayerPopUp").hide();
-				schedule();
 			}
 
 			function closeDim() {
 				$("#dimLayerPopUp").hide();
 			}
 			
-			function nextSchedule() {
-				let strYyyymm = String(yyyymm);
+			function moveSchedule() {
+				if( $("#year").val() == '' || $("#month").val() == '') {
+					alert('년, 월 선택 해');
+					return false;
+				} else {
+					yyyymm = Number( $("#year").val()+$("#month").val() );
+				}
+/*				let strYyyymm = String(yyyymm);
 				let yyyy = strYyyymm.substr(0,4);
 				let mm = strYyyymm.substr(4,2);
 				if(Number(mm) == 12 ) {
@@ -349,6 +354,7 @@
 				} else {
 					yyyymm += 1;
 				}
+*/				
 				schedule();
 			}
 			
@@ -367,7 +373,30 @@
 				<span id="spanMonthTitle"></span> 월
 			</div>
 			<div style="float: right;">
-				<button type="button" id="s1" onclick="javascript:nextSchedule();"><span><strong>다음달</strong></span></button>
+				<select name="year" id="year">
+					<option value="">년선택</option>
+					<option value="2022">2022</option>
+					<option value="2023">2023</option>
+					<option value="2024">2024</option>
+					<option value="2025">2025</option>
+					<option value="2026">2026</option>
+				</select>
+				<select name="month" id="month">
+					<option value="">월선택</option>
+					<option value="01">1</option>
+					<option value="02">2</option>
+					<option value="03">3</option>
+					<option value="04">4</option>
+					<option value="05">5</option>
+					<option value="06">6</option>
+					<option value="07">7</option>
+					<option value="08">8</option>
+					<option value="09">9</option>
+					<option value="10">10</option>
+					<option value="11">11</option>
+					<option value="12">12</option>
+				</select>
+				<button type="button" id="s1" onclick="javascript:moveSchedule();"><span><strong>이동</strong></span></button>
 			</div>
 		</div>
 
