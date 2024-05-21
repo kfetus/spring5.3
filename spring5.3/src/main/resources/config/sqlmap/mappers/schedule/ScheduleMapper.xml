@@ -80,7 +80,7 @@
 		GROUP BY S.WEEK_DAY
 	</select>
 	
-	<select id="selectScheduleOne" parameterType="String" resultType="java.util.HashMap">
+	<select id="selectScheduleOneDay" parameterType="String" resultType="java.util.HashMap">
 		SELECT S.YYYYMMDD /* ScheduleMapper.selectScheduleOne 스케쥴 상세 조회 */
 				, S.HH
 				, S.MM
@@ -118,18 +118,20 @@
 			</foreach>		 
 	</insert>
 
-	<delete id="deletescheduleDay">
+	<delete id="deletescheduleDay" parameterType="java.util.HashMap">
 		DELETE /* ScheduleMapper.deletescheduleDay 스케쥴 하루 삭제 */
 		  FROM MY_SCHEDULE 
 		 WHERE YYYYMMDD = #{yyyymmdd}
+		   AND USER_NO = #{userNo}
 	</delete>	
 
-	<delete id="deletescheduleOne">
+	<delete id="deletescheduleOne" parameterType="java.util.HashMap">
 		DELETE /* ScheduleMapper.deletescheduleOne 스케쥴 한건 삭제 */
 		  FROM MY_SCHEDULE 
 		 WHERE YYYYMMDD = #{yyyymmdd}
 		   AND HH = #{HH}
 		   AND MM = #{MM}
+		   AND USER_NO = #{userNo}
 	</delete>	
 
 	

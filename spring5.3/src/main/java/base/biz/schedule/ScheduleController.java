@@ -75,8 +75,8 @@ public class ScheduleController {
 	}
 	
 	
-	@RequestMapping(value = "/scheduleOne.do")
-	public Map<String,Object> selectScheduleOne(@RequestBody  HashMap<String,String> map, HttpServletRequest req) throws Exception {
+	@RequestMapping(value = "/scheduleOneDay.do")
+	public Map<String,Object> selectScheduleOneDay(@RequestBody  HashMap<String,String> map, HttpServletRequest req) throws Exception {
 		LOGGER.debug("@@@@@@@@@@@ selectScheduleOne 시작=" + map);
 		
 		Map<String , Object> retMap = new HashMap<String,Object>();
@@ -100,7 +100,7 @@ public class ScheduleController {
 		paramMap.put("yyyymmdd", yyyymmdd);
 		paramMap.put("userNo", String.valueOf(loginVo.getUserNo()));
 		
-		List<HashMap<String,String>> resultList = scheduleService.selectScheduleOne(paramMap);
+		List<HashMap<String,String>> resultList = scheduleService.selectScheduleOneDay(paramMap);
 
 		retMap.put("RESCODE","0000");
 		retMap.put("RESMSG","");
@@ -141,9 +141,13 @@ public class ScheduleController {
 		for ( int i = 0 ; i < paramList.size();i++) {
 			paramList.get(i).put("userNo", String.valueOf(loginVo.getUserNo()));
 		}
-		
 
-		int result = scheduleService.insertSchedule(paramList,yyyymmdd);
+		HashMap<String , Object> paramMap = new HashMap<String,Object>();
+		paramMap.put("paramList", paramList);
+		paramMap.put("yyyymmdd", yyyymmdd);
+		paramMap.put("userNo", loginVo.getUserNo());
+		
+		int result = scheduleService.insertSchedule(paramMap);
 
 		retMap.put("RESCODE","0000");
 		retMap.put("RESMSG","");

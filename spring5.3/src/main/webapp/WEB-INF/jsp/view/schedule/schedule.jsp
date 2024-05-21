@@ -112,7 +112,6 @@
 			let yyyymm;
 			const schedule = () => {
 				console.log('ajax start');
-				
 				$.ajax({
 					type : 'post',
 					url : '/scheduleCalender.do',
@@ -127,10 +126,16 @@
 							return false;
 						}
 						yyyymm = Number(result.YYYYMMDD.replace('-',''));
+						$("#spanMonthTitle").text(result.YYYYMMDD);
 
+						if( result.RESULT_DATA.length < 6) {
+							$("#weekly_5").hide();
+						} else {
+							$("#weekly_5").show();
+						}
+						
 						for ( let row = 0 ; row < result.RESULT_DATA.length ; row++ ) {
-							console.log(result.RESULT_DATA[row]);
-
+//							console.log(result.RESULT_DATA[row]);
 							makeDiv(result.RESULT_DATA, row, 'SUN');
 							makeDiv(result.RESULT_DATA, row, 'MON');
 							makeDiv(result.RESULT_DATA, row, 'TUE');
@@ -138,44 +143,6 @@
 							makeDiv(result.RESULT_DATA, row, 'THU');
 							makeDiv(result.RESULT_DATA, row, 'FRI');
 							makeDiv(result.RESULT_DATA ,row, 'SAT');
-/*							
-							let SUNDay = result.RESULT_DATA[row].SUN.split('|')[0];
-							if ( SUNDay != '' ) {
-								$("#DAY-SUN-"+row).html(SUNDay);	
-								$("#divCell_"+row+"_SUN").click(function () {
-									divCellClick(row+'_SUN');
-								});
-							}							
-							let SUNtext = result.RESULT_DATA[row].SUN.split('|')[1];
-							if (!!SUNtext) {
-								if(SUNtext.indexOf('@') == -1 ) {
-									$("#T-SUN-"+row).html(SUNtext);
-									$("#ADD-SUN-"+row).html(SUNtext);
-								} else {
-									$("#T-SUN-"+row).html(SUNtext.replace('@','<BR>'));
-									$("#ADD-SUN-"+row).html(SUNtext.replace('@','<BR>'));
-								}
-							}
-							$("#DAY-MON-"+row).html(result.RESULT_DATA[row].MON.split('|')[0]);
-							$("#T-MON-"+row).html(result.RESULT_DATA[row].MON.split('|')[1]);
-							$("#ADD-MON-"+row).html(result.RESULT_DATA[row].MON.split('|')[1]);
-							$("#DAY-TUE-"+row).html(result.RESULT_DATA[row].TUE.split('|')[0]);
-							$("#T-TUE-"+row).html(result.RESULT_DATA[row].TUE.split('|')[1]);
-							$("#ADD-TUE-"+row).html(result.RESULT_DATA[row].TUE.split('|')[1]);
-							$("#DAY-WED-"+row).html(result.RESULT_DATA[row].WED.split('|')[0]);
-							$("#T-WED-"+row).html(result.RESULT_DATA[row].WED.split('|')[1]);
-							$("#ADD-WED-"+row).html(result.RESULT_DATA[row].WED.split('|')[1]);
-							$("#DAY-THU-"+row).html(result.RESULT_DATA[row].THU.split('|')[0]);
-							$("#T-THU-"+row).html(result.RESULT_DATA[row].THU.split('|')[1]);
-							$("#ADD-THU-"+row).html(result.RESULT_DATA[row].THU.split('|')[1]);
-							$("#DAY-FRI-"+row).html(result.RESULT_DATA[row].FRI.split('|')[0]);
-							$("#T-FRI-"+row).html(result.RESULT_DATA[row].FRI.split('|')[1]);
-							$("#ADD-FRI-"+row).html(result.RESULT_DATA[row].FRI.split('|')[1]);
-							$("#DAY-SAT-"+row).html(result.RESULT_DATA[row].SAT.split('|')[0]);
-							$("#T-SAT-"+row).html(result.RESULT_DATA[row].SAT.split('|')[1]);
-							$("#ADD-SAT-"+row).html(result.RESULT_DATA[row].SAT.split('|')[1]);
-							//인서트 업데이트
-*/							
 						}
 /*
 						for ( let rr of result.RESULT_DATA ) {
@@ -198,6 +165,11 @@
 			function makeDiv(data, rowIndex, dayName) {
 				let day = data[rowIndex][dayName].split('|')[0];
 				let text = data[rowIndex][dayName].split('|')[1];
+
+				$("#DAY-"+dayName+"-"+rowIndex).html('');
+				$("#divCell_"+rowIndex+"_"+dayName).off("click");
+				$("#T-"+dayName+"-"+rowIndex).html('');
+				$("#ADD-"+dayName+"-"+rowIndex).html('');
 				
 				if ( day != '' ) {
 					$("#DAY-"+dayName+"-"+rowIndex).html(day);	
@@ -214,6 +186,17 @@
 						$("#ADD-"+dayName+"-"+rowIndex).html(text.replace('@','<BR>'));
 					}
 				}
+			}
+			
+			function resetCalendar() {
+
+				for ( let row = 0 ; row < 5; row++ ) {
+					$("#DAY-SUN-"+row).html('');
+					$("#divCell_"+row+"_SUN").off("click");
+					$("#T-SUN-"+row).html('');
+					$("#ADD-SUN-"+row).html('');
+				}
+				
 			}
 
 			function divCellClick(day,data) {
@@ -275,7 +258,7 @@
 			
 			function addRow() {
 				console.log($("#addSchedule > tbody tr").length);
-				let trStr = makeTableTr($("#addSchedule > tbody tr").length);
+				let trStr = makeTableTr($("#addSchedule > tbody tr").length-1);
 				$("#addSchedule").append(trStr);
 			}
 
@@ -297,8 +280,60 @@
 			}
 			
 			function saveSchedule() {
-				alert('save');
+
+				let paramList = [];
+				$("select[id^='time']").each(function(index, el) {
+					let paramRow = {YYYYMMDD:"",HH:"",MM:"",SCHEDULE:""};
+					paramRow["YYYYMMDD"] = $("#changeTitle").text();
+					paramRow["HH"] = $("#time"+index).val();
+					paramRow["MM"] = $("#minute"+index).val();
+					paramRow["SCHEDULE"] = $("#schduleText"+index).val();
+					paramList.push(paramRow);
+				});
+				
+				console.log(paramList);
+				
+				let checkState = false;
+				let tempStr = "";
+				//중복값 체크.
+				for(let i = 0 ; i < paramList.length; i++) {
+					let tempStr = paramList[i]["HH"]+paramList[i]["MM"];
+					for(let j = i+1 ; j < paramList.length; j++ ) {
+						if( tempStr == paramList[j]["HH"]+paramList[j]["MM"]) {
+							checkState = true;		
+							break;
+						}
+					}
+				}
+				if(checkState) {
+					alert('중복값이 있습니다.' + tempStr);
+					return false;
+				}
+
+				console.log(JSON.stringify({ "yyyymmdd":$("#changeTitle").text(),"scheduleList":paramList }));
+				
+				$.ajax({
+					type : 'post',
+					url : '/scheduleUpdate.do',
+					async : true,
+					dataType : 'json',
+	 				headers : {"Content-Type" : "application/json"},
+					data : JSON.stringify({ "yyyymmdd":$("#changeTitle").text(),"scheduleList":JSON.stringify(paramList)}),
+					success : function(result) {
+						console.log(result);
+						if(result.RESCODE != '0000') {
+							alert(result.RESMSG);
+							return false;
+						}
+					}, 
+					error : function(error, status) {        
+						console.log(error);
+						alert(error.responseJSON.RESMSG);
+					}
+				});				
+				
 				$("#dimLayerPopUp").hide();
+				schedule();
 			}
 
 			function closeDim() {
@@ -328,10 +363,10 @@
 	<body>
 	<div>
 		<div id="schedule">
-			<div>
-				<button type="button" id="s1" onclick="javascript:schedule();"><span><strong>조회</strong></span></button>
+			<div style="float: left;">
+				<span id="spanMonthTitle"></span> 월
 			</div>
-			<div>
+			<div style="float: right;">
 				<button type="button" id="s1" onclick="javascript:nextSchedule();"><span><strong>다음달</strong></span></button>
 			</div>
 		</div>
@@ -361,7 +396,7 @@
 				</div>
 			</div>
 		
-			<div class="div-table-row">
+			<div class="div-table-row" id="weekly_0">
 				<div class="div-table-cell" id="divCell_0_SUN">
 					<p id="DAY-SUN-0"></p>
 					<span id="T-SUN-0"></span>
@@ -399,7 +434,7 @@
 				</div>
 			</div>
 			
-			<div class="div-table-row">
+			<div class="div-table-row" id="weekly_1">
 				<div class="div-table-cell" id="divCell_1_SUN">
 				<p id="DAY-SUN-1"></p>
 				<span id="T-SUN-1"></span>
@@ -437,7 +472,7 @@
 				</div>
 			</div>
 
-			<div class="div-table-row">
+			<div class="div-table-row" id="weekly_2">
 				<div class="div-table-cell" id="divCell_2_SUN">
 				<p id="DAY-SUN-2"></p>
 				<span id="T-SUN-2"></span>
@@ -475,7 +510,7 @@
 				</div>
 			</div>
 
-			<div class="div-table-row">
+			<div class="div-table-row" id="weekly_3">
 				<div class="div-table-cell" id="divCell_3_SUN">
 				<p id="DAY-SUN-3"></p>
 				<span id="T-SUN-3"></span>
@@ -513,7 +548,7 @@
 				</div>
 			</div>
 
-			<div class="div-table-row">
+			<div class="div-table-row" id="weekly_4">
 				<div class="div-table-cell" id="divCell_4_SUN">
 				<p id="DAY-SUN-4"></p>
 				<span id="T-SUN-4"></span>
@@ -550,6 +585,45 @@
 				<p id="ADD-SAT-4" class="arrow_box"></p>
 				</div>
 			</div>
+
+			<div class="div-table-row" id="weekly_5" style="display: none;">
+				<div class="div-table-cell" id="divCell_5_SUN">
+				<p id="DAY-SUN-5"></p>
+				<span id="T-SUN-5"></span>
+				<p id="ADD-SUN-5" class="arrow_box"></p>
+				</div>
+				<div class="div-table-cell" id="divCell_5_MON">
+				<p id="DAY-MON-5"></p>
+				<span id="T-MON-5"></span>
+				<p id="ADD-MON-5" class="arrow_box"></p>
+				</div>
+				<div class="div-table-cell" id="divCell_5_TUE">
+				<p id="DAY-TUE-5"></p>
+				<span id="T-TUE-5"></span>
+				<p id="ADD-TUE-5" class="arrow_box"></p>
+				</div>
+				<div class="div-table-cell" id="divCell_5_WED">
+				<p id="DAY-WED-5"></p>
+				<span id="T-WED-5"></span>
+				<p id="ADD-WED-5" class="arrow_box"></p>
+				</div>
+				<div class="div-table-cell" id="divCell_5_THU">
+				<p id="DAY-THU-5"></p>
+				<span id="T-THU-5"></span>
+				<p id="ADD-THU-5" class="arrow_box"></p>
+				</div>
+				<div class="div-table-cell" id="divCell_5_FRI">
+				<p id="DAY-FRI-5"></p>
+				<span id="T-FRI-5"></span>
+				<p id="ADD-FRI-5" class="arrow_box"></p>
+				</div>
+				<div class="div-table-cell" id="divCell_5_SAT">
+				<p id="DAY-SAT-5"></p>
+				<span id="T-SAT-5"></span>
+				<p id="ADD-SAT-5" class="arrow_box"></p>
+				</div>
+			</div>
+
 		</div>
 
 		<div id="dimLayerPopUp">

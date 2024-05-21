@@ -22,18 +22,19 @@ public class ScheduleServiceImpl {
 		return result;
 	}
 
-	public List<HashMap<String,String>> selectScheduleOne(HashMap<String,String> paramMap) throws Exception {
+	public List<HashMap<String,String>> selectScheduleOneDay(HashMap<String,String> paramMap) throws Exception {
 		LOGGER.debug("@@@@@@@@@@@@@ selectScheduleOne paramMap=" + paramMap);
-		List<HashMap<String,String>> result = scheduleMapper.selectScheduleOne(paramMap);
+		List<HashMap<String,String>> result = scheduleMapper.selectScheduleOneDay(paramMap);
 		return result;
 	}
 
-	public int insertSchedule(List<HashMap<String,String>> list, String yyyymmdd) throws Exception {
-		LOGGER.debug("@@@@@@@@@@@@@ scheduleUpdate list=" + list);
+	@SuppressWarnings("unchecked")
+	public int insertSchedule( HashMap<String,Object> map ) throws Exception {
+		LOGGER.debug("@@@@@@@@@@@@@ scheduleUpdate map=" + map);
 		
-		scheduleMapper.deletescheduleDay(yyyymmdd);
-		
-		int result = scheduleMapper.insertSchedule(list);
+		scheduleMapper.deletescheduleDay(map);
+		List<HashMap<String,String>> paramList = (List<HashMap<String,String>>) map.get("paramList");
+		int result = scheduleMapper.insertSchedule(paramList);
 		
 		return result;
 		
