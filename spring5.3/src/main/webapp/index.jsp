@@ -93,6 +93,9 @@
 				<button onClick="javascript:fn_Login()">Login</button>
 			</div>
 		</form>
+			<div>
+				<a href="/user/joinForm.do">회원가입</a>
+			</div>
 	</div>
 
 </body>

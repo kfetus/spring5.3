@@ -361,6 +361,32 @@
 				schedule();
 			}
 			
+			function moveNext() {
+				let strYyyymm = String(yyyymm);
+				let yyyy = strYyyymm.substr(0,4);
+				let mm = strYyyymm.substr(4,2);
+				if(Number(mm) == 12 ) {
+					yyyymm = Number((Number(yyyy)+1)+'01');
+				} else {
+					yyyymm += 1;
+				}
+		
+				schedule();
+			}
+			
+			function movePre() {
+				let strYyyymm = String(yyyymm);
+				let yyyy = strYyyymm.substr(0,4);
+				let mm = strYyyymm.substr(4,2);
+				if(Number(mm) == 1 ) {
+					yyyymm = Number((Number(yyyy)-1)+'12');
+				} else {
+					yyyymm -= 1;
+				}
+		
+				schedule();
+			}
+			
 			$(function() {
 				console.log('document.onload()');
 				schedule();
@@ -370,12 +396,19 @@
 	
 	</head>
 	<body>
-	<div>
+		<header>
+			<div>
+				<h1>달력</h1>
+			</div>
+		</header>
+
+	<main>
 		<div id="schedule">
 			<div style="float: left;">
 				<span id="spanMonthTitle"></span> 월
 			</div>
 			<div style="float: right;">
+				<button type="button" id="s1" onclick="javascript:movePre();"><span><strong>이전달</strong></span></button>
 				<select name="year" id="year">
 					<option value="">년선택</option>
 					<option value="2022">2022</option>
@@ -400,6 +433,7 @@
 					<option value="12">12</option>
 				</select>
 				<button type="button" id="s1" onclick="javascript:moveSchedule();"><span><strong>이동</strong></span></button>
+				<button type="button" id="s1" onclick="javascript:moveNext();"><span><strong>다음달</strong></span></button>
 			</div>
 		</div>
 
@@ -703,6 +737,9 @@
 				<button type="button" onclick="javascript:saveSchedule();">저장</button>
 			</div>
 		</div>
-	</div>
+	</<main>
+	<footer>
+		바닥
+	</footer>
 	</body>
 </html>

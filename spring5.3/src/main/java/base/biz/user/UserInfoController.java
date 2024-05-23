@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,13 +14,13 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import base.comm.util.HttpUtil;
 import base.comm.util.SessionManager;
 import base.comm.vo.UserVO;
 
 @Controller
-@ResponseBody
 public class UserInfoController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserInfoController.class);
@@ -30,6 +31,24 @@ public class UserInfoController {
 	@Autowired
 	private UserInfoServiceImpl userInfoService;
 
+	
+	/**
+	 * 일정관리
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/user/joinForm.do")
+	public ModelAndView joinForm(HttpServletRequest req, HttpServletResponse res) {
+		LOGGER.debug("####################### joinForm");
+		ModelAndView mv = new ModelAndView();
+
+
+		mv.setViewName("user/joinInfoForm");
+		return mv;
+	}
+	
+	@ResponseBody
 	@RequestMapping(value = "/checkDupId.do")
 	public Map<String,Object> checkDupIdOne(@RequestBody UserVO vo) throws Exception {
 		LOGGER.debug("@@@@@@@@@@@ checkDupIdOne 시작=" + vo.toString());
@@ -64,6 +83,7 @@ public class UserInfoController {
 	 * @return
 	 * @throws Exception
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/joinUserOne.do")
 	public Map<String,Object> insertUserInfoOne(@RequestBody UserVO vo, HttpServletRequest req) throws Exception {
 		LOGGER.debug("@@@@@@@@@@@ insertUserInfoOne 시작=" + vo.toString());
@@ -103,7 +123,7 @@ public class UserInfoController {
 		return retMap;
 	}
 
-	
+	@ResponseBody
 	@RequestMapping(value = "/userInfoOne.do")
 	public Map<String,Object> selectUserInfoOne(@RequestBody  HashMap<String,String> map, HttpServletRequest req) throws Exception {
 		LOGGER.debug("@@@@@@@@@@@ selectBoardOne 시작=" + map);
@@ -128,6 +148,7 @@ public class UserInfoController {
 	}
 
 	
+	@ResponseBody
 	@RequestMapping(value = "/updateUserInfoOne.do")
 	public Map<String,Object> updateUserInfoOne(@RequestBody UserVO vo, HttpServletRequest req) throws Exception {
 		LOGGER.debug("@@@@@@@@@@@ updateUserInfoOne 시작=" + vo.toString());
@@ -150,6 +171,7 @@ public class UserInfoController {
 		return retMap;
 	}
 	
+	@ResponseBody
 	@RequestMapping(value = "/deleteUserInfoOne.do")
 	public Map<String,Object> deleteUserInfoOne(@RequestBody  HashMap<String,String> map, HttpServletRequest req) throws Exception {
 		LOGGER.debug("@@@@@@@@@@@ deleteUserInfoOne 시작=" + map);
