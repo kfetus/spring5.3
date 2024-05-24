@@ -67,6 +67,16 @@
 			)
 	</insert> 
 
+
+	<update id="updateLoginInfoOne" parameterType="base.comm.vo.UserVO">
+		UPDATE LOGIN_INFO /* LoginMapper.updateLoginInfoOne 사용자 정보 Update */
+		SET    USER_PASS = #{userPass}
+			   , SALT = #{salt}
+			   , USER_NAME  = #{userName}
+		       , USER_IP = #{userIp}
+		       , GRADE = #{grade}
+		WHERE USER_NO = #{userNo}
+	</update>
 	
 	<!-- resultMap id="userVoTest" type="base.vo.UserVO">
 		<result column="user_id" property="id" jdbcType="NVARCHAR" javaType="String"/>

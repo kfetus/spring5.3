@@ -11,9 +11,11 @@
 
 	<select id="selectUserInfoOne" parameterType="String" resultType="base.comm.vo.UserVO">
 		SELECT A.USER_NO /* UserInfoMapper.selectUserInfoOne 사용자 정보 상세 조회 */
+			, B.USER_ID 
 			, B.USER_NAME
 			, B.USER_IP
 			, B.DESCRIP
+			, B.GRADE 
 			, B.REG_DT
 			, B.CNG_DT 
 			, A.HP_NO
@@ -59,10 +61,11 @@
 		SET    HP_NO = #{hpNo}
 			   , EMAIL = #{email}
 			   , ZONE_CODE  = #{zoneCode}
-		       , ROAD_ADDR     = #{roadAddr}
+		       , ROAD_ADDR = #{roadAddr}
 		       , JIBUN_ADDR = #{jibunAddr}
 		       , DETAIL_ADDR = #{detailAddr}
-		       , CNG_DT    = CURRENT_TIMESTAMP()
+		       , CNG_USER_NO = #{userNo}
+		       , CNG_DT = CURRENT_TIMESTAMP()
 		WHERE USER_NO = #{userNo}
 	</update>
 	

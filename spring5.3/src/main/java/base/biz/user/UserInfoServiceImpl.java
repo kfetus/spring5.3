@@ -48,6 +48,11 @@ public class UserInfoServiceImpl {
 
 	public int updateUserInfoOne(UserVO vo) throws Exception {
 		LOGGER.debug("@@@@@@@@@@@@@ updateUserInfoOne map=" + vo.toString());
+		
+		String salt = Sha256Crypto.getSalt();
+		vo.setSalt(salt);
+		vo.setUserPass(Sha256Crypto.encSah256(vo.getUserPass(), salt));
+		loginMapper.updateLoginInfoOne(vo);
 		int result = userInfoMapper.updateUserInfoOne(vo);
 		return result;
 	}

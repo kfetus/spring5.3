@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>회원가입</title> 
+		<title>회원정보수정</title> 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 		<link rel="stylesheet" href="<c:url value="/static/css/base.css" />" />
 		<script src="<c:url value="/static/js/comm/jquery-3.7.1.js" />"></script>
@@ -25,54 +25,43 @@
 	</style>	
 
 	<script>
-		function dupCheck(){
-			if( !$('#userId').val() ) {
-				alert('ID 입력');
-				$('#userId').focus();
-				return;
-			}
-			if( !$('#userPass').val() ) {
-				alert('Pass 입력');
-				$('#userPass').focus();
-				return;
-			}
+		function selectUserInfo(){
+
 			$.ajax({
 				type : 'post',
-				url : '<c:url value="/checkDupId.do" />',
+				url : '<c:url value="/userInfoOne.do" />',
 				async : true,
 				dataType : 'json',
 				headers : {"Content-Type" : "application/json"},
-				data : JSON.stringify( {'userId':$('#userId').val(), 'userPass':$('#userPass').val()}),
+				data : JSON.stringify( {}),
 				success : function(result) {
 					console.log(result);
-					
 					if( result.RESCODE === '0000' ) {
-						if( result.RESULT_STATE === 'FALSE' ) {
-							alert('사용가능해');
-							$('#checkStatus').val('Y');
-						} else {
-							alert('중복된 값이 있다');
-							$('#checkStatus').val('N');
+						console.log(result.RESULT_DATA);
+						let tempKey = Object.getOwnPropertyNames(result.RESULT_DATA);
+						console.log(tempKey);
+						for( let i = 0 ; i < tempKey.length ; i++) {
+							console.log(tempKey[i]);
+							if( $("#"+tempKey[i]).val() != undefined) {
+								console.log($("#"+tempKey[i]).val());
+								
+								$("#"+tempKey[i]).val(result.RESULT_DATA[tempKey[i]])
+							}
 						}
 					} else {
 						alert(result.RESMSG);
-						$('#checkStatus').val('N');
 					}
 				},
-				error : function(request, status, error) {        
+				error : function(error,status) {        
 					console.log(error);
 					console.log(status);
-				
 				}
 			});
 		}
 		
-		function joinUs(){
-			if( !$('#userId').val() ) {
-				alert('ID 입력');
-				$('#userId').focus();
-				return;
-			}
+		function updateUserInfo(){
+			alert('ID 업데이트 안됨. 패스워드 변경이기에 인증을 먼저 하던 말던 ㅋ');
+			
 			if( !$('#userPass').val() ) {
 				alert('Pass 입력');
 				$('#userPass').focus();
@@ -97,15 +86,9 @@
 				return;
 			}
 			
-			if( 'Y' != $('#checkStatus').val() ) {
-				alert('중복체크부터 하시요');
-				$('#userId').focus();
-				return;
-			}
-			
 			$.ajax({
 				type : 'post',
-				url : '<c:url value="/joinUserOne.do" />',
+				url : '<c:url value="/updateUserInfoOne.do" />',
 				async : true,
 				dataType : 'json',
 				headers : {"Content-Type" : "application/json"},
@@ -114,17 +97,18 @@
 										, 'zoneCode':$('#zoneCode').val(), 'roadAddr':$('#roadAddr').val(), 'detailAddr':$('#detailAddr').val()}),
 				success : function(result) {
 					console.log(result);
+
 					if(result.RESCODE === '0000') {
-						alert('회원가입 완료');
+						alert('회원정보수정 완료');
 						window.location.href = "/welcome.jsp";
 					} else {
-						alert('회원가입 실패');
+						alert('회원정보수정 실패');
 					}
 				},
 				error : function(error, status) {        
 					console.log(error);
 					console.log(status);
-					alert('회원가입 실패');
+					alert('회원정보수정 실패');
 				}
 			});
 		}
@@ -185,7 +169,12 @@
 	            }
 	        }).open();
 	        
-	    }		
+	    }
+
+		$(function() {
+			console.log('document.onload()');
+			selectUserInfo();
+		})
 	</script>
 
 
@@ -202,9 +191,7 @@
 					<ul>
 						<li>
 							<label for="userId">ID</label>
-							<input type="text" name="userId" id="userId" placeholder="ID">
-							<input type="hidden" name="checkStatus" id="checkStatus" value="">
-							<button type="button" id="checkBtn" onclick="javascript:dupCheck();"><strong>중복체크</strong></button>
+							<input type="text" name="userId" id="userId" placeholder="ID" readOnly>
 						</li>
 						<li>
 							<label for="userPass">password</label>
@@ -254,7 +241,7 @@
 				</fieldset>
 	       	</div>
 			<div style="float:right">
-				<button type="button" onclick="javascript:joinUs();"><strong>가입</strong></button>
+				<button type="button" onclick="javascript:updateUserInfo();"><strong>수정</strong></button>
 			</div>
 		</main>
 

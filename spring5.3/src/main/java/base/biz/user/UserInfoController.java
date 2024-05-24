@@ -33,7 +33,7 @@ public class UserInfoController {
 
 	
 	/**
-	 * 일정관리
+	 * 회원가입 폼
 	 * @param request
 	 * @param response
 	 * @return
@@ -47,6 +47,23 @@ public class UserInfoController {
 		mv.setViewName("user/joinInfoForm");
 		return mv;
 	}
+
+	/**
+	 * 회원수정 폼
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/user/userUpdateForm.do")
+	public ModelAndView userUpdateForm(HttpServletRequest req, HttpServletResponse res) {
+		LOGGER.debug("####################### userUpdateForm");
+		ModelAndView mv = new ModelAndView();
+
+
+		mv.setViewName("user/userUpdateForm");
+		return mv;
+	}
+	
 	
 	@ResponseBody
 	@RequestMapping(value = "/checkDupId.do")
@@ -160,7 +177,9 @@ public class UserInfoController {
 			retMap.put("RESMSG","로그인 정보가 없습니다.");
 			return retMap;
 		}
-
+		vo.setUserNo(loginVo.getUserNo());
+		vo.setUserId(loginVo.getUserId());
+		vo.setUserIp(HttpUtil.getClientIp(req));
 		int result = userInfoService.updateUserInfoOne(vo);
 
 		retMap.put("RESCODE","0000");

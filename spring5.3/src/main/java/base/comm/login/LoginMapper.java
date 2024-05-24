@@ -14,5 +14,7 @@ public interface LoginMapper {
 	public List<UserVO> selectListUserVo();
 	
 	public int insertLoginInfoOne(UserVO vo);
+	
+	public int updateLoginInfoOne(UserVO vo);
 }
 
