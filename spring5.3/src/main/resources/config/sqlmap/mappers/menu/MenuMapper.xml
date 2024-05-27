@@ -24,7 +24,7 @@
 			, ORDER_NUM
 			, USE_YN
 			, LINK_YN
-			, REG_ID
+			, CNG_USER_NO
 			, REG_DT
 			, CNG_DT 
 		FROM SYSTEM_MENU 
@@ -48,7 +48,7 @@
 					, ORDER_NUM = #{rowData.ORDER_NUM} 
 					, USE_YN = #{rowData.USE_YN} 
 					, LINK_YN = #{rowData.LINK_YN} 
-					, REG_ID = #{rowData.REG_ID} 
+					, CNG_USER_NO = #{rowData.REG_ID} 
 					, CNG_DT = CURRENT_TIMESTAMP() 
 				WHERE URL = #{rowData.URL} 
 				  AND SYS_GROUP = #{rowData.SYS_GROUP} 
@@ -74,7 +74,7 @@
 					, ORDER_NUM
 					, USE_YN
 					, LINK_YN
-					, REG_ID
+					, CNG_USER_NO
 					, REG_DT
 					, CNG_DT
 				) VALUES
@@ -104,7 +104,7 @@
 					, ORDER_NUM
 					, USE_YN
 					, LINK_YN
-					, REG_ID
+					, CNG_USER_NO
 					, REG_DT
 					, CNG_DT
 				) VALUES

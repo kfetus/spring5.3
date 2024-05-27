@@ -181,7 +181,13 @@
 <body>
 		<header>
 			<div>
-				<h1>사이트 가입</h1>
+				<h1><button type="button" onclick="history.back();">뒤로</button></h1>
+			</div>
+			<div>
+				<h1>내정보 수정</h1>
+			</div>
+			<div>
+				<h1>메뉴</h1>
 			</div>
 		</header>
 		<main>

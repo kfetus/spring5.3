@@ -24,7 +24,7 @@
 				, A.BODY_TEXT
 				, A.ORIGIN_BOARD_SEQ
 				, A.ORDER_NUM
-				, A.USER_NO
+				, A.CNG_USER_NO
 				, DATE_FORMAT(A.REG_DT, '%Y-%m-%d %H:%i:%s') REG_DT
 				, DATE_FORMAT(A.CNG_DT, '%Y-%m-%d %H:%i:%s') CNG_DT
 		  FROM MAIN_BOARD A , CODE B
@@ -46,7 +46,7 @@
 				, A.BODY_TEXT
 				, A.ORIGIN_BOARD_SEQ
 				, A.ORDER_NUM
-				, A.USER_NO
+				, A.CNG_USER_NO
 				, DATE_FORMAT(A.REG_DT, '%Y-%m-%d') REG_DT
 				, A.CNG_DT
 				, CONCAT(C.FILE_NAME, '.', C.FILE_EXTENSION) AS FILE_NAME
@@ -78,7 +78,7 @@
 			, BODY_TEXT
 			, ORIGIN_BOARD_SEQ
 			, ORDER_NUM
-			, USER_NO
+			, CNG_USER_NO
 			, REG_DT
 			, CNG_DT
 			)
