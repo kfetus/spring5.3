@@ -2,6 +2,10 @@
  * 일반적인 공통 함수
  */
 
+	$(function() {
+		//로딩바 숨김
+		$(".spinner-container").hide();
+	});
 	const G_TOKEN_KEY = 'AccessKeyJwt';
 	/**
 	 * LocalStorage 관리

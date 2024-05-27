@@ -87,6 +87,7 @@
 				}
 			}
 			console.log(sendData);
+			$(".spinner-container").show();
 			$.ajax({
 				type : 'post',
 				url : 'changePmsList.do',
@@ -106,6 +107,7 @@
 					console.log(error);
 				}
 			});
+			$(".spinner-container").hide();
 		}
 
 		function addTableRow() {
@@ -136,7 +138,7 @@
 				pageGrid.removeCheckedRows();
 				return;
 			}
-
+			$(".spinner-container").show();
 			$.ajax({
 				type : 'post',
 				url : 'deletePmsList.do',
@@ -152,6 +154,7 @@
 					console.log(error);
 				}
 			});
+			$(".spinner-container").hide();
 		}
 		
 
@@ -159,6 +162,7 @@
 		function pmsSearch(wantPageNo) {
 			pageGrid.nowPage = wantPageNo;<%-- 현재페이지 셋팅 --%>
 			let pagePerCnt = $('#pagePerCnt').val();
+			$(".spinner-container").show();
 			$.ajax({
 				type : 'post',
 				url : '/pmsList.do',
@@ -182,6 +186,7 @@
 					alert(request.responseJSON.RESMSG);
 				}
 			});
+			$(".spinner-container").hide();
 		}
 		
 		$(function() {
@@ -366,5 +371,6 @@
 
 		</div>
 	</div>
+<jsp:include page="/WEB-INF/jsp/view/common/include/commonHtml.jsp"></jsp:include>
 </body>
 </html>

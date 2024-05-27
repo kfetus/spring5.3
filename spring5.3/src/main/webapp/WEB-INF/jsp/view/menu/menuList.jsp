@@ -192,6 +192,7 @@
 		}
 
 		$(function() {
+
 			fn_makeGrid();
 			let searchCnt = ${RESULT_TOTAL_CNT};
 			if(searchCnt > 0) {
@@ -246,7 +247,7 @@
 --%>
 			
 			$("body").append("<div id='loadingDim'><div id='dimSpinner'></div></div>");
-			
+			$(".spinner-container").show()
 			$.ajax({
 				type : 'post',
 				url : 'updateMenuList.do',
@@ -271,6 +272,7 @@
 					alert(error.responseJSON.RESMSG);
 				}
 			});
+			$(".spinner-container").hide()
 		}
 		
 		<%-- 페이지 로딩시 그리면 그려지지 않음.... --%>
@@ -430,6 +432,7 @@
 */
 			
 			let { _attributes,rowKey, ...rest } = addGrid.getModifiedRows().createdRows[0];
+			$(".spinner-container").show()
 			$.ajax({
 				type : 'post',
 				url : 'saveMenuOne.do',
@@ -451,6 +454,7 @@
 					console.log(error);
 				}
 			});
+			$(".spinner-container").hide()
 
 		}
 		
@@ -482,7 +486,7 @@
 				mainGrid.removeCheckedRows();
 				return;
 			}
-
+			$(".spinner-container").show()
 			$.ajax({
 				type : 'post',
 				url : '/menu/deleteMenuList.do',
@@ -502,6 +506,7 @@
 					console.log(error);
 				}
 			});
+			$(".spinner-container").hide();
 			
 		}
 		
@@ -575,6 +580,8 @@
 		<button type="button" onclick="javascript:saveAddData();">저장</button>
 	</div>
 </div>
+
+<jsp:include page="/WEB-INF/jsp/view/common/include/commonHtml.jsp"></jsp:include>
 
 </body>
 </html>
