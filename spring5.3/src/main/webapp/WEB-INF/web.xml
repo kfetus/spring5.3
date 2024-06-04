@@ -64,9 +64,13 @@
 		<exception-type>java.lang.Throwable</exception-type>
 		<location>/WEB-INF/jsp/view/common/exception/error.jsp</location>
 	</error-page>
-	<error-page>
+	<!-- error-page>
 		<error-code>404</error-code>
 		<location>/WEB-INF/jsp/view/common/exception/error.jsp</location>
+	</error-page -->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/static/vuejs/index.html</location>
 	</error-page>
 	<error-page>
 		<error-code>500</error-code>
