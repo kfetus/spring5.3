@@ -55,7 +55,7 @@
 						alert(retData.RESMSG);
 					}
 				},
-				error : function(request, status, error) {        
+				error : function(error,status ) {        
 					console.log(error);
 					console.log(status);
 				}

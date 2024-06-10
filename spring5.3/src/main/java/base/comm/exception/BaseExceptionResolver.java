@@ -35,7 +35,7 @@ public class BaseExceptionResolver extends AbstractHandlerExceptionResolver  {
 
 			if ("application/json".equals(accept)) {
 
-				//response status code = 400 셋팅. ajax 일 경우 error 로 리턴받아 처리 됨
+				//response status code = 500 셋팅. ajax 일 경우 error 로 리턴받아 처리 됨
 				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
 				HashMap<String, Object> errorData = new HashMap<>();
