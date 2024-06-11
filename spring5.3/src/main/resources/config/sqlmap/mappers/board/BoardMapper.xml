@@ -26,6 +26,7 @@
 				, A.ORDER_NUM
 				, A.CNG_USER_NO
 				, DATE_FORMAT(A.REG_DT, '%Y-%m-%d %H:%i:%s') REG_DT
+				, DATE_FORMAT(A.REG_DT, '%Y-%m-%d') REG_DT2
 				, DATE_FORMAT(A.CNG_DT, '%Y-%m-%d %H:%i:%s') CNG_DT
 		  FROM MAIN_BOARD A , CODE B
 		  WHERE A.CATEGORY = B.CODE

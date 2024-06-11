@@ -61,11 +61,12 @@
 					console.log(getData.data);
 					var message = JSON.parse(getData.data);
 					entryNumber = message.entryNumber;
+					nowAuctionState = message.auctionState;
+
 					$("#userId").html(message.bidId);
 					$("#userName").html(message.userName);
 					$("#entryNumber").html(message.entryNumber);
-					$("#auctionState").html(auctionSate[message.auctionState]);
-					nowAuctionState = message.auctionState;
+					$("#auctionState").html(auctionSate[nowAuctionState]);
 					$("#competePeopleNum").html(message.competePeopleNum);
 					
 					if(0 === message.competePeopleNum) {
@@ -97,7 +98,7 @@
 					$("#evaluationGrade").html(message.evaluationGrade);
 					$("#message").html(message.message);
 					
-					if('S' === message.auctionState) {
+					if('S' === nowAuctionState) {
 						$('#bidBtn').attr("disabled", false);
 						
 						$('#activeBidBtnSpan').show();
@@ -117,6 +118,11 @@
 							$('#startBtnSpan').show();
 							$('#stopBtnSpan').hide();
 						</c:if>
+						
+						if('E' === nowAuctionState) {
+							$("#startBtn").html("경매 종료");
+							$(document).off('click', '#startBtn');
+						}
 					}
 				};
 				
