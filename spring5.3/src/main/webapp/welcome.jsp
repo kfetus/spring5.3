@@ -57,6 +57,7 @@
 				},
 				error : function(error,status ) {        
 					console.log(error);
+					console.log(error.responseText);
 					console.log(status);
 				}
 			});
