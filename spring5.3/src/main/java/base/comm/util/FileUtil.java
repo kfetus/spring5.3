@@ -41,8 +41,13 @@ public class FileUtil {
 	    }
 	*/
 	
-	public static boolean checkUploadFileExtension(MultipartFile multiFile) {
-		LOGGER.debug("checkUploadFileExtension="+multiFile.getOriginalFilename());
+	public static boolean checkUploadFileExtension(MultipartFile multiFile) throws Exception{
+		
+		LOGGER.debug("checkUploadFileExtension="+multiFile);
+
+		if(multiFile == null) {
+			return true;
+		}
 		
 		String originalFilename = multiFile.getOriginalFilename();
 		int pointIndex = originalFilename.lastIndexOf(".");
