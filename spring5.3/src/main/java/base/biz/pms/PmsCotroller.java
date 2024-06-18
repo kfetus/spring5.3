@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import base.comm.SystemConstance;
+import base.comm.exception.BaseException;
 import base.comm.util.SessionManager;
 import base.comm.vo.UserVO;
 
@@ -39,13 +40,18 @@ public class PmsCotroller {
 	 * @param request
 	 * @param response
 	 * @return
+	 * @throws BaseException 
 	 */
 	@RequestMapping(value = "/pmsMain.do")
-	public ModelAndView pmsMain(HttpServletRequest req, HttpServletResponse res) {
+	public ModelAndView pmsMain(HttpServletRequest req, HttpServletResponse res) throws BaseException {
 		LOGGER.debug("####################### pmsMain");
 		
 		ModelAndView mv = new ModelAndView();
 		UserVO vo = sessionManager.getUserInfo(req);
+		if (vo == null) {
+			throw new BaseException("로그인 정보가 없습니다.","9990");
+		}		
+		
 		mv.addObject("userNm", vo.getUserName());
 		mv.setViewName("pms/pmsMain");
 		return mv;
