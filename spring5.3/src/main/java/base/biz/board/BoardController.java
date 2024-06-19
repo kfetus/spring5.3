@@ -263,7 +263,7 @@ public class BoardController {
 
 		String seq = map.get("seq");
 		HashMap<String, String> resultData = boardService.selectBoardOne(seq);
-		String userNo = String.valueOf(resultData.get("USER_NO"));
+		String userNo = String.valueOf(resultData.get("CNG_USER_NO"));
 
 		int tempUserNo = Integer.parseInt(userNo);
 
@@ -319,7 +319,6 @@ public class BoardController {
 		Map<String, Object> retMap = new HashMap<String, Object>();
 
 		String seq = map.get("SEQ");
-		String userNo = StringUtils.trimWhitespace(map.get("userNo"));
 
 		UserVO vo = sessionManager.getUserInfo(req);
 
@@ -328,18 +327,18 @@ public class BoardController {
 			retMap.put("RESMSG", "로그인 정보가 없습니다.");
 			LOGGER.debug("@@@@@@@@@@@ insertBoardOne 에러발생=" + retMap);
 			return retMap;
-		} else {
-			int tempUserNo = Integer.parseInt(userNo);
-			LOGGER.debug("@@@@@@@@@@@ deleteBoardOne tempUserNo=" + tempUserNo + "|" + userNo + "|");
-			LOGGER.debug("@@@@@@@@@@@ deleteBoardOne userNo=" + (tempUserNo != vo.getUserNo()));
+		} 
 
-			if (tempUserNo != vo.getUserNo()) {
-				retMap.put("RESCODE", "9997");
-				retMap.put("RESMSG", "삭제 권한이 없습니다.");
-				return retMap;
-			}
+		HashMap<String, String> resultData = boardService.selectBoardOne(seq);
+		LOGGER.debug("@@@@@@@@@@@ deleteBoardOne resultData=" + resultData);
+		String boardOwnerNo = String.valueOf(resultData.get("CNG_USER_NO"));
+		int tempUserNo = Integer.parseInt(boardOwnerNo);
+		if (tempUserNo != vo.getUserNo()) {
+			retMap.put("RESCODE", "9997");
+			retMap.put("RESMSG", "삭제 권한이 없습니다.");
+			return retMap;
 		}
-
+		
 		int result = boardService.deleteBoardOne(seq);
 
 		retMap.put("RESCODE", "0000");

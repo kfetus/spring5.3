@@ -25,7 +25,9 @@ public class BaseExceptionResolver extends AbstractHandlerExceptionResolver  {
 	protected ModelAndView doResolveException(HttpServletRequest request, HttpServletResponse response, Object handler,	Exception exception) {
 		
 		LOGGER.debug("@@@@@@@@@@@@@ BaseExceptionResolver.doResolveException exception=" + exception);
-		
+		exception.printStackTrace();
+		LOGGER.debug("@@@@@@@@@@@@@");
+
 		ObjectMapper objectMapper = new ObjectMapper();
 		
 		try {
