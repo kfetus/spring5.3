@@ -82,7 +82,16 @@ public class BoardController {
 			map.put("pageListCnt", pageListCnt);
 			List<HashMap<String, String>> resultList = boardService.selectBoardList(map);
 
-			
+/*			절대로 서버에서 바꿔서 리턴하면 안됨. 변경해서 리턴하면 컴파일된 jsp를 브라우저는 그대로 실행하게 되므로 XSS에 취약해짐. 필요하면 클라이언트에서 해당 값 replace해야 함(EX:에디터 내용들) 
+			for(int i = 0 ; i < resultList.size();i++) {
+				HashMap<String, String> row = resultList.get(i);
+				String bodyText = row.get("BODY_TEXT");
+				LOGGER.debug("@@@@@@@@@@@ boardList bodyText=" + bodyText);
+				bodyText = bodyText.replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&#40;", "(").replaceAll("&#41;", ")");
+				LOGGER.debug("@@@@@@@@@@@ boardList after bodyText=" + bodyText);
+				row.put("BODY_TEXT", bodyText);
+			}
+*/			
 			retMap.put("RESCODE", "0000");
 			retMap.put("RESMSG", "");
 			retMap.put("RESULT_SIZE", resultList.size());
