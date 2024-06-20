@@ -72,7 +72,12 @@ public class BoardServiceImpl {
 		HashMap<String,String> result = boardMapper.selectBoardOne(seq);
 		return result;
 	}
-
+	
+	public List<HashMap<String,String>> selectBoardOneCommemtList(String seq) throws Exception {
+		List<HashMap<String,String>> result = boardMapper.selectBoardOneCommemtList(seq);
+		return result;
+	}
+	
 	public HashMap<String,Object> selectBoardFileOne(HashMap<String,String> map) throws Exception {
 		HashMap<String,Object> result = boardMapper.selectBoardFileOne(map);
 		return result;

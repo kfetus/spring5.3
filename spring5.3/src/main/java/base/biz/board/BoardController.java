@@ -111,10 +111,11 @@ public class BoardController {
 		String seq = map.get("SEQ");
 
 		HashMap<String, String> resultData = boardService.selectBoardOne(seq);
-
+		List<HashMap<String, String>> resultList = boardService.selectBoardOneCommemtList(seq);
 		retMap.put("RESCODE", "0000");
 		retMap.put("RESMSG", "");
 		retMap.put("RESULT_DATA", resultData);
+		retMap.put("RESULT_LIST", resultList);
 
 		LOGGER.debug("@@@@@@@@@@@ selectBoardOne 종료" + retMap);
 		return retMap;

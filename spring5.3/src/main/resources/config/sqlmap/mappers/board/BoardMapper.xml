@@ -23,14 +23,20 @@
 				, A.TITLE
 				, A.BODY_TEXT
 				, A.ORIGIN_BOARD_SEQ
+				, C.COMMENT_CNT
 				, A.ORDER_NUM
 				, A.CNG_USER_NO
 				, DATE_FORMAT(A.REG_DT, '%Y-%m-%d %H:%i:%s') REG_DT
 				, DATE_FORMAT(A.REG_DT, '%Y-%m-%d') REG_DT2
 				, DATE_FORMAT(A.CNG_DT, '%Y-%m-%d %H:%i:%s') CNG_DT
-		  FROM MAIN_BOARD A , CODE B
-		  WHERE A.CATEGORY = B.CODE
-		   AND B.CODE_TYPE = 'BOARD'
+		  FROM MAIN_BOARD A INNER JOIN CODE B ON A.CATEGORY = B.CODE 
+		  		 LEFT OUTER JOIN (SELECT COUNT(ORIGIN_BOARD_SEQ) AS COMMENT_CNT 
+								 		, ORIGIN_BOARD_SEQ
+									FROM main_board
+								   WHERE ORIGIN_BOARD_SEQ IS NOT NULL
+								GROUP BY ORIGIN_BOARD_SEQ) AS C ON A.SEQ = C.ORIGIN_BOARD_SEQ
+		  WHERE B.CODE_TYPE = 'BOARD' 
+		    AND A.ORIGIN_BOARD_SEQ IS NULL 
 			<if test="seq != null and seq != '' ">AND A.SEQ = #{seq}</if>
 			<if test="title != null and title != '' ">AND A.TITLE LIKE CONCAT('%',#{title},'%')</if>
 			<if test="category != null and category != '' ">AND A.CATEGORY = #{category}</if>
@@ -56,6 +62,17 @@
 		 WHERE A.SEQ = #{seq}
 		   AND B.CODE_TYPE = 'BOARD'
 	</select>
+
+	<select id="selectBoardOneCommemtList" parameterType="String" resultType="java.util.HashMap">
+		SELECT /* BoardMapper.selectBoardOneCommemtList 게시판 상세 댓글 조회 */
+				SEQ
+				, CATEGORY
+				, TITLE
+				, BODY_TEXT
+		  FROM MAIN_BOARD
+		 WHERE ORIGIN_BOARD_SEQ = #{seq}
+	</select>
+
     
 	<select id="selectBoardFileOne" parameterType="java.util.HashMap" resultType="java.util.HashMap">
 			SELECT CONCAT(FILE_NAME, '.', FILE_EXTENSION) AS FILE_NAME 
