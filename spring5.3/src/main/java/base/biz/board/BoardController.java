@@ -112,6 +112,7 @@ public class BoardController {
 
 		HashMap<String, String> resultData = boardService.selectBoardOne(seq);
 		List<HashMap<String, String>> resultList = boardService.selectBoardOneCommemtList(seq);
+		
 		retMap.put("RESCODE", "0000");
 		retMap.put("RESMSG", "");
 		retMap.put("RESULT_DATA", resultData);
