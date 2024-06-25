@@ -113,6 +113,31 @@
 			)
 	</insert>
 
+<!-- SUBQUERY로 한건의 댓글을 넣을때용 사용 안함. 
+		INSERT /* BoardMapper.insertBoardOne 게시판 Insert */
+		INTO MAIN_BOARD(
+			SEQ
+			, CATEGORY
+			, TITLE
+			, BODY_TEXT
+			, ORIGIN_BOARD_SEQ
+			, ORDER_NUM
+			, CNG_USER_NO
+			, REG_DT
+			, CNG_DT
+			)
+			SELECT 115
+			, 'NOTICE'
+			, '댓글제목'
+			, '댓글 테스트 샘ㅍ플'
+			, 110
+			, (SELECT IFNULL(MAX(ORDER_NUM),0) AS NUM FROM main_board WHERE ORIGIN_BOARD_SEQ =110)
+			, 17
+			, CURRENT_TIMESTAMP()
+			, CURRENT_TIMESTAMP() FROM DUAL
+			;
+ -->
+ 
 	<insert id="insertBoardFile" parameterType="java.util.HashMap">
 		<selectKey resultType="int" keyProperty="fileSeq" keyColumn="FILE_SEQ" order="BEFORE">
 			SELECT IFNULL(MAX(FILE_SEQ)+1 , '1') AS FILE_SEQ

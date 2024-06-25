@@ -359,4 +359,31 @@ public class BoardController {
 		LOGGER.debug("@@@@@@@@@@@ updateBoardOne 종료" + retMap);
 		return retMap;
 	}
+	
+	
+	@RequestMapping(value = "/insertBoardCommentOne.do")
+	public Map<String, Object> insertBoardCommentOne(@RequestBody HashMap<String, Object> map, HttpServletRequest req) throws Exception {
+		LOGGER.debug("@@@@@@@@@@@ insertBoardCommentOne 시작 @@@@@@@@@@@"+ map);
+		Map<String, Object> retMap = new HashMap<String, Object>();
+		
+		UserVO vo = sessionManager.getUserInfo(req);
+		if (vo == null) {
+			retMap.put("RESCODE", "9998");
+			retMap.put("RESMSG", "로그인 정보가 없습니다.");
+			LOGGER.debug("@@@@@@@@@@@ insertBoardOne 에러발생=" + retMap);
+			return retMap;
+		} else {
+			map.put("userNo", String.valueOf(vo.getUserNo()));
+		}
+		
+		
+		int result = boardService.insertBoardOne(map);
+		retMap.put("RESCODE", "0000");
+		retMap.put("RESMSG", "");
+		retMap.put("RESULT_CNT", result);
+
+		LOGGER.debug("@@@@@@@@@@@ insertBoardCommentOne 종료" + retMap);
+		return retMap;
+	}	
+	
 }
