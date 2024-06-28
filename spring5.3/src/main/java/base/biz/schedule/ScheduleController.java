@@ -67,7 +67,7 @@ public class ScheduleController {
 
 		retMap.put("RESCODE","0000");
 		retMap.put("RESMSG","");
-		retMap.put("RESULT_DATA",resultList);
+		retMap.put("RESULT_LIST",resultList);
 		retMap.put("YYYYMMDD",yyyymmdd.substring(0, 4)+"-"+yyyymmdd.substring(4, 6));
 
 		LOGGER.debug("@@@@@@@@@@@ scheduleCalender 종료"+ retMap);
@@ -76,8 +76,8 @@ public class ScheduleController {
 	
 	
 	@RequestMapping(value = "/scheduleOneDay.do")
-	public Map<String,Object> selectScheduleOneDay(@RequestBody  HashMap<String,String> map, HttpServletRequest req) throws Exception {
-		LOGGER.debug("@@@@@@@@@@@ selectScheduleOne 시작=" + map);
+	public Map<String,Object> selectScheduleOneDayList(@RequestBody  HashMap<String,String> map, HttpServletRequest req) throws Exception {
+		LOGGER.debug("@@@@@@@@@@@ selectScheduleOneDayList 시작=" + map);
 		
 		Map<String , Object> retMap = new HashMap<String,Object>();
 
@@ -104,9 +104,9 @@ public class ScheduleController {
 
 		retMap.put("RESCODE","0000");
 		retMap.put("RESMSG","");
-		retMap.put("RESULT_DATA",resultList);
+		retMap.put("RESULT_LIST",resultList);
 
-		LOGGER.debug("@@@@@@@@@@@ selectScheduleOne 종료"+ retMap);
+		LOGGER.debug("@@@@@@@@@@@ selectScheduleOneDayList 종료"+ retMap);
 		return retMap;
 	}
 
