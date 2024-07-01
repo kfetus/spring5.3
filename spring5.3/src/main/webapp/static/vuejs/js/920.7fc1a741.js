@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkvue_test"]=self["webpackChunkvue_test"]||[]).push([[920],{8920:function(t,e,n){n.r(e),n.d(e,{default:function(){return v}});var u=n(6768),s=n(5603),l=n(3902);const a=(0,u.Lk)("main",null,[(0,u.Lk)("div",null," 의류 내용 ")],-1),c={name:"clothTest"};var r=Object.assign(c,{setup(t){return(t,e)=>((0,u.uX)(),(0,u.CE)("div",null,[(0,u.bF)(s.A,{title:"의류"}),a,(0,u.bF)(l.A)]))}});const i=r;var v=i}}]);
+//# sourceMappingURL=920.7fc1a741.js.map

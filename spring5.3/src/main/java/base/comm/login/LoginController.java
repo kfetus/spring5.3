@@ -69,6 +69,7 @@ public class LoginController {
 				retMap.put("RESMSG","");
 //				vo.setUserIp((null != req.getHeader("X-FORWARDED-FOR")) ? req.getHeader("X-FORWARDED-FOR") : req.getRemoteAddr());
 				vo2.setUserPass("");
+				vo2.setSalt("");
 				retMap.put("userInfo", vo2);
 				sessionManager.createUserInfo(req, vo2);
 				
