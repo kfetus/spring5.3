@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import base.comm.util.HttpUtil;
 import base.comm.util.SessionManager;
+import base.comm.util.StringUtil;
 import base.comm.vo.UserVO;
 
 @Controller
@@ -155,7 +156,10 @@ public class UserInfoController {
 		
 //		String userNo = map.get("userNo");
 		UserVO vo = userInfoService.selectUserInfoOne(String.valueOf(loginVo.getUserNo()));
-
+		vo.setUserId(StringUtil.asteriskName(vo.getUserId()));//ID 변환.
+		vo.setUserName(StringUtil.asteriskName(vo.getUserName()));//이름 변환.
+		vo.setHpNo(StringUtil.asteriskHP(vo.getHpNo()));//HP 변환
+		
 		retMap.put("RESCODE","0000");
 		retMap.put("RESMSG","");
 		retMap.put("RESULT_DATA",vo);
