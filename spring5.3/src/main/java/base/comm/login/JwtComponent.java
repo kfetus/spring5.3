@@ -41,6 +41,12 @@ public class JwtComponent {
 	@Value("#{controlsite['jwt.baseKey']}")
 	private String JWT_KEY ;
 	
+	@Value("#{controlsite['jwt.baseTime']}")
+	private long JWT_BASE_TIME ;//300000
+
+	@Value("#{controlsite['jwt.refreshTime']}")
+	private long JWT_REFRESH_TIME ;//3600000
+	
 	//header에서 주고 받을 키값. 아무 이름이나 써도 된다.
 	public final String HEADER_KEY = "AccessKeyJwt";
 
@@ -48,17 +54,16 @@ public class JwtComponent {
 	 * 
 	 * @param userVO  = UserVO
 	 * @param subject = "Authorization"
-	 * @param continueTime = 1800000(30분)
 	 * @return
 	 */
-	public String makeToken(UserVO userVO, String subject , long continueTime) {
+	public String makeToken(UserVO userVO, String subject ) {
 
-		Map<String, Object> claims = new HashMap<>();
+		Map<String, Object> jwtInfo = new HashMap<>();
 
-		claims.put("id", userVO.getUserId());
-		claims.put("name", userVO.getUserName());
-		claims.put("grade", userVO.getGrade());
-		claims.put("hpno", userVO.getHpNo());
+		jwtInfo.put("id", userVO.getUserId());
+		jwtInfo.put("name", userVO.getUserName());
+		jwtInfo.put("grade", userVO.getGrade());
+		jwtInfo.put("hpno", userVO.getHpNo());
 
 		LOGGER.debug("######secret=" + JWT_KEY);
 
@@ -66,12 +71,40 @@ public class JwtComponent {
 		// SecretKey key = Jwts.SIG.HS256.key().build();
 
 		//expire Time 30분(1800000)
-		return Jwts.builder().claims(claims).subject(subject).issuedAt(new Date(System.currentTimeMillis()))
-				.expiration(new Date(System.currentTimeMillis() + continueTime))
+		return Jwts.builder().claims(jwtInfo).subject(subject).issuedAt(new Date(System.currentTimeMillis()))
+				.expiration(new Date(System.currentTimeMillis() + JWT_BASE_TIME))
 				.signWith(Keys.hmacShaKeyFor(JWT_KEY.getBytes()), Jwts.SIG.HS512).compact();
-
 	}
 
+	
+	/**
+	 * refresh 토큰은 accessToken과 동일하게 생성해서 클라이언트에게 내려준다. 다만 시간이 다를뿐이다. 
+	 * 프로세스 : 1. accessToken으로 접근 2.verifyJWT에서 ExpireException 발생 3. client에게 해당 에러 전송 4. client는 해당 에러시 갱신 프로세스 진행
+	 * 5. Token 갱신 url에 sessionStorage에 있는 refreshToken을 담아서 전송. 
+	 * 6. 서버는 최초 로그인시 로그인시의 특정 정보(ID 같은거)를 PK로 refreshToken은 따로 (DB, Redis, 등등)에 저장하고 있다가 
+	 * client에서 전송받은 refreshToken을 decode해서 claims에 있는 키값으로 조회해서 값이 있고, 서로 같으면 accessToken을 새로 발급해서 전송
+	 * 7. client는 받은 값으로 accessToken을 저장. 이때 refreshToken을 갱신하지 않는 이유는 expire Time을 충분히 길게(예를 들면 3시간) 잡았다는 가정기준이므로 
+	 * @param userVO  = UserVO
+	 * @param subject = "Authorization"
+	 * @return
+	 */
+	public String makeRefreshToken(UserVO userVO, String subject ) {
+
+		Map<String, Object> jwtInfo = new HashMap<>();
+
+		jwtInfo.put("id", userVO.getUserId());
+		jwtInfo.put("name", userVO.getUserName());
+		jwtInfo.put("grade", userVO.getGrade());
+		jwtInfo.put("hpno", userVO.getHpNo());
+
+		LOGGER.debug("######secret=" + JWT_KEY);
+
+		return Jwts.builder().claims(jwtInfo).subject(subject).issuedAt(new Date(System.currentTimeMillis()))
+				.expiration(new Date(System.currentTimeMillis() + JWT_REFRESH_TIME))
+				.signWith(Keys.hmacShaKeyFor(JWT_KEY.getBytes()), Jwts.SIG.HS512).compact();
+	}
+
+	
 	public boolean verifyJWT(String token) {
 		boolean state = true;
 		try {
@@ -90,6 +123,15 @@ public class JwtComponent {
 		return state;
 	}
 
+	public Map<String, Object> decoderClaim(String token){
+		LOGGER.debug("###### decoderClaim token=" + token);
+		
+		Map<String, Object> decodeClaim = Jwts.parser().verifyWith(Keys.hmacShaKeyFor(JWT_KEY.getBytes()))
+	            .build().parseSignedClaims(token).getPayload();
+	    return decodeClaim;
+	}
+	
+	
 	public static void main(String[] args) {
 		System.out.println("###### START ######");
 
@@ -101,11 +143,14 @@ public class JwtComponent {
 		vo.setUserId("TESXT");
 		vo.setUserName("아무개");
 		vo.setGrade("M");
-		vo.setHpNo("0101234567");
+		vo.setHpNo("01012345678");
 
-		String token = jwt.makeToken(vo, jwt.HEADER_KEY,1800);
+		String token = jwt.makeToken(vo, jwt.HEADER_KEY);
 		System.out.println("###### jwt token="+token);
 		System.out.println("###### verifyJWT(token)="+jwt.verifyJWT(token));
+		System.out.println("###### parsing(token)="+jwt.decoderClaim(token));
+		
+		
 //		System.out.println("###### verifyJWT(token)="+jwt.verifyJWT("eyJhbGciOiJIUzUxMiJ9.eyJncmFkZSI6Ik0iLCJuYW1lIjoi7Jik7Yag7KSR6rOg7LCoIiwiaHBubyI6IjAxMDU1NTU0NDQ0IiwiaWQiOiJhdXRvIiwic3ViIjoiQXV0aG9yaXphdGlvbiIsImlhdCI6MTcxNDM4MDkxMywiZXhwIjoxNzE0MzgyNzEzfQ.qTROxPZ1hVW9UNVo1JOdp2FaJjb0SYwRRoxrKqYPkVtQK8r6p3HWr0DfDyLMZy0sMXn3Us8oKWu6SZj2tHr-MQ"));
 		
 		

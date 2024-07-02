@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import base.comm.util.SessionManager;
+import base.comm.util.StringUtil;
 import base.comm.util.crypto.Sha256Crypto;
 import base.comm.vo.UserVO;
 
@@ -70,12 +71,22 @@ public class LoginController {
 //				vo.setUserIp((null != req.getHeader("X-FORWARDED-FOR")) ? req.getHeader("X-FORWARDED-FOR") : req.getRemoteAddr());
 				vo2.setUserPass("");
 				vo2.setSalt("");
+				
+				vo2.setUserId(StringUtil.asteriskName(vo2.getUserId()));//ID 변환.
+				vo2.setUserName(StringUtil.asteriskName(vo2.getUserName()));//이름 변환.
+				vo2.setHpNo(StringUtil.asteriskHP(vo2.getHpNo()));//HP 변환
+				
 				retMap.put("userInfo", vo2);
 				sessionManager.createUserInfo(req, vo2);
 				
 				//JWT 관련 심플 셋팅. 30분 expire Time 설정
-				String token = jwt.makeToken(vo2, jwt.HEADER_KEY,1800000);
+				String token = jwt.makeToken(vo2, jwt.HEADER_KEY);
+				
+				//이 값을 DB나 Redis에 PK 기준으로 저장해서 차후 Token 갱신때 비교해야 함. 현재는 생략함.  
+				String refreshToken = jwt.makeRefreshToken(vo2, jwt.HEADER_KEY);
+				
 				retMap.put("token", token);
+				retMap.put("refreshToken", refreshToken);
 			} else {
 				retMap.put("RESCODE","0001");
 				retMap.put("RESMSG","사용자가 없습니다.");

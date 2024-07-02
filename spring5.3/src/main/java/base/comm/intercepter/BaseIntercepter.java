@@ -42,7 +42,7 @@ public class BaseIntercepter implements AsyncHandlerInterceptor {
         String jwtToken = request.getHeader(jwt.HEADER_KEY);
         LOGGER.debug("request.getHeader(jwt.HEADER_KEY)="+jwtToken);
         if(jwtToken != null) {
-            jwt.verifyJWT(jwtToken);
+        	LOGGER.debug("jwt.verifyJWT(jwtToken)="+jwt.verifyJWT(jwtToken));
         }
         
 /*
