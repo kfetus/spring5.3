@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +30,12 @@ public class ScheduleController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ScheduleController.class);
 	
+	@Value("#{errorCode['login.infoNullCODE']}")
+	private String loginNullErrorCode ;
+	
+	@Value("#{errorCode['validation.null']}")
+	private String validationNullCode;
+	
 	@Autowired
 	private SessionManager sessionManager;
 
@@ -43,7 +50,7 @@ public class ScheduleController {
 
 		UserVO loginVo = sessionManager.getUserInfo(req);
 		if (loginVo == null) {
-			retMap.put("RESCODE","9998");
+			retMap.put("RESCODE",loginNullErrorCode);
 			retMap.put("RESMSG","로그인 정보가 없습니다.");
 			return retMap;
 		}		
@@ -83,7 +90,7 @@ public class ScheduleController {
 
 		UserVO loginVo = sessionManager.getUserInfo(req);
 		if (loginVo == null) {
-			retMap.put("RESCODE","9998");
+			retMap.put("RESCODE",loginNullErrorCode);
 			retMap.put("RESMSG","로그인 정보가 없습니다.");
 			return retMap;
 		}		
@@ -91,7 +98,7 @@ public class ScheduleController {
 		String yyyymmdd = map.get("yyyymmdd");
 
 		if( !StringUtils.hasText(yyyymmdd)) {
-			retMap.put("RESCODE","9999");
+			retMap.put("RESCODE",validationNullCode);
 			retMap.put("RESMSG","조회하려는 날짜를 선택해 주세요.");
 			return retMap;
 		}
@@ -120,7 +127,7 @@ public class ScheduleController {
 		UserVO loginVo = sessionManager.getUserInfo(req);
  
 		if (loginVo == null) {
-			retMap.put("RESCODE","9998");
+			retMap.put("RESCODE",loginNullErrorCode);
 			retMap.put("RESMSG","로그인 정보가 없습니다.");
 			return retMap;
 		}		
@@ -129,7 +136,7 @@ public class ScheduleController {
 		String strList = map.get("scheduleList");
 
 		if( !StringUtils.hasText(yyyymmdd)) {
-			retMap.put("RESCODE","9999");
+			retMap.put("RESCODE",validationNullCode);
 			retMap.put("RESMSG","변경하려는 날짜를 선택해 주세요.");
 			return retMap;
 		}

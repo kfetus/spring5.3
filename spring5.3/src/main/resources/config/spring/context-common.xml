@@ -28,4 +28,5 @@
 	     <util:properties id="config" location="classpath:/config/properties/msg_#{systemProperties['activemode']}.properties"/> -->
 	<util:properties id="controlsite" location="classpath:/config/properties/controlSite.properties"/>
 	<util:properties id="msg" location="classpath:/config/properties/msg.properties"/>
+	<util:properties id="errorCode" location="classpath:/config/properties/errorCode.properties"/>
 </beans>

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,6 +33,11 @@ public class UserInfoController {
 	@Autowired
 	private UserInfoServiceImpl userInfoService;
 
+	@Value("#{errorCode['login.infoNullCODE']}")
+	private String loginNullErrorCode ;
+	
+	@Value("#{errorCode['validation.null']}")
+	private String validationNullCode;
 	
 	/**
 	 * 회원가입 폼
@@ -73,12 +79,12 @@ public class UserInfoController {
 		Map<String , Object> retMap = new HashMap<String,Object>();
 
 		if( !StringUtils.hasText(vo.getUserId())) {
-			retMap.put("RESCODE","9999");
+			retMap.put("RESCODE",validationNullCode);
 			retMap.put("RESMSG","아이디가 없습니다.");
 			return retMap;
 		}
 		if (!StringUtils.hasText(vo.getUserPass()) ) {
-			retMap.put("RESCODE","9999");
+			retMap.put("RESCODE",validationNullCode);
 			retMap.put("RESMSG","패스워드가 없습니다.");
 			return retMap;
 		}
@@ -108,23 +114,23 @@ public class UserInfoController {
 		Map<String , Object> retMap = new HashMap<String,Object>();
 		
 		if( !StringUtils.hasText(vo.getUserId())) {
-			retMap.put("RESCODE","9999");
+			retMap.put("RESCODE",validationNullCode);
 			retMap.put("RESMSG","아이디가 없습니다.");
 			return retMap;
 		}
 		if (!StringUtils.hasText(vo.getUserPass()) ) {
-			retMap.put("RESCODE","9999");
+			retMap.put("RESCODE",validationNullCode);
 			retMap.put("RESMSG","패스워드가 없습니다.");
 			return retMap;
 		}
 		if (!StringUtils.hasText(vo.getUserName()) ) {
-			retMap.put("RESCODE","9999");
+			retMap.put("RESCODE",validationNullCode);
 			retMap.put("RESMSG","이름이 없습니다.");
 			return retMap;
 		}
 
 		if (!StringUtils.hasText(vo.getHpNo()) ) {
-			retMap.put("RESCODE","9999");
+			retMap.put("RESCODE",validationNullCode);
 			retMap.put("RESMSG","휴대전화 정보가 없습니다.");
 			return retMap;
 		}
@@ -149,8 +155,9 @@ public class UserInfoController {
 
 		UserVO loginVo = sessionManager.getUserInfo(req);
 		if (loginVo == null) {
-			retMap.put("RESCODE","9998");
+			retMap.put("RESCODE",loginNullErrorCode);
 			retMap.put("RESMSG","로그인 정보가 없습니다.");
+//			retMap = loginNullMap;
 			return retMap;
 		}
 		
@@ -177,7 +184,7 @@ public class UserInfoController {
 		
 		UserVO loginVo = sessionManager.getUserInfo(req);
 		if (loginVo == null) {
-			retMap.put("RESCODE","9998");
+			retMap.put("RESCODE",loginNullErrorCode);
 			retMap.put("RESMSG","로그인 정보가 없습니다.");
 			return retMap;
 		}
@@ -202,7 +209,7 @@ public class UserInfoController {
 		
 		UserVO vo = sessionManager.getUserInfo(req);
 		if (vo == null) {
-			retMap.put("RESCODE","9998");
+			retMap.put("RESCODE",loginNullErrorCode);
 			retMap.put("RESMSG","로그인 정보가 없습니다.");
 			return retMap;
 		}

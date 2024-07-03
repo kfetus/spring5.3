@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver;
 
@@ -20,6 +21,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class BaseExceptionResolver extends AbstractHandlerExceptionResolver  {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseExceptionResolver.class);
+	
+	@Value("#{errorCode['system.runtime']}")
+	private String systemRuntimeErrorCode;
+	
 	
 	@Override
 	protected ModelAndView doResolveException(HttpServletRequest request, HttpServletResponse response, Object handler,	Exception exception) {
@@ -42,7 +47,7 @@ public class BaseExceptionResolver extends AbstractHandlerExceptionResolver  {
 
 				HashMap<String, Object> errorData = new HashMap<>();
 				errorData.put("RESMSG", exception.getMessage());
-				errorData.put("RESCODE", "9999");
+				errorData.put("RESCODE", systemRuntimeErrorCode);
 
 				String jsonStr = objectMapper.writeValueAsString(errorData);
 

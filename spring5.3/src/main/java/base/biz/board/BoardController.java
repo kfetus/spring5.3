@@ -44,6 +44,9 @@ public class BoardController {
 
 	@Value("#{msg['msg.hi']}")
 	public String msghi;
+	
+	@Value("#{errorCode['login.infoNullCODE']}")
+	private String loginNullErrorCode ;
 
 	@RequestMapping(value = "/boardList.do")
 	public Map<String, Object> boardList(@RequestBody HashMap<String, Object> map) throws Exception {
@@ -197,7 +200,7 @@ public class BoardController {
 		
 		boolean checkState = FileUtil.checkUploadFileExtension(multiFiles);
 		if(!checkState) {
-			retMap.put("RESCODE", "9998");
+			retMap.put("RESCODE", "9997");
 			retMap.put("RESMSG", "잘못된 파일을 업로드 하였습니다."+multiFiles.getOriginalFilename());
 			LOGGER.debug("@@@@@@@@@@@ insertBoardOne 에러발생=" + retMap);
 			return retMap;
@@ -211,7 +214,7 @@ public class BoardController {
 
 		UserVO vo = sessionManager.getUserInfo(req);
 		if (vo == null) {
-			retMap.put("RESCODE", "9998");
+			retMap.put("RESCODE", loginNullErrorCode);
 			retMap.put("RESMSG", "로그인 정보가 없습니다.");
 			LOGGER.debug("@@@@@@@@@@@ insertBoardOne 에러발생=" + retMap);
 			return retMap;
@@ -267,7 +270,7 @@ public class BoardController {
 
 		UserVO vo = sessionManager.getUserInfo(req);
 		if (vo == null) {
-			retMap.put("RESCODE", "9998");
+			retMap.put("RESCODE", loginNullErrorCode);
 			retMap.put("RESMSG", "로그인 정보가 없습니다.");
 			return retMap;
 		}
@@ -334,7 +337,7 @@ public class BoardController {
 		UserVO vo = sessionManager.getUserInfo(req);
 
 		if (vo == null) {
-			retMap.put("RESCODE", "9998");
+			retMap.put("RESCODE", loginNullErrorCode);
 			retMap.put("RESMSG", "로그인 정보가 없습니다.");
 			LOGGER.debug("@@@@@@@@@@@ insertBoardOne 에러발생=" + retMap);
 			return retMap;
@@ -368,7 +371,7 @@ public class BoardController {
 		
 		UserVO vo = sessionManager.getUserInfo(req);
 		if (vo == null) {
-			retMap.put("RESCODE", "9998");
+			retMap.put("RESCODE", loginNullErrorCode);
 			retMap.put("RESMSG", "로그인 정보가 없습니다.");
 			LOGGER.debug("@@@@@@@@@@@ insertBoardOne 에러발생=" + retMap);
 			return retMap;

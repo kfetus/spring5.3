@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,18 +41,22 @@ public class LoginController {
 	@Autowired
 	private JwtComponent jwt;
 	
+	@Value("#{errorCode['validation.null']}")
+	private String validationNullCode;
+	
+	
 	@RequestMapping(value = "/restLogin.do")
 	public Map<String,Object> restLogin(@RequestBody  UserVO vo, HttpServletRequest req, HttpServletResponse res) throws Exception {
 		LOGGER.debug("@@@@@@@@@@@ restLogin 시작="+vo.toString());
 		Map<String , Object> retMap = new HashMap<String,Object>();
 		
 		if( !StringUtils.hasText(vo.getUserId())) {
-			retMap.put("RESCODE","9999");
+			retMap.put("RESCODE",validationNullCode);
 			retMap.put("RESMSG","아이디가 없습니다.");
 			return retMap;
 		}
 		if (!StringUtils.hasText(vo.getUserPass()) ) {
-			retMap.put("RESCODE","9999");
+			retMap.put("RESCODE",validationNullCode);
 			retMap.put("RESMSG","패스워드가 없습니다.");
 			return retMap;
 		}

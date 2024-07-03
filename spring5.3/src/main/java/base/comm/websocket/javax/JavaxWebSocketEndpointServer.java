@@ -19,6 +19,7 @@ import javax.websocket.server.ServerEndpoint;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 
@@ -46,6 +47,10 @@ import org.springframework.stereotype.Service;
 public class JavaxWebSocketEndpointServer {
 	
 	private final Logger LOGGER = LoggerFactory.getLogger(JavaxWebSocketEndpointServer.class);
+
+	@Value("#{errorCode['login.infoNullCODE']}")
+	private String loginNullErrorCode ;
+	
 	//WAS가 여러대로 운영할 경우 이 값을 redis 나 DB를 이용해서 같이 관리해야 함.
 	private List<Session> sessionList = new ArrayList<>();
 	
@@ -115,7 +120,7 @@ public class JavaxWebSocketEndpointServer {
 		} else {
 			try {
 				BidMessage localBidMessage = new BidMessage();
-				localBidMessage.setConState("9999");
+				localBidMessage.setConState(loginNullErrorCode);
 				localBidMessage.setMessage("로그인 정보가 없습니다.");
 				session.getBasicRemote().sendObject(localBidMessage);
 				throw new Exception("login info is null");

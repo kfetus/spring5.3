@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -120,7 +121,7 @@
 						console.log(result);
 						if(result.RESCODE != '0000') {
 							alert(result.RESMSG);
-							if( result.RESCODE == '9998' ){
+							if( result.RESCODE == '<spring:eval expression="@errorCode['login.infoNullCODE']"/>' ){
 								window.location.href = "/index.jsp";
 							}
 							return false;
@@ -128,30 +129,30 @@
 						yyyymm = Number(result.YYYYMMDD.replace('-',''));
 						$("#spanMonthTitle").text(result.YYYYMMDD);
 
-						if( result.RESULT_DATA.length < 6) {
+						if( result.RESULT_LIST.length < 6) {
 							$("#weekly_5").hide();
 						} else {
 							$("#weekly_5").show();
 						}
 						
-						for ( let row = 0 ; row < result.RESULT_DATA.length ; row++ ) {
-//							console.log(result.RESULT_DATA[row]);
-							makeDiv(result.RESULT_DATA, row, 'SUN');
-							makeDiv(result.RESULT_DATA, row, 'MON');
-							makeDiv(result.RESULT_DATA, row, 'TUE');
-							makeDiv(result.RESULT_DATA, row, 'WED');
-							makeDiv(result.RESULT_DATA, row, 'THU');
-							makeDiv(result.RESULT_DATA, row, 'FRI');
-							makeDiv(result.RESULT_DATA ,row, 'SAT');
+						for ( let row = 0 ; row < result.RESULT_LIST.length ; row++ ) {
+//							console.log(result.RESULT_LIST[row]);
+							makeDiv(result.RESULT_LIST, row, 'SUN');
+							makeDiv(result.RESULT_LIST, row, 'MON');
+							makeDiv(result.RESULT_LIST, row, 'TUE');
+							makeDiv(result.RESULT_LIST, row, 'WED');
+							makeDiv(result.RESULT_LIST, row, 'THU');
+							makeDiv(result.RESULT_LIST, row, 'FRI');
+							makeDiv(result.RESULT_LIST ,row, 'SAT');
 						}
 /*
-						for ( let rr of result.RESULT_DATA ) {
+						for ( let rr of result.RESULT_LIST ) {
 							console.log(rr);
 						}
 
 						//이건 row로 loop문 안에서 처리를 하면 예로 위에서 div에 이벤트 할당할때 처럼 하면 row 변수가 공유가 되어서 모두 마지막 값으로 셋팅된다. 즉 loop는 정상적으로 수행 되나 loop 종료 후 데이턴s row 최종값만 셋팅된다.
-						for ( row in result.RESULT_DATA) {
-							console.log(result.RESULT_DATA[i])
+						for ( row in result.RESULT_LIST) {
+							console.log(result.RESULT_LIST[i])
 						}
 */
 					},

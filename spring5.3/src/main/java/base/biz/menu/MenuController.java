@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -37,6 +38,10 @@ public class MenuController {
 	@Autowired
 	private MenuServiceImpl menuService;
 
+	@Value("#{errorCode['validation.dup']}")
+	private String validationDuplication;
+	
+	
 	@RequestMapping(value = "/menuList.do")
 	public ModelAndView menuList(HttpServletRequest req, HttpServletResponse res, @RequestParam HashMap<String, Object> map) throws Exception {
 		LOGGER.debug("####################### menuList START");
@@ -126,7 +131,7 @@ public class MenuController {
 
 		int resultCount = menuService.saveMenuOne(map);
 		if (resultCount != 1) {
-			retMap.put("RESCODE", "9999");
+			retMap.put("RESCODE", validationDuplication);
 			retMap.put("RESMSG", "중복된 데이터가 있습니다.");
 		} else {
 			retMap.put("RESCODE", "0000");
