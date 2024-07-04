@@ -94,7 +94,7 @@ public class LoginController {
 				retMap.put("refreshToken", refreshToken);
 			} else {
 				retMap.put("RESCODE","0001");
-				retMap.put("RESMSG","사용자가 없습니다.");
+				retMap.put("RESMSG","사용자가 없습니다.");//패스워드가 없습니다가 맞으나 너무 많은 정보를 줄 필요가 없음. 해킹 우려
 				return retMap;
 			}
 		}
