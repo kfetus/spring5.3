@@ -9,7 +9,48 @@
 		<script src="<c:url value="/static/js/comm/siteComm.js" />"></script>
 	</head>
 
+
 	<style>
+		* {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+		:root {
+			--padding: 60px;
+		}
+		body{
+		    background: #62546b;
+		}
+		
+		.box {
+			position: relative;
+			margin: 50px auto;
+			width: 400px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			padding: var(--padding);
+			background-color: #8092a7;;
+			border-radius: 7px;
+		}
+		
+		.box input,
+		.box button {
+			padding: 15px;
+			font-size: 1.2em;
+			border: none;
+		}
+		.box input {
+			margin-bottom: 25px;
+		}
+		.box button {
+			background-color: #534c44;
+			color: #547fb2;
+			border-radius: 4px;
+			margin-bottom: 25px;
+		}
+<%--	
 		button {
 		  margin: 0;
 		  padding: 0.5rem 1rem;
@@ -32,6 +73,8 @@
 		  background: var(--button-hover-bg-color);
 		  outline: 0;
 		}
+--%>
+
 	</style>	
 
 	<script>
@@ -78,11 +121,21 @@
 				}
 			});
 		}
+		
+		function moveJoin() {
+			location.href="/user/joinForm.do";
+		}
+		
+		function enterCheck(event) {
+			if(event.keyCode == 13){
+				fn_Login();
+			}
+		}
 	</script>
 
 
 <body>
-
+<%-- 
 	<div>
 		<form action="" method="post" onsubmit="return false;">
 			<label for="userId">ID</label>
@@ -97,6 +150,14 @@
 				<a href="/user/joinForm.do">회원가입</a>
 			</div>
 	</div>
+  --%>
+	<div class="box">
+		<input type="text" placeholder="ID" name="userId" id="userId" autofocus="autofocus" required="required" />
+		<input type="password" placeholder="Password" name="userPass" id="userPass" autocomplete="current-password" required="required" onkeypress="enterCheck(event)"/>
+		<button onClick="javascript:fn_Login()">Sign in</button>
+		<button onClick="javascript:moveJoin()">join</button>
+	</div>
+
 
 </body>
 </html>
