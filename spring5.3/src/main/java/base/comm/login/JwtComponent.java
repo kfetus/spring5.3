@@ -118,7 +118,8 @@ public class JwtComponent {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw e;
+			state =false;
+//			throw e;
 		}
 		return state;
 	}
