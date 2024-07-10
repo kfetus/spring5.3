@@ -157,11 +157,9 @@ public class UserInfoController {
 		if (loginVo == null) {
 			retMap.put("RESCODE",loginNullErrorCode);
 			retMap.put("RESMSG","로그인 정보가 없습니다.");
-//			retMap = loginNullMap;
 			return retMap;
 		}
 		
-//		String userNo = map.get("userNo");
 		UserVO vo = userInfoService.selectUserInfoOne(String.valueOf(loginVo.getUserNo()));
 		vo.setUserId(StringUtil.asteriskName(vo.getUserId()));//ID 변환.
 		vo.setUserName(StringUtil.asteriskName(vo.getUserName()));//이름 변환.

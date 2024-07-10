@@ -145,6 +145,13 @@ public class ScheduleController {
 		List<HashMap<String,String>> paramList = om.readValue(strList, new TypeReference<List<HashMap<String,String>>>() {});
 		LOGGER.debug("@@@@@@@@@@@ scheduleUpdate =" + paramList.size());
 		LOGGER.debug("@@@@@@@@@@@ scheduleUpdate =" + paramList);
+		
+		if(paramList.size() == 0) {
+			retMap.put("RESCODE",validationNullCode);
+			retMap.put("RESMSG","추가하려는 스케쥴을 입력하세요.");
+			return retMap;
+		}
+		
 		for ( int i = 0 ; i < paramList.size();i++) {
 			paramList.get(i).put("userNo", String.valueOf(loginVo.getUserNo()));
 		}
