@@ -79,6 +79,8 @@
 						$("#detailCategory").text(result.RESULT_DATA.CATEGORY);
 						$("#detailFileName").text(result.RESULT_DATA.FILE_NAME);
 						$("#detailTitle").data("seq",result.RESULT_DATA.SEQ);
+						
+						$("#detailHref").attr("href", "http://localhost:8080/blobFiledown.do?seq="+seq+"&fileSeq="+result.RESULT_DATA.FILE_SEQ)
  					},
 					error : function(request, status, error) {        
 						console.log(error);
@@ -153,7 +155,7 @@
 			<div>제목<span id="detailTitle" data-seq=""></span></div>
 			<div>내용<span id="detailContent"></span></div>
 			<div>카테고리<span id="detailCategory"></span></div> 
-			<div>파일명<span id="detailFileName"></span></div> 
+			<div>파일명<a id="detailHref" href=""><span id="detailFileName"></span></a></div> 
 		</div>
 	</body>
 </html>
