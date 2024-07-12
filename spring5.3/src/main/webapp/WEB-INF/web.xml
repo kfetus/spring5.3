@@ -16,7 +16,23 @@
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>*.do</url-pattern>
 	</filter-mapping>
-    
+
+	<!-- XSS 필터를 타기 전에 multipart request를 일반request로 변경해주기. tomcat 설정 변경. context.xml 파일 <Context> => <Context allowCasualMultipartParsing="true" path="/"> -->
+	<filter>
+		<filter-name>multipartFilter</filter-name>
+		<filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
+		<init-param>
+			<param-name>multipartResolverBeanName</param-name>
+			<param-value>multipartResolver</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>multipartFilter</filter-name>
+		<!-- 전체 url 아래 한개만 하개 변경 url-pattern>*.do</url-pattern-->
+		<url-pattern>/insertBoardOne.do</url-pattern>
+	</filter-mapping>
+
+    <!-- XSS 필터 -->
 	<filter>
 		<filter-name>HTMLTagFilter</filter-name>
 		<filter-class>base.comm.filter.HTMLTagFilter</filter-class>
