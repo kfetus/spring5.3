@@ -92,6 +92,10 @@
 				boardList(1);
 				console.log('document.onload()');
 			})
+			
+			function registBoard() {
+				location.href="/urlToView/board/boardEdit.do";
+			}
 		
 		</script>
 	
@@ -105,8 +109,8 @@
 					<option value="NOTICE">공지</option>
 				</select>
 				<input name="title" id="title" value="" placeholder="제목" onkeyup="if(window.event.keyCode==13){boardList('1')}">
-
 				<button type="button" id="s1" onclick="javascript:boardList('1');"><span><strong>조회</strong></span></button>
+				<button type="button" id="s1" onclick="javascript:registBoard();"><span><strong>등록</strong></span></button>
 			</div>
 		
 	       	<div>
