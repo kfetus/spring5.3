@@ -41,6 +41,11 @@ public class MenuController {
 	@Value("#{errorCode['validation.dup']}")
 	private String validationDuplication;
 	
+	@Value("#{errorCode['noData']}")
+	private String noData ;
+
+	@Value("#{errorCode['success']}")
+	private String successCode ;
 	
 	@RequestMapping(value = "/menuList.do")
 	public ModelAndView menuList(HttpServletRequest req, HttpServletResponse res, @RequestParam HashMap<String, Object> map) throws Exception {
@@ -61,7 +66,7 @@ public class MenuController {
 		int startIdx = 0;
 		
 		if (totalCnt == 0) {
-			mv.addObject("RESCODE", "0000");
+			mv.addObject("RESCODE", noData);
 			mv.addObject("RESMSG", "데이타 없습니다.");
 			mv.addObject("RESULT_TOTAL_CNT", "0");
 		} else {
@@ -84,8 +89,8 @@ public class MenuController {
 			//JSON 배열 데이터로 넘겨줄때 Json으로 변환하지 않으면 html단에서 키값에 " 가 없어서 JSON.parse() 가 에러남. 
 			ObjectMapper mapper = new ObjectMapper();
 			String jsonStr = mapper.writeValueAsString(resultList);
-			mv.addObject("RESCODE", "0000");
-			mv.addObject("RESMSG", "");
+			mv.addObject("RESCODE", successCode);
+			mv.addObject("RESMSG", "정상적으로 처리되었습니다");
 			mv.addObject("RESULT_LIST", resultList);
 			mv.addObject("RESULT_JSON_LIST", jsonStr);
 			mv.addObject("RESULT_TOTAL_CNT", totalCnt);
@@ -111,8 +116,8 @@ public class MenuController {
 		//multi update는 무조건 1건으로 처리되므로 conut가 의미 없다
 		menuService.updateMenuList(list);
 		
-		retMap.put("RESCODE", "0000");
-		retMap.put("RESMSG", "");
+		retMap.put("RESCODE", successCode);
+		retMap.put("RESMSG", "정상적으로 처리되었습니다");
 //		retMap.put("CHANGE_COUNT", resultCount);
 
 		LOGGER.debug("@@@@@@@@@@@ updateMenuList 종료" + retMap);
@@ -134,8 +139,8 @@ public class MenuController {
 			retMap.put("RESCODE", validationDuplication);
 			retMap.put("RESMSG", "중복된 데이터가 있습니다.");
 		} else {
-			retMap.put("RESCODE", "0000");
-			retMap.put("RESMSG", "");
+			retMap.put("RESCODE", successCode);
+			retMap.put("RESMSG", "정상적으로 처리되었습니다");
 		}
 		retMap.put("CHANGE_COUNT", resultCount);
 
@@ -153,8 +158,8 @@ public class MenuController {
 		
 		int resultCount = menuService.deleteMenuList(list);
 		
-		retMap.put("RESCODE", "0000");
-		retMap.put("RESMSG", "");
+		retMap.put("RESCODE", successCode);
+		retMap.put("RESMSG", "정상적으로 처리되었습니다");
 		retMap.put("CHANGE_COUNT", resultCount);
 
 		LOGGER.debug("@@@@@@@@@@@ deleteMenuList 종료" + retMap);

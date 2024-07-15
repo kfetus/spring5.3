@@ -41,17 +41,36 @@
 */
 
 			const ajaxUpload = () => {
+
+				if ($("#srcCategory").val() == '') {
+	                alert("분류가 없어.");
+	                $("#srcCategory").focus();
+	                return;
+	            }
+				if ($("#srcTitle").val() == '') {
+	                alert("제목이 없어.");
+	                $("#srcTitle").focus();
+	                return;
+	            }
+				if ($("#srcContents").val() == '') {
+	                alert("내용이 없어.");
+	                $("#srcContents").focus();
+	                return;
+	            }
+				
 				var formData = new FormData();
 				var inputFile = $("#srcAddFile");
 				var files = inputFile[0].files;
 				
 				console.log(files[0]);
 				
-				var reg = /(.*?)\/(jpg|jpeg|png|bmp)$/;
-				if (!files[0].type.match(reg)) {
-	                alert("확장자는 이미지 확장자만 가능합니다.");
-	                return;
-	            }
+				if( !!files[0] ) {
+					var reg = /(.*?)\/(jpg|jpeg|png|bmp)$/;
+					if (!files[0].type.match(reg)) {
+		                alert("확장자는 이미지 확장자만 가능합니다.");
+		                return;
+		            }
+				}
 
 		        formData.append('category',$("#srcCategory").val());
 		        formData.append('title',$("#srcTitle").val());
@@ -65,8 +84,13 @@
 					processData : false,
 					contentType : false,
 					data : formData,
-					success : function(result){
-						alert(result);
+					success : function(res){
+						if(res.RESCODE == '0000'){
+							location.href = "/urlToView/board/boardList.do";
+						} else {
+							alert(res.RESMSG);
+							
+						}
 					},
 					error : function(request, status, error) {
 						console.log(error);

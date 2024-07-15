@@ -45,9 +45,18 @@ public class BoardController {
 	@Value("#{msg['msg.hi']}")
 	public String msghi;
 	
+	@Value("#{errorCode['success']}")
+	private String successCode ;
+	
 	@Value("#{errorCode['login.infoNullCODE']}")
 	private String loginNullErrorCode ;
 
+	@Value("#{errorCode['biz.nomalError']}")
+	private String bizNomalError;
+
+	@Value("#{errorCode['biz.noAuthority']}")
+	private String bizNoAuthority;
+	
 	@RequestMapping(value = "/boardList.do")
 	public Map<String, Object> boardList(@RequestBody HashMap<String, Object> map) throws Exception {
 		LOGGER.debug("@@@@@@@@@@@ boardList 시작=" + map);
@@ -63,7 +72,7 @@ public class BoardController {
 		int startIdx = 0;
 		
 		if (totalCnt == 0) {
-			retMap.put("RESCODE", "0000");
+			retMap.put("RESCODE", successCode);
 			retMap.put("RESMSG", "데이타 없습니다.");
 			retMap.put("RESULT_SIZE", "0");
 			return retMap;
@@ -95,7 +104,7 @@ public class BoardController {
 				row.put("BODY_TEXT", bodyText);
 			}
 */			
-			retMap.put("RESCODE", "0000");
+			retMap.put("RESCODE", successCode);
 			retMap.put("RESMSG", "");
 			retMap.put("RESULT_SIZE", resultList.size());
 			retMap.put("RESULT_LIST", resultList);
@@ -116,7 +125,7 @@ public class BoardController {
 		HashMap<String, String> resultData = boardService.selectBoardOne(seq);
 		List<HashMap<String, String>> resultList = boardService.selectBoardOneCommemtList(seq);
 		
-		retMap.put("RESCODE", "0000");
+		retMap.put("RESCODE", successCode);
 		retMap.put("RESMSG", "");
 		retMap.put("RESULT_DATA", resultData);
 		retMap.put("RESULT_LIST", resultList);
@@ -183,7 +192,7 @@ public class BoardController {
 		Map<String, Object> retMap = new HashMap<String, Object>();
 
 
-		retMap.put("RESCODE", "0000");
+		retMap.put("RESCODE", successCode);
 		retMap.put("RESMSG", "");
 
 		LOGGER.debug("@@@@@@@@@@@ insertBoardOne 종료" + retMap);
@@ -200,7 +209,7 @@ public class BoardController {
 		
 		boolean checkState = FileUtil.checkUploadFileExtension(multiFiles);
 		if(!checkState) {
-			retMap.put("RESCODE", "9997");
+			retMap.put("RESCODE", bizNomalError);
 			retMap.put("RESMSG", "잘못된 파일을 업로드 하였습니다."+multiFiles.getOriginalFilename());
 			LOGGER.debug("@@@@@@@@@@@ insertBoardOne 에러발생=" + retMap);
 			return retMap;
@@ -254,8 +263,8 @@ public class BoardController {
 		
 		LOGGER.debug("@@@@@@@@@@@ insertBoardOne result" + result);
 */
-		retMap.put("RESCODE", "0000");
-		retMap.put("RESMSG", "");
+		retMap.put("RESCODE", successCode);
+		retMap.put("RESMSG", "게시물을 등록하였습니다.");
 		retMap.put("RESULT_CNT", result);
 
 		LOGGER.debug("@@@@@@@@@@@ insertBoardOne 종료" + retMap);
@@ -282,14 +291,14 @@ public class BoardController {
 		int tempUserNo = Integer.parseInt(userNo);
 
 		if (tempUserNo != vo.getUserNo()) {
-			retMap.put("RESCODE", "9997");
+			retMap.put("RESCODE", bizNoAuthority);
 			retMap.put("RESMSG", "수정 권한이 없습니다.");
 			return retMap;
 		}
 
 		int result = boardService.updateBoardOne(map);
 
-		retMap.put("RESCODE", "0000");
+		retMap.put("RESCODE", successCode);
 		retMap.put("RESMSG", "");
 		retMap.put("RESULT_CNT", result);
 
@@ -348,14 +357,14 @@ public class BoardController {
 		String boardOwnerNo = String.valueOf(resultData.get("CNG_USER_NO"));
 		int tempUserNo = Integer.parseInt(boardOwnerNo);
 		if (tempUserNo != vo.getUserNo()) {
-			retMap.put("RESCODE", "9997");
+			retMap.put("RESCODE", bizNoAuthority);
 			retMap.put("RESMSG", "삭제 권한이 없습니다.");
 			return retMap;
 		}
 		
 		int result = boardService.deleteBoardOne(seq);
 
-		retMap.put("RESCODE", "0000");
+		retMap.put("RESCODE", successCode);
 		retMap.put("RESMSG", "");
 		retMap.put("RESULT_CNT", result);
 
@@ -381,7 +390,7 @@ public class BoardController {
 		
 		
 		int result = boardService.insertBoardOne(map);
-		retMap.put("RESCODE", "0000");
+		retMap.put("RESCODE", successCode);
 		retMap.put("RESMSG", "");
 		retMap.put("RESULT_CNT", result);
 

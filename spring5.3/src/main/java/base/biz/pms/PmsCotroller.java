@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -35,6 +36,15 @@ public class PmsCotroller {
 	@Autowired
 	private PmsServiceImpl pmsService;
 
+	@Value("#{errorCode['noData']}")
+	private String noData ;
+
+	@Value("#{errorCode['success']}")
+	private String successCode ;
+
+	@Value("#{errorCode['login.infoNullCODE']}")
+	private String loginNullErrorCode ;
+	
 	/**
 	 * 일정관리
 	 * @param request
@@ -49,7 +59,7 @@ public class PmsCotroller {
 		ModelAndView mv = new ModelAndView();
 		UserVO vo = sessionManager.getUserInfo(req);
 		if (vo == null) {
-			throw new BaseException("로그인 정보가 없습니다.","9990");
+			throw new BaseException("로그인 정보가 없습니다.", loginNullErrorCode);
 		}		
 		
 		mv.addObject("userNm", vo.getUserName());
@@ -71,7 +81,7 @@ public class PmsCotroller {
 		int startIdx = 0;
 		
 		if (totalCnt == 0) {
-			retMap.put("RESCODE", "0000");
+			retMap.put("RESCODE", noData);
 			retMap.put("RESMSG", "데이타 없습니다.");
 			retMap.put("RESULT_SIZE", "0");
 		} else {
@@ -93,8 +103,8 @@ public class PmsCotroller {
 			List<HashMap<String, String>> resultList = pmsService.selectPmsList(map);
 
 			
-			retMap.put("RESCODE", "0000");
-			retMap.put("RESMSG", "");
+			retMap.put("RESCODE", successCode);
+			retMap.put("RESMSG", "정상적으로 처리되었습니다");
 			retMap.put("RESULT_SIZE", resultList.size());
 			retMap.put("RESULT_LIST", resultList);
 			retMap.put("RESULT_TOTAL_CNT", totalCnt);
@@ -113,8 +123,8 @@ public class PmsCotroller {
 		
 		int resultCount = pmsService.changePmsList(list);
 		
-		retMap.put("RESCODE", "0000");
-		retMap.put("RESMSG", "");
+		retMap.put("RESCODE", successCode);
+		retMap.put("RESMSG", "정상적으로 처리되었습니다");
 		retMap.put("CHANGE_COUNT", resultCount);
 
 		LOGGER.debug("@@@@@@@@@@@ changePmsList 종료" + retMap);
@@ -129,8 +139,8 @@ public class PmsCotroller {
 		
 		int resultCount = pmsService.deletePmsList(list);
 		
-		retMap.put("RESCODE", "0000");
-		retMap.put("RESMSG", "");
+		retMap.put("RESCODE", successCode);
+		retMap.put("RESMSG", "정상적으로 처리되었습니다");
 		retMap.put("CHANGE_COUNT", resultCount);
 
 		LOGGER.debug("@@@@@@@@@@@ changePmsList 종료" + retMap);

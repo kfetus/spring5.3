@@ -7,6 +7,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,11 @@ public class CodeController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CodeController.class);
 	
+	@Value("#{errorCode['noData']}")
+	private String noData ;
+
+	@Value("#{errorCode['success']}")
+	private String successCode ;
 	
 	@Autowired
 	private CodeServiceImpl codeService;
@@ -30,13 +36,13 @@ public class CodeController {
 		List<HashMap<String,String>> resultList = codeService.selectCodeList(map);
 
 		if( resultList.size() == 0) {
-			retMap.put("RESCODE","0000");
+			retMap.put("RESCODE",noData);
 			retMap.put("RESMSG","데이타 없습니다.");
 			retMap.put("RESULT_SIZE","0");
 			return retMap;
 		} else {
-			retMap.put("RESCODE","0000");
-			retMap.put("RESMSG","");
+			retMap.put("RESCODE",successCode);
+			retMap.put("RESMSG","정상적으로 처리되었습니다.");
 			retMap.put("RESULT_SIZE",resultList.size());
 			retMap.put("RESULT_LIST",resultList);
 		}

@@ -38,6 +38,9 @@ public class UserInfoController {
 	
 	@Value("#{errorCode['validation.null']}")
 	private String validationNullCode;
+
+	@Value("#{errorCode['success']}")
+	private String successCode ;
 	
 	/**
 	 * 회원가입 폼
@@ -91,8 +94,8 @@ public class UserInfoController {
 		
 		int result = userInfoService.checkDupIdOne(vo);
 		
-		retMap.put("RESCODE","0000");
-		retMap.put("RESMSG","");
+		retMap.put("RESCODE",successCode);
+		retMap.put("RESMSG","정상적으로 처리되었습니다");
 		retMap.put("RESULT_STATE",result == 0 ? "FALSE" : "TRUE");
 
 		LOGGER.debug("@@@@@@@@@@@ checkDupIdOne 종료"+retMap);
@@ -139,8 +142,8 @@ public class UserInfoController {
 		LOGGER.debug("@@@@@@@@@@@ insertUserInfoOne insert data=" + vo.toString());
 		int result = userInfoService.insertUserInfoOne(vo);
 
-		retMap.put("RESCODE","0000");
-		retMap.put("RESMSG","");
+		retMap.put("RESCODE",successCode);
+		retMap.put("RESMSG","정상적으로 처리되었습니다");
 		retMap.put("RESULT_CNT",result);
 
 		LOGGER.debug("@@@@@@@@@@@ insertBoardOne 종료"+retMap);
@@ -165,8 +168,8 @@ public class UserInfoController {
 		vo.setUserName(StringUtil.asteriskName(vo.getUserName()));//이름 변환.
 		vo.setHpNo(StringUtil.asteriskHP(vo.getHpNo()));//HP 변환
 		
-		retMap.put("RESCODE","0000");
-		retMap.put("RESMSG","");
+		retMap.put("RESCODE",successCode);
+		retMap.put("RESMSG","정상적으로 처리되었습니다");
 		retMap.put("RESULT_DATA",vo);
 
 		LOGGER.debug("@@@@@@@@@@@ selectBoardOne 종료"+retMap);
@@ -191,8 +194,8 @@ public class UserInfoController {
 		vo.setUserIp(HttpUtil.getClientIp(req));
 		int result = userInfoService.updateUserInfoOne(vo);
 
-		retMap.put("RESCODE","0000");
-		retMap.put("RESMSG","");
+		retMap.put("RESCODE",successCode);
+		retMap.put("RESMSG","정상적으로 처리되었습니다");
 		retMap.put("RESULT_CNT",result);
 
 		LOGGER.debug("@@@@@@@@@@@ updateBoardOne 종료"+retMap);
@@ -214,8 +217,8 @@ public class UserInfoController {
 
 		int result = userInfoService.deleteUserInfoOne(vo.getUserNo());
 
-		retMap.put("RESCODE","0000");
-		retMap.put("RESMSG","");
+		retMap.put("RESCODE",successCode);
+		retMap.put("RESMSG","정상적으로 처리되었습니다");
 		retMap.put("RESULT_CNT",result);
 
 		LOGGER.debug("@@@@@@@@@@@ updateBoardOne 종료"+retMap);

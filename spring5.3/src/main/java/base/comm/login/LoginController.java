@@ -44,6 +44,11 @@ public class LoginController {
 	@Value("#{errorCode['validation.null']}")
 	private String validationNullCode;
 	
+	@Value("#{errorCode['biz.noUser']}")
+	private String bizNoUser;
+
+	@Value("#{errorCode['success']}")
+	private String successCode;	
 	
 	@RequestMapping(value = "/restLogin.do")
 	public Map<String,Object> restLogin(@RequestBody  UserVO vo, HttpServletRequest req, HttpServletResponse res) throws Exception {
@@ -65,14 +70,14 @@ public class LoginController {
 		LOGGER.debug("@@@@@@@@@@@ restLogin after="+vo2);
 		
 		if( vo2 == null) {
-			retMap.put("RESCODE","0001");
+			retMap.put("RESCODE",bizNoUser);
 			retMap.put("RESMSG","사용자가 없습니다.");
 			return retMap;
 		} else {
 			String sha256pass = Sha256Crypto.encSah256(vo.getUserPass(), vo2.getSalt());
 			if(vo2.getUserPass().equals(sha256pass)) {
-				retMap.put("RESCODE","0000");
-				retMap.put("RESMSG","");
+				retMap.put("RESCODE",successCode);
+				retMap.put("RESMSG","정상적으로 처리되었습니다.");
 //				vo.setUserIp((null != req.getHeader("X-FORWARDED-FOR")) ? req.getHeader("X-FORWARDED-FOR") : req.getRemoteAddr());
 				vo2.setUserPass("");
 				vo2.setSalt("");
@@ -93,7 +98,7 @@ public class LoginController {
 				retMap.put("token", token);
 				retMap.put("refreshToken", refreshToken);
 			} else {
-				retMap.put("RESCODE","0001");
+				retMap.put("RESCODE",bizNoUser);
 				retMap.put("RESMSG","사용자가 없습니다.");//패스워드가 없습니다가 맞으나 너무 많은 정보를 줄 필요가 없음. 해킹 우려
 				return retMap;
 			}
@@ -118,8 +123,8 @@ public class LoginController {
 		LOGGER.debug("@@@@@@@@@@@ checkUser 시작=");
 		
 		Map<String , Object> retMap = new HashMap<String,Object>();
-		retMap.put("RESCODE","0000");
-		retMap.put("RESMSG","");
+		retMap.put("RESCODE",successCode);
+		retMap.put("RESMSG","정상적으로 처리되었습니다.");
 				
 		UserVO vo = (UserVO)sessionManager.getUserInfo(req);
 		if( vo != null) {

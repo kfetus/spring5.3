@@ -35,6 +35,9 @@ public class ScheduleController {
 	
 	@Value("#{errorCode['validation.null']}")
 	private String validationNullCode;
+
+	@Value("#{errorCode['success']}")
+	private String successCode ;
 	
 	@Autowired
 	private SessionManager sessionManager;
@@ -72,8 +75,8 @@ public class ScheduleController {
 
 		List<HashMap<String,String>> resultList = scheduleService.selectScheduleList(paramMap);
 
-		retMap.put("RESCODE","0000");
-		retMap.put("RESMSG","");
+		retMap.put("RESCODE",successCode);
+		retMap.put("RESMSG","정상적으로 처리되었습니다");
 		retMap.put("RESULT_LIST",resultList);
 		retMap.put("YYYYMMDD",yyyymmdd.substring(0, 4)+"-"+yyyymmdd.substring(4, 6));
 
@@ -109,8 +112,8 @@ public class ScheduleController {
 		
 		List<HashMap<String,String>> resultList = scheduleService.selectScheduleOneDay(paramMap);
 
-		retMap.put("RESCODE","0000");
-		retMap.put("RESMSG","");
+		retMap.put("RESCODE",successCode);
+		retMap.put("RESMSG","정상적으로 처리되었습니다");
 		retMap.put("RESULT_LIST",resultList);
 
 		LOGGER.debug("@@@@@@@@@@@ selectScheduleOneDayList 종료"+ retMap);
@@ -163,8 +166,8 @@ public class ScheduleController {
 		
 		int result = scheduleService.insertSchedule(paramMap);
 
-		retMap.put("RESCODE","0000");
-		retMap.put("RESMSG","");
+		retMap.put("RESCODE",successCode);
+		retMap.put("RESMSG","정상적으로 처리되었습니다");
 		retMap.put("RESULT_DATA",result);
 
 		LOGGER.debug("@@@@@@@@@@@ scheduleUpdate 종료"+ retMap);

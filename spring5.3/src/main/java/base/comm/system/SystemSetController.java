@@ -7,6 +7,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,9 @@ public class SystemSetController {
 	
 	@Autowired
 	private SystemSetServiceImpl systemSetService;
+
+	@Value("#{errorCode['success']}")
+	private String successCode ;
 	
 	@RequestMapping(value = "/menuList.do")
 	public Map<String,Object> menuList(@RequestBody  HashMap<String,String> map) throws Exception {
@@ -32,8 +36,8 @@ public class SystemSetController {
 		
 		List<HashMap<String,String>> resultList = systemSetService.selectMenuList(map);
 
-		retMap.put("RESCODE","0000");
-		retMap.put("RESMSG","");
+		retMap.put("RESCODE",successCode);
+		retMap.put("RESMSG","정상적으로 처리되었습니다.");
 		retMap.put("RESULT_SIZE",resultList.size());
 		retMap.put("RESULT_LIST",resultList);
 

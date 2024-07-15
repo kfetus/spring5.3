@@ -135,6 +135,7 @@
 	       				<th align="center">등록일</th>
 	       				<th align="center">변경일</th>
 	       			</tr>
+<%--	       			
 	       			<c:forEach var="result" items="${list}" varStatus="status">
 	           			<tr>
 	           				<td><c:out value="${result.CODE_TYPE}"/></td>
@@ -147,6 +148,7 @@
 	           				<td><c:out value="${result.CODE_NAME}"/></td>
 	           			</tr>
 	       			</c:forEach>
+ --%>
 	       		</table>
 	       	</div>
 	       	<div id="paging" ></div>
