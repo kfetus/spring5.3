@@ -14,9 +14,9 @@
 
 			const ajaxUpload = () => {
 
-				if ($("#srcCategory").val() == '') {
-	                alert("분류가 없어.");
-	                $("#srcCategory").focus();
+				if ($("#srcSheetNm").val() == '') {
+	                alert("Sheet명이 없어.");
+	                $("#srcSheetNm").focus();
 	                return;
 	            }
 				
@@ -39,11 +39,12 @@
 				}
 
 				formData.append("multiFiles", files[0]);
+				formData.append('srcSheetNm',$("#srcSheetNm").val());
 				
 				console.log(formData);
 				$.ajax({
 					type : 'post',
-					url: '/excelUploadSample.do',
+					url: '/upload/excelUploadSample.do',
 					processData : false,
 					contentType : false,
 					data : formData,

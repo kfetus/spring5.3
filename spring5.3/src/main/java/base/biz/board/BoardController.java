@@ -166,7 +166,7 @@ public class BoardController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/insertBoardOne1.do")
+	@RequestMapping(value = "/upload/insertBoardOne1.do")
 	public Map<String, Object> insertBoardOne1(@RequestParam String title,@RequestParam String bodyText,@RequestParam String category
 			,@RequestPart MultipartFile[] multiFiles, HttpServletRequest req) throws Exception {
 		LOGGER.debug("@@@@@@@@@@@ insertBoardOne 시작title=" + title);
@@ -201,7 +201,7 @@ public class BoardController {
 	
 	
 	//vue든 react 든 client에서 파일 업로드시 new FormData() 선언해서 append 로 값을 할당해서 보내는데 이렇게 받아야 함. RequestBody로는 받지 못함.
-	@RequestMapping(value = "/insertBoardOne.do")
+	@RequestMapping(value = "/upload/insertBoardOne.do")
 	public Map<String, Object> insertBoardOne(@RequestParam String title,@RequestParam String bodyText,@RequestParam String category
 			,@RequestPart(required = false)  MultipartFile multiFiles, HttpServletRequest req) throws Exception {
 		LOGGER.debug("@@@@@@@@@@@ insertBoardOne 시작 @@@@@@@@@@@");

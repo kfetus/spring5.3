@@ -80,7 +80,7 @@
 				console.log(formData);
 				$.ajax({
 					type : 'post',
-					url: '/insertBoardOne.do',
+					url: '/upload/insertBoardOne.do',
 					processData : false,
 					contentType : false,
 					data : formData,

@@ -103,8 +103,8 @@ public class SampleController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/excelUploadSample.do")
-	public Map<String, Object> excelUploadSample(@RequestPart(required = false)  MultipartFile multiFiles, HttpServletRequest req) throws Exception {
+	@RequestMapping(value = "/upload/excelUploadSample.do")
+	public Map<String, Object> excelUploadSample(@RequestParam String srcSheetNm, @RequestPart(required = false) MultipartFile multiFiles, HttpServletRequest req) throws Exception {
 		LOGGER.debug("@@@@@@@@@@@ excelUploadSample 시작 @@@@@@@@@@@");
 		Map<String, Object> retMap = new HashMap<String, Object>();
 		
@@ -128,7 +128,7 @@ public class SampleController {
 		//1번 방식
 		File file = new File(multiFiles.getOriginalFilename());
 		multiFiles.transferTo(file);
-		ExcelUtil.readExcel(multiFiles, "sheet1");
+		ExcelUtil.readExcel(multiFiles, srcSheetNm);
 
 		//2번 방식
 //		File file = new File("C:/Users/PMG/Desktop/down/"+multiFiles.getOriginalFilename());
