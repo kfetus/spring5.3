@@ -1,7 +1,9 @@
 package base.biz.sample;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,11 +11,18 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import base.comm.util.ExcelUtil;
+import base.comm.util.FileUtil;
 
 /**
  * 기본 테스트용 클래스
@@ -28,6 +37,12 @@ public class SampleController {
 	@Autowired
 	private SampleServiceImpl sampleService;
 
+	@Value("#{errorCode['success']}")
+	private String successCode ;
+	
+	@Value("#{errorCode['biz.nomalError']}")
+	private String bizNomalError;	
+	
 	/**
 	 * SockJs 방식의 브라우저용 websocket 테스트 샘플
 	 * @param request
@@ -86,4 +101,46 @@ public class SampleController {
 		mv.setViewName(subPath+"/"+viewFileName);
 		return mv;
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/excelUploadSample.do")
+	public Map<String, Object> excelUploadSample(@RequestPart(required = false)  MultipartFile multiFiles, HttpServletRequest req) throws Exception {
+		LOGGER.debug("@@@@@@@@@@@ excelUploadSample 시작 @@@@@@@@@@@");
+		Map<String, Object> retMap = new HashMap<String, Object>();
+		
+		boolean checkState = FileUtil.checkUploadFileExtension(multiFiles);
+		if(!checkState) {
+			retMap.put("RESCODE", bizNomalError);
+			retMap.put("RESMSG", "잘못된 파일을 업로드 하였습니다."+multiFiles.getOriginalFilename());
+			LOGGER.debug("@@@@@@@@@@@ excelUploadSample 에러발생=" + retMap);
+			return retMap;
+		}
+
+		/**
+		 * Excel File Parsing은 두가지 방식이 있음. 
+		 * 1. multiFiles.getInputStream()
+		 * 2. File
+		 * 1번은 업로드 파일 그대로 parsing. 2번은 File을 Disk에 생성해서 진행. 어떤게 메모리 최적화를 해서
+		 * 서버 다운을 막을지는 모르겠음
+		 */
+		
+		LOGGER.debug("@@@@@@@@@@@ excelUploadSample file명=" + multiFiles.getOriginalFilename());
+		//1번 방식
+		File file = new File(multiFiles.getOriginalFilename());
+		multiFiles.transferTo(file);
+		ExcelUtil.readExcel(multiFiles, "sheet1");
+
+		//2번 방식
+//		File file = new File("C:/Users/PMG/Desktop/down/"+multiFiles.getOriginalFilename());
+//		ExcelUtil.readExcel(file, "sheet1");
+
+		file.delete();
+		retMap.put("RESCODE", successCode);
+		retMap.put("RESMSG", "업로드 완료.");
+
+		LOGGER.debug("@@@@@@@@@@@ excelUploadSample 종료" + retMap);
+		return retMap;
+	}
+	
+	
 }

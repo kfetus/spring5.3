@@ -105,6 +105,9 @@
 			<a href="<c:url value="/user/userUpdateForm.do" />">내정보수정</a>
 		</li>
 		<li>
+			<a href="<c:url value="/urlToView/sample/excelUpload.do" />">엑셀업로드</a>
+		</li>
+		<li>
 			<button onClick="javascript:testRest()">restError테스트</button>
 		</li>
 	</ul>

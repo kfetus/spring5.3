@@ -30,6 +30,7 @@
 		<filter-name>multipartFilter</filter-name>
 		<!-- 전체 url 아래 한개만 하개 변경 url-pattern>*.do</url-pattern-->
 		<url-pattern>/insertBoardOne.do</url-pattern>
+		<url-pattern>/excelUploadSample.do</url-pattern>
 	</filter-mapping>
 
     <!-- XSS 필터 -->
