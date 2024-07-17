@@ -128,11 +128,11 @@ public class SampleController {
 		//1번 방식
 		File file = new File(multiFiles.getOriginalFilename());
 		multiFiles.transferTo(file);
-		ExcelUtil.readExcel(multiFiles, srcSheetNm);
+		ExcelUtil.readExcelMultiPartFile(multiFiles, srcSheetNm);
 
 		//2번 방식
 //		File file = new File("C:/Users/PMG/Desktop/down/"+multiFiles.getOriginalFilename());
-//		ExcelUtil.readExcel(file, "sheet1");
+//		ExcelUtil.readExcelFile(file, "sheet1");
 
 		file.delete();
 		retMap.put("RESCODE", successCode);
