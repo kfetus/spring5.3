@@ -23,4 +23,10 @@ public class SampleServiceImpl {
 		List<HashMap<String,String>> result = sampleMapper.selectList(map);
 		return result;
 	}
+
+	public int insertUploadTestList(List<HashMap<String, String>> list) throws Exception {
+		LOGGER.debug("@@@@@@@@@@@ insertUploadTestList 시작=" +list);
+		int count = sampleMapper.insertUploadTestList(list);
+		return count;
+	}
 }

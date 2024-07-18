@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import base.comm.util.ExcelUtil;
 import base.comm.util.FileUtil;
+import base.comm.vo.CommonFBVO;
 
 /**
  * 기본 테스트용 클래스
@@ -104,16 +105,22 @@ public class SampleController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/upload/excelUploadSample.do")
-	public Map<String, Object> excelUploadSample(@RequestParam String srcSheetNm, @RequestPart(required = false) MultipartFile multiFiles, HttpServletRequest req) throws Exception {
+	public CommonFBVO excelUploadSample(@RequestParam String srcSheetNm, @RequestPart(required = false) MultipartFile multiFiles, HttpServletRequest req) throws Exception {
 		LOGGER.debug("@@@@@@@@@@@ excelUploadSample 시작 @@@@@@@@@@@");
 		Map<String, Object> retMap = new HashMap<String, Object>();
+
+		CommonFBVO frontBackVo = new CommonFBVO();
 		
 		boolean checkState = FileUtil.checkUploadFileExtension(multiFiles);
 		if(!checkState) {
-			retMap.put("RESCODE", bizNomalError);
-			retMap.put("RESMSG", "잘못된 파일을 업로드 하였습니다."+multiFiles.getOriginalFilename());
-			LOGGER.debug("@@@@@@@@@@@ excelUploadSample 에러발생=" + retMap);
-			return retMap;
+			frontBackVo.setRESCODE(bizNomalError);
+			frontBackVo.setRESMSG("잘못된 파일을 업로드 하였습니다."+multiFiles.getOriginalFilename());
+			return frontBackVo;
+			
+//			retMap.put("RESCODE", bizNomalError);
+//			retMap.put("RESMSG", "잘못된 파일을 업로드 하였습니다."+multiFiles.getOriginalFilename());
+//			LOGGER.debug("@@@@@@@@@@@ excelUploadSample 에러발생=" + retMap);
+//			return retMap;
 		}
 
 		/**
@@ -128,18 +135,24 @@ public class SampleController {
 		//1번 방식
 		File file = new File(multiFiles.getOriginalFilename());
 		multiFiles.transferTo(file);
-		ExcelUtil.readExcelMultiPartFile(multiFiles, srcSheetNm);
+		List<HashMap<String, String>> dataList = ExcelUtil.readExcelMultiPartFile(multiFiles, srcSheetNm);
+		sampleService.insertUploadTestList(dataList);
 
 		//2번 방식
 //		File file = new File("C:/Users/PMG/Desktop/down/"+multiFiles.getOriginalFilename());
 //		ExcelUtil.readExcelFile(file, "sheet1");
-
-		file.delete();
-		retMap.put("RESCODE", successCode);
-		retMap.put("RESMSG", "업로드 완료.");
-
+//		file.delete();
+		
+		frontBackVo.setRESCODE(successCode);
+		frontBackVo.setRESMSG("업로드 완료");
 		LOGGER.debug("@@@@@@@@@@@ excelUploadSample 종료" + retMap);
-		return retMap;
+		return frontBackVo;
+		
+//		retMap.put("RESCODE", successCode);
+//		retMap.put("RESMSG", "업로드 완료.");
+//
+//		LOGGER.debug("@@@@@@@@@@@ excelUploadSample 종료" + retMap);
+//		return retMap;
 	}
 	
 	

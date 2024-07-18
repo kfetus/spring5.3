@@ -1,12 +1,22 @@
 package base.comm.util;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -36,7 +46,8 @@ public class ExcelUtil {
 	}
 
 	/**
-	 * Excel Upload시에 List<HashMap<String, String>> 로 반환
+	 * Excel Upload시에 List<HashMap<String, String>> 로 반환.
+	 * 엑셀파일 첫째 줄은 헤더부, 둘째줄부터 데이터 부임.
 	 * 
 	 * @param workbook XSSFWorkbook
 	 * @param sheetName String 읽어들일 Excel Sheet 명
@@ -63,7 +74,7 @@ public class ExcelUtil {
 					String value = "";
 
 					if (cell == null) {
-						LOGGER.debug(null);
+//						LOGGER.debug(null);
 					} else {
 						switch (cell.getCellType()) {
 						case FORMULA:
@@ -102,13 +113,14 @@ public class ExcelUtil {
 					} else {
 						excelDataMap.put(keyList.get(nCol), value);
 					}
-					LOGGER.debug(value);
+//					LOGGER.debug(value);
 				}
 				if (nRow != 0) {
 					excelDataList.add(excelDataMap);
 				}
 			}
-			LOGGER.debug("==================================== LOOP END" + excelDataList);
+//			LOGGER.debug("==================================== keyList" + keyList);
+//			LOGGER.debug("==================================== LOOP END" + excelDataList);
 		} finally {
 			workbook.close();
 		}
@@ -116,23 +128,103 @@ public class ExcelUtil {
 		return excelDataList;
 	}
 
-	
-	public static void main(String[] args) {
-		String excelFullPath = "C:/Users/PMG/Desktop/testData.xlsx";
-		File file = new File(excelFullPath);
-		try {
-			String[] keyArrau = { "SEQ", "CODE", "MENU_DEPTH_1", "MENU_DEPTH_2", "MENU_DEPTH_3", "MENU_DEPTH_4",
-					"PROG_FILE_NM", "MENU_NAME", "STATE", "MASTER_NAME", "START_DT", "CNG_DT" };
-
-			List<HashMap<String, String>> retList = readExcelFile(file, "sheet1");
-			for (int i = 0; i < retList.size(); i++) {
-				for (String key : keyArrau) {
-					System.out.print(key + "=" + retList.get(i).get(key) + " ");
-				}
-				System.out.println();
+	/**
+	 * 엑셀 파일 생성
+	 * 
+	 * @param keySet 첫째줄 헤더 부
+	 * @param data 둘째줄 부터 시작되는 데이타 부
+	 * @param filePath 생성할 파일 경로
+	 * @throws Exception
+	 */
+	public static void makeExcel(List<String> keySet, List<HashMap<String,String>> data, String filePath) throws Exception {
+		XSSFWorkbook workBook = new XSSFWorkbook(); 
+		
+		CellStyle defaultStyle = workBook.createCellStyle();
+		defaultStyle.setBorderTop(BorderStyle.THIN);
+		defaultStyle.setBorderLeft(BorderStyle.THIN);
+		defaultStyle.setBorderRight(BorderStyle.THIN);
+		defaultStyle.setBorderBottom(BorderStyle.THIN);
+		defaultStyle.setAlignment(HorizontalAlignment.CENTER);
+		defaultStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+		
+		Sheet sheet = workBook.createSheet();
+		sheet.setDefaultRowHeightInPoints(30);
+		
+		Row headRow = sheet.createRow(0);
+		for (int i = 0 ; i < keySet.size() ; i++) {
+			Cell cell = headRow.createCell(i);
+			cell.setCellStyle(defaultStyle);
+			cell.setCellValue(keySet.get(i));
+			sheet.setColumnWidth(i, 3000);
+		}
+		
+		
+		for (int i = 0 ; i < data.size() ; i++) {
+			Row row = sheet.createRow(i+1);
+			HashMap<String,String> rowData = data.get(i);
+			for (int j = 0 ; j < keySet.size() ; j++) {
+				
+				Cell cell = row.createCell(j);
+				cell.setCellStyle(defaultStyle);
+				cell.setCellValue(rowData.get(keySet.get(j)));
+				sheet.setColumnWidth(j, 3000);
 			}
+		}
+		
+		FileOutputStream fileOut = null;
+		try {
+			File xlsFile = new File(filePath);
+			fileOut = new FileOutputStream(xlsFile);
+			workBook.write(fileOut);
+		} catch (Exception e) {
+		    e.printStackTrace();
+		} finally {
+		    workBook.close();
+			fileOut.close();
+		}
+	}
+
+	public static void main(String[] args) {
+		String excelFullPath = "C:/Users/PMG/Desktop/sampleData.xlsx";
+		File file = new File(excelFullPath);
+		
+		try {
+			List<HashMap<String, String>> retList = readExcelFile(file, "sample");
+			System.out.println(retList);
+
+			List<String> keyList = Arrays.asList("goodsno", "goodsnm", "sellYn", "goodscd", "maker", "keyword", "strprice", "shortdesc", "coupon", "coupon_ea", "coupon_usecnt", "coupon_date", "regdt");
+			
+			for(HashMap<String, String> rowMap : retList) {
+				if("".equals( rowMap.get("maker").trim()) ) {
+					rowMap.put("maker", "NIDAS");
+				}
+				if("".equals( rowMap.get("goodscd").trim()) ) {
+					rowMap.put("goodscd", rowMap.get("goodsnm"));
+				}
+				SecureRandom random = SecureRandom.getInstanceStrong();
+				rowMap.put("coupon_usecnt", random.nextInt(5)+"");
+			}
+			
+			makeExcel(keyList,retList,"C:/Users/PMG/Desktop/sampleData22.xlsx");
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+//		String excelFullPath = "C:/Users/PMG/Desktop/testData.xlsx";
+//		try {
+//			String[] keyArrau = { "SEQ", "CODE", "MENU_DEPTH_1", "MENU_DEPTH_2", "MENU_DEPTH_3", "MENU_DEPTH_4",
+//					"PROG_FILE_NM", "MENU_NAME", "STATE", "MASTER_NAME", "START_DT", "CNG_DT" };
+//
+//			List<HashMap<String, String>> retList = readExcelFile(file, "sheet1");
+//			for (int i = 0; i < retList.size(); i++) {
+//				for (String key : keyArrau) {
+//					System.out.print(key + "=" + retList.get(i).get(key) + " ");
+//				}
+//				System.out.println();
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 }

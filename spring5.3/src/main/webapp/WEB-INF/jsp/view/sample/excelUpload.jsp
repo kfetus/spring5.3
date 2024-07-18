@@ -71,7 +71,7 @@
         <div>
             <div>
                 <label for="srcSheetNm" style="vertical-align: top;">업로드 sheet명</label>
-                <input name="srcSheetNm" id="srcSheetNm" placeholder="Sheet명입력" />
+                <input name="srcSheetNm" id="srcSheetNm" placeholder="Sheet명입력" value="sheet1"/>
             </div>
             <div style="padding: 10px;"></div>
             <div>

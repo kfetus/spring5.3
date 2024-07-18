@@ -9,4 +9,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface SampleMapper {
 
 	public List<HashMap<String,String>> selectList(HashMap<String,Object> map);
+	
+	public int insertUploadTestList(List<HashMap<String, String>> list);
 }

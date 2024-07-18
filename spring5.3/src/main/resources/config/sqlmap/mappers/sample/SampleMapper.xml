@@ -15,5 +15,41 @@
 		 WHERE CODE_TYPE= 'BOARD'
 		 ORDER BY ORDER_NUM
     </select>
+
+	<!-- goodsno AUTO_INCREMENT. goodsno 컬럼이 autoIncrement로 DB에 설정되어 있을 경우 자동 증가하면서 insert -->	
+	<insert id="insertUploadTestList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="SEQ">
+		INSERT INTO UPLOAD_TEST ( /* SampleMapper.insertUploadTestList excel Upload TEST insert */
+<!-- 					GOODS_NO, --> 
+					GOODS_NM
+					, SELL_YN
+					, GOODS_CD
+					, MAKER
+					, KEYWORD
+					, STR_PRICE
+					, SHORT_DESC
+					, COUPON
+					, COUPON_EA
+					, COUPON_USECNT
+					, COUPON_DATE
+					, REG_DT
+				) VALUES
+			<foreach collection="list" item="rowData" separator=",">
+				(
+<!-- 					#{rowData.GOODS_NM}, --> 
+					#{rowData.GOODS_NM}
+					, #{rowData.SELL_YN}
+					, #{rowData.GOODS_CD}
+					, #{rowData.MAKER}
+					, #{rowData.KEYWORD}
+					, #{rowData.STR_PRICE}
+					, #{rowData.SHORT_DESC}
+					, #{rowData.COUPON}
+					, #{rowData.COUPON_EA}
+					, #{rowData.COUPON_USECNT}
+					, #{rowData.COUPON_DATE}
+					, #{rowData.REG_DT}
+				)
+			</foreach>
+	</insert>
 		
 </mapper>
