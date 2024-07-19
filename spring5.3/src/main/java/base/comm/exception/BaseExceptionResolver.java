@@ -47,7 +47,11 @@ public class BaseExceptionResolver extends AbstractHandlerExceptionResolver  {
 
 				HashMap<String, Object> errorData = new HashMap<>();
 				errorData.put("RESMSG", exception.getMessage());
-				errorData.put("RESCODE", systemRuntimeErrorCode);
+				if(exception instanceof BaseException && ((BaseException) exception).getErrorCode() != null) {
+					errorData.put("RESCODE", ((BaseException) exception).getErrorCode());
+				} else {
+					errorData.put("RESCODE", systemRuntimeErrorCode);
+				}
 
 				String jsonStr = objectMapper.writeValueAsString(errorData);
 

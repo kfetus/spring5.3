@@ -131,6 +131,7 @@
 				본문
 				<button type="button" onclick="javascript:fn_queryServer('/sampleRest.do');"><span><strong>샘플</strong></span></button>
 				<button type="button" onclick="javascript:fn_queryServer('/restBaseModel.do');">기본</button>
+				<button type="button" onclick="javascript:fn_queryServer('/restBaseResVo.do');">응답기본</button>
 				<button type="button" onclick="javascript:fn_scriptTest();">스크립트테스트</button>
 			</div>
 
