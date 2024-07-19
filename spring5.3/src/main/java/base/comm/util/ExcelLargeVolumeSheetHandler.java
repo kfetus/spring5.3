@@ -6,10 +6,12 @@ import java.util.List;
 
 import org.apache.poi.xssf.binary.XSSFBSheetHandler.SheetContentsHandler;
 import org.apache.poi.xssf.usermodel.XSSFComment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExcelLargeVolumeSheetHandler implements SheetContentsHandler {
 
-//	private static final Logger LOGGER = LoggerFactory.getLogger(ExcelLargeVolumeSheetHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ExcelLargeVolumeSheetHandler.class);
 
 
 	int currentRow = 0;
@@ -33,13 +35,16 @@ public class ExcelLargeVolumeSheetHandler implements SheetContentsHandler {
 
 	@Override
 	public void startRow(int rowNum) {
-//		LOGGER.debug("startRow ====================================" + rowNum);
+		LOGGER.debug("startRow ====================================" + rowNum);
 		this.currentRow = rowNum;
 	}
 
 	@Override
 	public void endRow(int rowNum) {
 //		LOGGER.debug("endRow ====================================" + rowNum);
+		if(row.size()==0) {
+			return;
+		}
 		if (rowNum == 0) {
 			header = new ArrayList<String>(row);
 		} else {
