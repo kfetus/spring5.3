@@ -3,10 +3,8 @@ package base.comm.util;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -249,24 +247,25 @@ public class ExcelUtil {
 	}
 
 	public static void main(String[] args) {
-		String excelFullPath = "C:/Users/PMG/Desktop/sampleData.xlsx";
+		/*	
+		String excelFullPath = "C:/Users/PMG/Desktop/uploadTest.xlsx";
 		File file = new File(excelFullPath);
-		
+
 		try {
-			List<HashMap<String, String>> retList = readExcelFile(file, "sample");
+			List<HashMap<String, String>> retList = readExcelFile(file, "sheet1");
 			System.out.println(retList);
 
-			List<String> keyList = Arrays.asList("goodsno", "goodsnm", "sellYn", "goodscd", "maker", "keyword", "strprice", "shortdesc", "coupon", "coupon_ea", "coupon_usecnt", "coupon_date", "regdt");
+			List<String> keyList = Arrays.asList("GOODS_NO", "GOODS_NM", "SELL_YN", "GOODS_CD", "MAKER", "KEYWORD", "STR_PRICE", "SHORT_DESC", "COUPON", "COUPON_EA", "COUPON_USECNT", "COUPON_DATE", "REG_DT");
 			
 			for(HashMap<String, String> rowMap : retList) {
-				if("".equals( rowMap.get("maker").trim()) ) {
-					rowMap.put("maker", "NIDAS");
+				if("".equals( rowMap.get("MAKER").trim()) ) {
+					rowMap.put("MAKER", "NIDAS");
 				}
-				if("".equals( rowMap.get("goodscd").trim()) ) {
-					rowMap.put("goodscd", rowMap.get("goodsnm"));
+				if("".equals( rowMap.get("GOODS_NM").trim()) ) {
+					rowMap.put("GOODS_NM", rowMap.get("goodsnm"));
 				}
 				SecureRandom random = SecureRandom.getInstanceStrong();
-				rowMap.put("coupon_usecnt", random.nextInt(5)+"");
+				rowMap.put("COUPON_USECNT", random.nextInt(5)+"");
 			}
 			
 			makeExcel(keyList,retList,"C:/Users/PMG/Desktop/sampleData22.xlsx");
@@ -274,21 +273,24 @@ public class ExcelUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+*/		
 		
-//		String excelFullPath = "C:/Users/PMG/Desktop/testData.xlsx";
-//		try {
-//			String[] keyArrau = { "SEQ", "CODE", "MENU_DEPTH_1", "MENU_DEPTH_2", "MENU_DEPTH_3", "MENU_DEPTH_4",
-//					"PROG_FILE_NM", "MENU_NAME", "STATE", "MASTER_NAME", "START_DT", "CNG_DT" };
-//
-//			List<HashMap<String, String>> retList = readExcelFile(file, "sheet1");
-//			for (int i = 0; i < retList.size(); i++) {
-//				for (String key : keyArrau) {
-//					System.out.print(key + "=" + retList.get(i).get(key) + " ");
-//				}
-//				System.out.println();
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		String excelFullPath = "C:/Users/PMG/Desktop/uploadTest.xlsx";
+		File file = new File(excelFullPath);
+//		FileInputStream fileInputStream = new FileInputStream(file);
+		
+		try {
+			String[] keyArrau = { "GOODS_NO", "GOODS_NM", "SELL_YN", "GOODS_CD", "MAKER", "KEYWORD", "STR_PRICE", "SHORT_DESC", "COUPON", "COUPON_EA", "COUPON_USECNT", "COUPON_DATE", "REG_DT" };
+
+			List<HashMap<String, String>> retList = readExcelFile(file, "sheet1");
+			for (int i = 0; i < retList.size(); i++) {
+				for (String key : keyArrau) {
+					System.out.print(key + "=" + retList.get(i).get(key) + " ");
+				}
+				System.out.println();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
