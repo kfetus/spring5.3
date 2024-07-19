@@ -49,7 +49,7 @@
 					contentType : false,
 					data : formData,
 					success : function(res){
-						alert(res.RESMSG);
+						alert(res.resMsg);
 					},
 					error : function(request, status, error) {
 						console.log(error);

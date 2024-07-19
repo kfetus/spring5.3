@@ -3,7 +3,6 @@ package base.biz.sample;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -107,20 +106,14 @@ public class SampleController {
 	@RequestMapping(value = "/upload/excelUploadSample.do")
 	public CommonFBVO excelUploadSample(@RequestParam String srcSheetNm, @RequestPart(required = false) MultipartFile multiFiles, HttpServletRequest req) throws Exception {
 		LOGGER.debug("@@@@@@@@@@@ excelUploadSample 시작 @@@@@@@@@@@");
-		Map<String, Object> retMap = new HashMap<String, Object>();
 
 		CommonFBVO frontBackVo = new CommonFBVO();
 		
 		boolean checkState = FileUtil.checkUploadFileExtension(multiFiles);
 		if(!checkState) {
-			frontBackVo.setRESCODE(bizNomalError);
-			frontBackVo.setRESMSG("잘못된 파일을 업로드 하였습니다."+multiFiles.getOriginalFilename());
+			frontBackVo.setResCode(bizNomalError);
+			frontBackVo.setResMsg("잘못된 파일을 업로드 하였습니다."+multiFiles.getOriginalFilename());
 			return frontBackVo;
-			
-//			retMap.put("RESCODE", bizNomalError);
-//			retMap.put("RESMSG", "잘못된 파일을 업로드 하였습니다."+multiFiles.getOriginalFilename());
-//			LOGGER.debug("@@@@@@@@@@@ excelUploadSample 에러발생=" + retMap);
-//			return retMap;
 		}
 
 		/**
@@ -135,24 +128,39 @@ public class SampleController {
 		//1번 방식
 		File file = new File(multiFiles.getOriginalFilename());
 		multiFiles.transferTo(file);
-		List<HashMap<String, String>> dataList = ExcelUtil.readExcelMultiPartFile(multiFiles, srcSheetNm);
-		sampleService.insertUploadTestList(dataList);
+		
+		long beforeTime = System.currentTimeMillis();
+		
+//		List<HashMap<String, String>> dataList = ExcelUtil.readExcelMultiPartFile(multiFiles, srcSheetNm);
+		List<HashMap<String, String>> dataList = ExcelUtil.readBigExcelMultiPartFile(multiFiles, srcSheetNm);
+
+		long afterTime = System.currentTimeMillis();
+		long diffTime = afterTime - beforeTime;
+		LOGGER.debug("excel List 변환 실행 시간(ms): " + diffTime);//10만건 기준 4초		
+		
+		if(dataList.size() == 0) {
+			frontBackVo.setResCode(bizNomalError);
+			frontBackVo.setResMsg("업로드 내용이 없습니다.");
+			return frontBackVo;
+		}
+		beforeTime = System.currentTimeMillis();
+
+		int retCount = sampleService.insertUploadTestList(dataList);
+
+		afterTime = System.currentTimeMillis();
+		diffTime = afterTime - beforeTime;
+		LOGGER.debug("List DB Insert 실행 시간(ms): " + diffTime);//10만건 기준 12.3초 10000건씩 insert
 
 		//2번 방식
 //		File file = new File("C:/Users/PMG/Desktop/down/"+multiFiles.getOriginalFilename());
 //		ExcelUtil.readExcelFile(file, "sheet1");
 //		file.delete();
 		
-		frontBackVo.setRESCODE(successCode);
-		frontBackVo.setRESMSG("업로드 완료");
-		LOGGER.debug("@@@@@@@@@@@ excelUploadSample 종료" + retMap);
+		frontBackVo.setResCode(successCode);
+		frontBackVo.setResMsg("업로드 완료");
+		frontBackVo.setChangeCount(retCount+"");
+		LOGGER.debug("@@@@@@@@@@@ excelUploadSample 종료" + frontBackVo);
 		return frontBackVo;
-		
-//		retMap.put("RESCODE", successCode);
-//		retMap.put("RESMSG", "업로드 완료.");
-//
-//		LOGGER.debug("@@@@@@@@@@@ excelUploadSample 종료" + retMap);
-//		return retMap;
 	}
 	
 	

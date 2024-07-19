@@ -3,70 +3,72 @@ package base.comm.vo;
 import java.util.HashMap;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+//현재 PropertyNamingStrategy에서는 대문자 snakeCaseStrategy를 지원하지 않는다.
+//차선책으로 아래의 JsonProperty를 하면 한개의 엔티티가 두개씩 리턴되므로 오버헤드가 심해서 사용하지 말자. 걍 camel로 가자
+//@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class CommonFBVO {
 
 	//응답 코드
-	@JsonProperty("RESCODE")
-	String RESCODE;
+//	@JsonProperty("RESCODE")
+	String resCode;
 	//응답 메세지
-	@JsonProperty("RESMSG")
-	String RESMSG;
+//	@JsonProperty("RESMSG")
+	String resMsg;
 	//조회시 전체 카운트
-	@JsonProperty("RESULT_TOTAL_CNT")
-	String RESULT_TOTAL_CNT;
+//	@JsonProperty("RESULT_TOTAL_CNT")
+	String resultTotalCnt;
 	//조회 리스트
-	@JsonProperty("RESULT_LIST")
-	List<HashMap<String, String>> RESULT_LIST;
+//	@JsonProperty("RESULT_LIST")
+	List<HashMap<String, String>> resultList;
 	//조회 리스트의 카운트(페이징된 카운트)
-	@JsonProperty("RESULT_SIZE")
-	String RESULT_SIZE;
+//	@JsonProperty("RESULT_SIZE")
+	String resultSize;
 	//변경된 카운트
-	@JsonProperty("CHANGE_COUNT")
-	String CHANGE_COUNT;
+//	@JsonProperty("CHANGE_COUNT")
+	String changeCount;
 	
-	public String getRESCODE() {
-		return RESCODE;
+	public String getResCode() {
+		return resCode;
 	}
-	public void setRESCODE(String rESCODE) {
-		RESCODE = rESCODE;
+	public void setResCode(String resCode) {
+		this.resCode = resCode;
 	}
-	public String getRESMSG() {
-		return RESMSG;
+	public String getResMsg() {
+		return resMsg;
 	}
-	public void setRESMSG(String rESMSG) {
-		RESMSG = rESMSG;
+	public void setResMsg(String resMsg) {
+		this.resMsg = resMsg;
 	}
-	public String getRESULT_TOTAL_CNT() {
-		return RESULT_TOTAL_CNT;
+	public String getResultTotalCnt() {
+		return resultTotalCnt;
 	}
-	public void setRESULT_TOTAL_CNT(String rESULT_TOTAL_CNT) {
-		RESULT_TOTAL_CNT = rESULT_TOTAL_CNT;
+	public void setResultTotalCnt(String resultTotalCnt) {
+		this.resultTotalCnt = resultTotalCnt;
 	}
-	public List<HashMap<String, String>> getRESULT_LIST() {
-		return RESULT_LIST;
+	public List<HashMap<String, String>> getResultList() {
+		return resultList;
 	}
-	public void setRESULT_LIST(List<HashMap<String, String>> rESULT_LIST) {
-		RESULT_LIST = rESULT_LIST;
+	public void setResultList(List<HashMap<String, String>> resultList) {
+		this.resultList = resultList;
 	}
-	public String getRESULT_SIZE() {
-		return RESULT_SIZE;
+	public String getResultSize() {
+		return resultSize;
 	}
-	public void setRESULT_SIZE(String rESULT_SIZE) {
-		RESULT_SIZE = rESULT_SIZE;
+	public void setResultSize(String resultSize) {
+		this.resultSize = resultSize;
 	}
-	public String getCHANGE_COUNT() {
-		return CHANGE_COUNT;
+	public String getChangeCount() {
+		return changeCount;
 	}
-	public void setCHANGE_COUNT(String cHANGE_COUNT) {
-		CHANGE_COUNT = cHANGE_COUNT;
+	public void setChangeCount(String changeCount) {
+		this.changeCount = changeCount;
 	}
 	@Override
 	public String toString() {
-		return "CommonFBVO [RESCODE=" + RESCODE + ", RESMSG=" + RESMSG + ", RESULT_TOTAL_CNT=" + RESULT_TOTAL_CNT
-				+ ", RESULT_LIST=" + RESULT_LIST + ", RESULT_SIZE=" + RESULT_SIZE + ", CHANGE_COUNT=" + CHANGE_COUNT
-				+ "]";
+		return "CommonFBVO [resCode=" + resCode + ", resMsg=" + resMsg + ", resultTotalCnt=" + resultTotalCnt
+				+ ", resultList=" + resultList + ", resultSize=" + resultSize + ", changeCount=" + changeCount + "]";
 	}
+	
+
 	
 }

@@ -2,6 +2,7 @@ package base.comm.util;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,6 +11,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -17,6 +22,10 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.xssf.eventusermodel.ReadOnlySharedStringsTable;
+import org.apache.poi.xssf.eventusermodel.XSSFReader;
+import org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler;
+import org.apache.poi.xssf.model.StylesTable;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -24,6 +33,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
 
 public class ExcelUtil {
 
@@ -128,6 +140,58 @@ public class ExcelUtil {
 		return excelDataList;
 	}
 
+	/**
+	 * 대용량 5만건 이상 엑셀 파일 업로드시 사용 
+	 * @param excelFile
+	 * @param sheetName
+	 * @return
+	 * @throws Exception
+	 */
+	public static List<HashMap<String, String>> readBigExcelMultiPartFile(MultipartFile excelFile, String sheetName) throws Exception {
+		LOGGER.debug("readBigExcelMultiPartFile ====================================");
+
+        OPCPackage opc = OPCPackage.open(excelFile.getInputStream());
+        XSSFReader xssfReader = new XSSFReader(opc);
+        ReadOnlySharedStringsTable data = new ReadOnlySharedStringsTable(opc);
+        
+        StylesTable styles = xssfReader.getStylesTable();
+        //첫번째 sheet를 가져오기.
+        InputStream sheetStream = xssfReader.getSheetsData().next();
+        InputSource sheetSource = new InputSource(sheetStream);
+        /* 여러개일 경우 샘플
+        Iterator<InputStream> sheets = xssfReader.getSheetsData();
+        while (sheetIterator.hasNext()) {
+        	InputStream inputStream = sheetIterator.next();
+            InputSource inputSource = new InputSource(inputStream);
+            ...
+        }
+        */
+
+        ExcelLargeVolumeSheetHandler sheetHandler = new ExcelLargeVolumeSheetHandler();
+        //XMLHandler 생성
+        ContentHandler handler = new XSSFSheetXMLHandler(styles, data, sheetHandler, false);
+
+        //SAX 형식의 XMLReader 생성
+        SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+        saxParserFactory.setNamespaceAware(true);
+        SAXParser parser = saxParserFactory.newSAXParser();
+        XMLReader xmlReader = parser.getXMLReader();
+
+        xmlReader.setContentHandler(handler);
+        xmlReader.parse(sheetSource);
+        sheetStream.close();
+        
+//		LOGGER.debug("sheetHandler.getHeader()="+sheetHandler.getHeader());
+//		LOGGER.debug("sheetHandler.getRows()="+sheetHandler.getRows());
+//		LOGGER.debug("sheetHandler.getExcelDataList()="+sheetHandler.getExcelDataList());
+		return sheetHandler.getExcelDataList();
+	}
+	
+	
+	
+
+	
+	
 	/**
 	 * 엑셀 파일 생성
 	 * 
