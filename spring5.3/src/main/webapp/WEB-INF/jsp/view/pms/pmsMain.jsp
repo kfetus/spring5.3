@@ -87,6 +87,9 @@
 				}
 			}
 			console.log(sendData);
+			if(sendData.length == 0) {
+				alert('수정된 데이터가 없어');
+			}
 			$(".spinner-container").show();
 			$.ajax({
 				type : 'post',
