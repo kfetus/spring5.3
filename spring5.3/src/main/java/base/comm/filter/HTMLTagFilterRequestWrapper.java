@@ -31,7 +31,8 @@ public class HTMLTagFilterRequestWrapper extends HttpServletRequestWrapper {
 			LOGGER.debug("¿¿¿¿¿¿¿¿¿¿¿¿ HTMLTagFilterRequestWrapper 생성자"+reqAccept);
 //			LOGGER.debug("¿¿¿¿¿¿¿¿¿¿¿¿ HTMLTagFilterRequestWrapper 생성자"+reqContentType);
 			
-			if( (reqAccept != null && reqContentType != null)&& (reqAccept.indexOf("application/json")>-1 || reqContentType.indexOf("multipart/form-data") > -1 ) ) {
+			if( (reqAccept != null && reqContentType != null) && 
+					(reqAccept.indexOf("application/json")>-1 || reqContentType.indexOf("application/json") > -1 || reqContentType.indexOf("multipart/form-data") > -1 ) ) {
 //				LOGGER.debug("¿¿¿¿¿¿¿¿¿¿¿¿ HTMLTagFilterRequestWrapper InputStream 가로채기");		
 				InputStream is = request.getInputStream();
 				this.reqStreamData = handleXSS(IOUtils.toByteArray(is));
