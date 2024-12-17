@@ -28,7 +28,7 @@ public class CodeController {
 	@Autowired
 	private CodeServiceImpl codeService;
 	
-	@RequestMapping(value = "/codeList.do")
+	@RequestMapping(value = "/common/codeList.do")
 	public Map<String,Object> codeList(@RequestBody  HashMap<String,String> map) throws Exception {
 		LOGGER.debug("@@@@@@@@@@@ commonCodeList 시작=" + map);
 		Map<String , Object> retMap = new HashMap<String,Object>();
